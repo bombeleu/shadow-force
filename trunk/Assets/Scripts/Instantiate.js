@@ -5,10 +5,10 @@ function OnNetworkLoadedLevel () {
 	// Instantiating SpaceCraft when Network is loaded
 	var spawn: Transform;
 	var spawners = GameObject.FindGameObjectsWithTag ("Respawn");
-	Debug.Log("aa"+spawners.length);
+	/*Debug.Log("aa"+spawners.length);
 	Debug.Log(Random.value);
 	Debug.Log(Random.value);
-	Debug.Log(Random.value);
+	Debug.Log(Random.value);*/
 	spawn = spawners[ Mathf.Floor( (spawners.length-1) * Random.value)].transform;
 		
 	var character = Network.Instantiate(SpaceCraft, spawn.position + Vector3(0,4,0), spawn.rotation, 0);

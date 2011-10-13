@@ -181,7 +181,7 @@ function Update () {
 			
 			// Acquire the relative screen position			
 			var posRel : Vector3 = cursorScreenPosition - Vector3 (halfWidth, halfHeight, cursorScreenPosition.z);		
-			posRel.x /= maxHalf; 
+			posRel.x /= maxHalf;
 			posRel.y /= maxHalf;
 						
 			cameraAdjustmentVector = posRel.x * screenMovementRight + posRel.y * screenMovementForward;

@@ -3,18 +3,23 @@ public var character : Transform;
 public var cursorPlaneHeight : float = 0;
 public var spawnPoint : Transform;
 
-public var weapons: MonoScript[];
+//public var weapons: MonoScript[];
+public var weapons: Weapon[];
+private var curWeapon: int = 0;
 
-private var ws: Weapon[];
+//private var ws: Weapon[];
 
 
 private var playerMovementPlane : Plane;
 
 
 function Awake(){
-	ws = new Weapon[1];
-	ws[0] =( ScriptableObject.CreateInstance(weapons[0].GetClass()) as Weapon);
+	/*ws = new Weapon[1];
+	//ws[0] =( ScriptableObject.CreateInstance(weapons[0].GetClass()) as Weapon);
 	//ws[0].saySth();
+	var go:GameObject = Instantiate(weapons[0], Vector3.zero, Quaternion.identity);
+	ws[0] = go.GetComponent.<Weapon>();*/
+	
 	
 	playerMovementPlane = new Plane (character.up, character.position + character.up * cursorPlaneHeight);
 	altFireTimer = Time.time;
@@ -37,12 +42,13 @@ public static function ScreenPointToWorldPointOnPlane (screenPoint : Vector3, pl
 private var altFireTimer:float = 0;
 private var bufferedShot:int = 0;
 function Update () {
+	//return;
 	//this is only needed if the terrain is uneven!
 	playerMovementPlane.normal = character.up;
 	playerMovementPlane.distance = -character.position.y + cursorPlaneHeight;
 
 #if UNITY_IPHONE || UNITY_ANDROID
-	if (ws[0].needPosition){
+	if (weapons[curWeapon].needPosition){
 		//wait for the character rotation first
 		//trigger the attack
 		//distance, direction take from tap position (tap up)
@@ -56,8 +62,8 @@ function Update () {
 	
 	// Find out where the mouse ray intersects with the movement plane of the player
 	var cursorWorldPosition : Vector3 = ScreenPointToWorldPointOnPlane (cursorScreenPosition, playerMovementPlane, Camera.main);
-			
-	if (ws[0].needPosition){
+
+	if (weapons[curWeapon].needPosition){
 		//distance, direction take from mouse position
 		//wait for the character rotation first
 		//trigger the attack

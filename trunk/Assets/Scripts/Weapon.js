@@ -3,6 +3,8 @@
 public var needPosition:boolean = false;
 public var cooldown:float = 0.5;
 public var bulletPrefab: GameObject;
+public var spawnPoint : Transform;
+public var switchTime : float = 1;
 
 /*class Weapon extends ScriptableObject{
 	public var needPosition:boolean = false;
@@ -13,3 +15,10 @@ public var bulletPrefab: GameObject;
 	}
 }
 */
+
+function SetEnable(b:boolean){
+	var rr = gameObject.GetComponentsInChildren(Renderer);
+	for (var r:Renderer in rr){
+		r.enabled = b;
+	}
+}

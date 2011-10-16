@@ -17,6 +17,7 @@ var deadZone : float = 0;									// Control when position is output
 var normalize : boolean = false; 							// Normalize output after the dead-zone?
 var position : Vector2; 									// [-1, 1] in x,y
 var tapCount : int;											// Current tap count
+var directionalOnly : boolean = false;						
 
 private var lastFingerId = -1;								// Finger last used for this joystick
 private var tapTimeWindow : float;							// How much time there is left for a tap to occur
@@ -53,8 +54,10 @@ function Start () {
         
 	if (touchPad) {
 		// If a texture has been assigned, then use the rect ferom the gui as our touchZone
-		if (gui.texture)
-			touchZone = defaultRect;
+		//if (gui.texture)
+		//	touchZone = defaultRect;
+		guiTouchOffset.x = defaultRect.width * 0.5;
+		guiTouchOffset.y = defaultRect.height * 0.5;
 	}
 	else {				
 		// This is an offset for touch input to match with the top left
@@ -83,7 +86,10 @@ function ResetJoystick () {
 	// Release the finger control and set the joystick back to the default position
 	gui.pixelInset = defaultRect;
 	lastFingerId = -1;
-	position = Vector2.zero;
+	if (directionalOnly) 
+		position.Normalize();
+	else
+		position = Vector2.zero;
 	fingerDownPos = Vector2.zero;
 	
 	if (touchPad)
@@ -139,7 +145,8 @@ function Update () {
 					gui.color.a = 0.15;
 					
 					lastFingerId = touch.fingerId;
-					fingerDownPos = touch.position;
+					fingerDownPos = directionalOnly?touch.position - 
+						Vector2(position.x*guiTouchOffset.x,position.y*guiTouchOffset.y):touch.position;
 					fingerDownTime = Time.time;
 				}
 				
@@ -170,8 +177,15 @@ function Update () {
 				
 				if (touchPad) {	
 					// For a touchpad, let's just set the position directly based on distance from initial touchdown
-					position.x = Mathf.Clamp ((touch.position.x - fingerDownPos.x) / (touchZone.width / 2), -1, 1);
-					position.y = Mathf.Clamp ((touch.position.y - fingerDownPos.y) / (touchZone.height / 2), -1, 1);
+					/*position.x = Mathf.Clamp ((touch.position.x - fingerDownPos.x) / (touchZone.width / 2), -1, 1);
+					position.y = Mathf.Clamp ((touch.position.y - fingerDownPos.y) / (touchZone.height / 2), -1, 1);*/
+					if (directionalOnly){
+						position.x = (touch.position.x - fingerDownPos.x) / (defaultRect.width / 2);
+						position.y = (touch.position.y - fingerDownPos.y) / (defaultRect.height / 2);
+					}else{
+ 						position.x = Mathf.Clamp ((touch.position.x - fingerDownPos.x) / (defaultRect.width / 2), -1, 1);
+						position.y = Mathf.Clamp ((touch.position.y - fingerDownPos.y) / (defaultRect.height / 2), -1, 1);
+					}
 				}
 				else {					
 					// Change the location of the joystick graphic to match where the touch is
@@ -181,39 +195,45 @@ function Update () {
 				
 				if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
 					ResetJoystick ();
-			}			
+			}
 		}
 	}
 	
 	// Calculate the length. This involves a squareroot operation,
 	// so it's slightly expensive. We re-use this length for multiple
 	// things below to avoid doing the square-root more than one.
-	var length : float = position.magnitude;
-	
-	
-	if (length < deadZone) {
-		// If the length of the vector is smaller than the deadZone radius,
-		// set the position to the origin.
-		position = Vector2.zero;
-	}
-	else {
-		if (length > 1) {
-			// Normalize the vector if its length was greater than 1.
-			// Use the already calculated length instead of using Normalize().
-			position = position / length;
+	if (!directionalOnly){
+		var length : float = position.magnitude;
+		
+		
+		if (length < deadZone) {
+			// If the length of the vector is smaller than the deadZone radius,
+			// set the position to the origin.
+			position = Vector2.zero;
 		}
-		else if (normalize) {
-			// Normalize the vector and multiply it with the length adjusted
-			// to compensate for the deadZone radius.
-			// This prevents the position from snapping from zero to the deadZone radius.
-			position = position / length * Mathf.InverseLerp (length, deadZone, 1);
-		}
+		else {
+			if (length > 1) {
+				// Normalize the vector if its length was greater than 1.
+				// Use the already calculated length instead of using Normalize().
+				position = position / length;
+			}
+			else if (normalize) {
+				// Normalize the vector and multiply it with the length adjusted
+				// to compensate for the deadZone radius.
+				// This prevents the position from snapping from zero to the deadZone radius.
+				position = position / length * Mathf.InverseLerp (length, deadZone, 1);
+			}
+		}	
 	}
+
 	
 	if (!touchPad) {
 		// Change the location of the joystick graphic to match the position
 		gui.pixelInset.x = (position.x - 1) * guiTouchOffset.x + guiCenter.x;
 		gui.pixelInset.y = (position.y - 1) * guiTouchOffset.y + guiCenter.y;
+	}else{
+		gui.pixelInset.x = fingerDownPos.x - guiTouchOffset.x;
+		gui.pixelInset.y = fingerDownPos.y - guiTouchOffset.y;
 	}
 }
 

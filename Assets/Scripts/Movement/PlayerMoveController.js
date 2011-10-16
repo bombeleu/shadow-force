@@ -61,11 +61,16 @@ function Awake () {
 			var joystickLeftGO : GameObject = Instantiate (joystickPrefab) as GameObject;
 			joystickLeftGO.name = "Joystick Left";
 			joystickLeft = joystickLeftGO.GetComponent.<Joystick> ();
+			joystickLeft.touchPad = true;
+			joystickLeft.touchZone = Rect(0,0,Screen.width/2, Screen.height);
 			
 			// Create right joystick
 			joystickRightGO = Instantiate (joystickPrefab) as GameObject;
 			joystickRightGO.name = "Joystick Right";
-			joystickRight = joystickRightGO.GetComponent.<Joystick> ();			
+			joystickRight = joystickRightGO.GetComponent.<Joystick> ();
+			joystickRight.touchPad = true;
+			joystickRight.touchZone = Rect(Screen.width/2,0,Screen.width/2, Screen.height);
+			joystickRight.directionalOnly = true;
 		}
 	#else
 		if (cursorPrefab) {
@@ -155,6 +160,15 @@ function Update () {
 		motor.facingDirection = joystickRight.position.x * screenMovementRight + joystickRight.position.y * screenMovementForward;
 				
 		cameraAdjustmentVector = motor.facingDirection;		
+		
+		var wm:WeaponManager = GetComponent.<WeaponManager>();
+		//Debug.Log(wm);
+		//Debug.Log(joystickRight.position.sqrMagnitude);
+		if (joystickRight.position.sqrMagnitude > 4){
+			wm.OnStartFire();
+		}else{
+			wm.OnStopFire();
+		}
 	
 	#else
 	

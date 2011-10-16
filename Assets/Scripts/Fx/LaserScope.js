@@ -12,6 +12,8 @@ public var minWidth : float = 0.2;
 
 public var pointer : GameObject = null;
 
+public var reflect : boolean = false;
+
 private var lRenderer : LineRenderer;
 private var aniTime : float = 0.0;
 private var aniDir : float = 1.0;
@@ -48,7 +50,21 @@ function Update () {
 	// Cast a ray to find out the end point of the laser
 	var hitInfo : RaycastHit = raycast.GetHitInfo ();
 	if (hitInfo.transform) {
-		lRenderer.SetPosition (1, (hitInfo.distance * Vector3.forward));
+		lRenderer.SetVertexCount(reflect?3:2);
+		var firstPos : Vector3 = (hitInfo.distance * Vector3.forward);
+		lRenderer.SetPosition (1, firstPos);
+		
+		if (reflect){
+			var localNorm:Vector3 = transform.worldToLocalMatrix.MultiplyVector(hitInfo.normal);
+			var dir:Vector3 = Vector3.forward - localNorm * Vector3.Dot(Vector3.forward, localNorm) * 2;
+			dir.y = 0;
+			var secondHit:RaycastHit = RaycastHit ();
+			Physics.Raycast (transform.localToWorldMatrix.MultiplyPoint(firstPos /*+ dir.normalized*/), 
+				transform.localToWorldMatrix.MultiplyVector(dir), secondHit);
+			lRenderer.SetPosition (2, firstPos + secondHit.distance * dir);
+			//dir -= norm * Vector3.Dot(dir, norm) * 2;
+    		//dir.y = 0;
+		}
 		renderer.material.mainTextureScale.x = 0.1 * (hitInfo.distance);
 		renderer.material.SetTextureScale ("_NoiseTex", Vector2 (0.1 * hitInfo.distance * noiseSize, noiseSize));		
 		
@@ -61,6 +77,7 @@ function Update () {
 		}
 	}
 	else {
+		lRenderer.SetVertexCount(2);
 		if (pointer)
 			pointer.renderer.enabled = false;		
 		var maxDist : float = 200.0;

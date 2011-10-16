@@ -37,10 +37,10 @@
     <Reference Include="System.XML" />
 	<Reference Include="System.Core" />
 	<Reference Include="UnityEngine">
-	  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+	  <HintPath>/Applications/Unity/Unity.app/Contents/Frameworks/Managed/UnityEngine.dll</HintPath>
 	</Reference>
 	<Reference Include="UnityEditor">
-	  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+	  <HintPath>/Applications/Unity/Unity.app/Contents/Frameworks/Managed/UnityEditor.dll</HintPath>
 	</Reference>
   </ItemGroup>
   <ItemGroup>
@@ -92,8 +92,10 @@
      <Compile Include="Assets\Scripts\Fx\SelfIlluminationBlink.js" />
      <Compile Include="Assets\Scripts\Fx\ShaderDatabase.js" />
      <Compile Include="Assets\Scripts\Fx\WorldSpaceSpecular.js" />
+     <Compile Include="Assets\Scripts\InstantBullet.js" />
      <Compile Include="Assets\Scripts\Instantiate.js" />
      <Compile Include="Assets\Scripts\LineOfSight.js" />
+     <Compile Include="Assets\Scripts\MachineGunBullet.js" />
      <Compile Include="Assets\Scripts\Managers\MaterialImpactManager.js" />
      <Compile Include="Assets\Scripts\Managers\Spawner.js" />
      <Compile Include="Assets\Scripts\Managers\TextAdventureManager.js" />
@@ -135,6 +137,7 @@
      <Compile Include="Assets\Scripts\Rain\RainManager.js" />
      <Compile Include="Assets\Scripts\Rain\RainsplashBox.js" />
      <Compile Include="Assets\Scripts\Rain\RainsplashManager.js" />
+     <Compile Include="Assets\Scripts\SlowBullet.js" />
      <Compile Include="Assets\Scripts\Team.js" />
      <Compile Include="Assets\Scripts\Weapon.js" />
      <Compile Include="Assets\Scripts\WeaponManager.js" />

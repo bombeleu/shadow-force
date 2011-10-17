@@ -1,5 +1,7 @@
+#pragma strict
 @script RequireComponent (Weapon)
 @script RequireComponent (InstantBullet)
+@script RequireComponent (NetworkView)
 
 public var frequency : float = 10;
 public var muzzleFlashFront : GameObject;
@@ -24,11 +26,21 @@ function Start(){
 }
 
 function OnLaunchBullet(){
+	networkView.RPC("EnableFiring", RPCMode.All);
+}
+
+@RPC
+function EnableFiring(){
 	firing = true;
 	muzzleFlashFront.active = true;
 }
 
 function OnStopFiring(){
+	networkView.RPC("DisableFiring", RPCMode.All);
+}
+
+@RPC
+function DisableFiring(){
 	firing = false;
 	muzzleFlashFront.active = false;
 }
@@ -38,7 +50,14 @@ function Update(){
 		var go : GameObject = Spawner.Spawn (bulletPrefab, spawnPoint.position, spawnPoint.rotation) as GameObject;
 		
 		var bullet : SimpleBullet = go.GetComponent.<SimpleBullet> ();
-		bullet.dist = GetComponent.<InstantBullet>().GetHitDistance();
+		if (networkView.isMine)
+			bullet.dist = GetComponent.<InstantBullet>().GetHitDistance();
+		else{
+			var hitInfo : RaycastHit = RaycastHit ();
+			Physics.Raycast (spawnPoint.position, spawnPoint.forward, hitInfo);
+			bullet.dist = hitInfo.transform?hitInfo.distance:1000;
+		}
+			
 		lastFireTime = Time.time;
 	}
 }

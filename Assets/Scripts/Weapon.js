@@ -1,3 +1,6 @@
+#pragma strict
+//@script RequireComponent (NetworkView)
+
 //component for 'weapon' prefab
 
 public var needPosition:boolean = false;
@@ -18,7 +21,7 @@ public var switchTime : float = 1;
 
 function SetEnable(b:boolean){
 	var rr = gameObject.GetComponentsInChildren(Renderer);
-	for (var r:Renderer in rr){
-		r.enabled = b;
+	for (var r:Component in rr){
+		r.renderer.enabled = b;
 	}
 }

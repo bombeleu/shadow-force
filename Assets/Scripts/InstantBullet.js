@@ -1,5 +1,7 @@
 @script RequireComponent (Weapon)
 
+public var damageRate:float = 20;
+
 private var hitDistance:float=0;
 function GetHitDistance(){
 	return hitDistance;
@@ -54,4 +56,7 @@ function OnLaunchBullet(){
 
 function OnStopFiring(){
 	
+}
+
+function Update(){
 }

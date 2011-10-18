@@ -105,11 +105,11 @@ function OnStopFire () {
 	animationComponent[shootAdditive.name].enabled = false;
 }
 
-private var aveVelo:Vector3 = Vector3.zero;
+private var aveDist:Vector3 = Vector3.zero;
 private var aveTime:float=0;
 function FixedUpdate () {
-	velocity = rigid.velocity;
-	//velocity = (tr.position - lastPosition) / Time.deltaTime;
+	//velocity = rigid.velocity;
+	velocity = (tr.position - lastPosition) / Time.deltaTime;
 	localVelocity = tr.InverseTransformDirection (velocity);
 	localVelocity.y = 0;
 	if (rigid.networkView.isMine){
@@ -117,15 +117,16 @@ function FixedUpdate () {
 		angle = HorizontalAngle (localVelocity);
 	}
 	else{
-		aveVelo += localVelocity * Time.deltaTime;
+		aveDist += localVelocity * Time.deltaTime;
 		aveTime += Time.deltaTime;
 		if (aveTime > 0.5){
 			aveTime = 0;
-			aveVelo = Vector3.zero;
+			aveDist = Vector3.zero;
 		}
-		speed = aveTime==0?aveVelo.magnitude:(aveVelo.magnitude/aveTime);
-		angle = HorizontalAngle (aveVelo);
-		//Debug.Log("speed "+speed+"ave speed "+aveSpeed/aveTime);
+		speed = aveTime==0?aveDist.magnitude:(aveDist.magnitude/aveTime);
+		//speed = aveDist.magnitude;
+		angle = HorizontalAngle (aveDist);
+		//Debug.Log("speed "+speed+" - ave dist "+aveDist.magnitude+" - localVel "+localVelocity.magnitude);
 	}
 	lastPosition = tr.position;
 }

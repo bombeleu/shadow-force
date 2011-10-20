@@ -79,51 +79,50 @@ function Update () {
 	var weapon : Weapon = ws[curWeapon];
 	weapon.SetEnable(true);
 
-
-	if (weapon.needPosition){
-		//distance, direction take from mouse position
-		//wait for the character rotation first
-		//trigger the attack
-	}else{
-		//direction takes from mouse position
-		//wait for the character rotation to trigger the attack on Fire1 or Fire2 axis possitive
-
-		var angle:float;
-		#if UNITY_IPHONE || UNITY_ANDROID
-			angle = 0;//TODO: compute angle base on the different between angle and joystick
-		#else
-			var quat: Quaternion = Quaternion.FromToRotation( character.transform.rotation * Vector3.forward, 
-				cursorWorldPosition - character.transform.position);
-			var axis:Vector3;
-			quat.ToAngleAxis(angle, axis);
-			var fireAlt:float = Input.GetAxis("Fire1");
-			oldIsFiring = isFiring;
-			isFiring = fireAlt>=1;
-		#endif
-		
-		if (weapon.cooldown > 0){
-			if (!oldIsFiring && isFiring){
-				bufferedShot=1;//maximum buffered 1 shot
-			}
-			if ((bufferedShot>0 || isFiring) && angle<=3 && (Time.time - altFireTimer > 0.5)){
-				bufferedShot = 0;
-				//RPCFireMissile();
-				//transform.SendMessage ("RPCFireMissile");
-				altFireTimer = Time.time;
-				
-				weapon.gameObject.SendMessage("OnLaunchBullet");
-			}
-		}else{//continuous firing
-			if (isFiring && (firing || angle<=3)){
-				firing = true;
-				weapon.gameObject.SendMessage("OnLaunchBullet");
+	//direction takes from mouse position
+	//wait for the character rotation to trigger the attack on Fire1 or Fire2 axis possitive
+	var angle:float;
+	#if UNITY_IPHONE || UNITY_ANDROID
+		angle = 0;//TODO: compute angle base on the different between angle and joystick
+	#else
+		var quat: Quaternion = Quaternion.FromToRotation( character.transform.rotation * Vector3.forward, 
+			cursorWorldPosition - character.transform.position);
+		var axis:Vector3;
+		quat.ToAngleAxis(angle, axis);
+		var fireAlt:float = Input.GetAxis("Fire1");
+		oldIsFiring = isFiring;
+		isFiring = fireAlt>=1;
+	#endif
+	
+	if (weapon.cooldown > 0){
+		if (!oldIsFiring && isFiring){
+			bufferedShot=1;//maximum buffered 1 shot
+		}
+		if ((bufferedShot>0 || isFiring) && angle<=3 && (Time.time - altFireTimer > 0.5)){
+			bufferedShot = 0;
+			//RPCFireMissile();
+			//transform.SendMessage ("RPCFireMissile");
+			altFireTimer = Time.time;
+			if (weapon.needPosition){
+				weapon.gameObject.SendMessage("OnLaunchBullet", cursorWorldPosition);
 			}else{
-				firing = false;
-				weapon.gameObject.SendMessage("OnStopFiring");
+				weapon.gameObject.SendMessage("OnLaunchBullet");
 			}
 		}
-		//receiver.SendMessage ("OnStartFire");
+	}else{//continuous firing
+		if (isFiring && (firing || angle<=3)){
+			firing = true;
+			if (weapon.needPosition){
+				weapon.gameObject.SendMessage("OnLaunchBullet", cursorWorldPosition);
+			}else{
+				weapon.gameObject.SendMessage("OnLaunchBullet");
+			}
+		}else{
+			firing = false;
+			weapon.gameObject.SendMessage("OnStopFiring");
+		}
 	}
+	
 	var weaponSwitch:boolean;
 	#if UNITY_IPHONE || UNITY_ANDROID
 		if (Input.isGyroAvailable)

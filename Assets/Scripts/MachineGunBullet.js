@@ -5,6 +5,7 @@
 
 public var frequency : float = 10;
 public var muzzleFlashFront : GameObject;
+public var raycast: PerFrameRaycast;
 
 private var bulletPrefab: GameObject;
 private var firing:boolean = false;
@@ -50,7 +51,7 @@ function Update(){
 		var go : GameObject = Spawner.Spawn (bulletPrefab, spawnPoint.position, spawnPoint.rotation) as GameObject;
 		
 		var bullet : SimpleBullet = go.GetComponent.<SimpleBullet> ();
-		var hitInfo : RaycastHit = (gameObject.GetComponentInChildren.<PerFrameRaycast> () as PerFrameRaycast).GetHitInfo();
+		var hitInfo : RaycastHit = raycast.GetHitInfo();
 		bullet.dist = hitInfo.transform?hitInfo.distance:1000;
 		
 		/*if (networkView.isMine)

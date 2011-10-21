@@ -20,7 +20,7 @@ function Update () {
 
 function OnCollisionEnter(collision : Collision) {
 	if (impact) return;
-	Debug.Log("impact!");
+	//Debug.Log("impact!");
 	//if (Time.time - startTime <1) return;
     impact = true;
     rigidbody.useGravity = true;

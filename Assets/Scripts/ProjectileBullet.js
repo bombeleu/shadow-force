@@ -19,8 +19,9 @@ function OnLaunchBullet(pos:Vector3){
 	//networkView.RPC("RPCLaunchBullet", RPCMode.All);//TODO: clone all current slow bullets to newly joined player
 	var go:GameObject = Network.Instantiate(bulletPrefab, spawnPoint.position, 
 		spawnPoint.rotation, 0);
-	go.rigidbody.velocity = velo;
-	go.rigidbody.angularVelocity = Vector3(Random.value,Random.value,Random.value)*Random.value*4;
+	//go.rigidbody.velocity = velo;
+	go.SendMessage("SetVelocity",velo);
+	//go.rigidbody.angularVelocity = Vector3(Random.value,Random.value,Random.value)*Random.value*4;
 	/*var go2:GameObject = Network.Instantiate(bulletPrefab, oriPos, 
 		spawnPoint.rotation, 0);*/
 }

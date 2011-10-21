@@ -40,6 +40,13 @@ private var screenMovementSpace : Quaternion;
 private var screenMovementForward : Vector3;
 private var screenMovementRight : Vector3;
 
+function SetJoystickReset(b:boolean){
+	if (b)
+		joystickRight.listener = gameObject;
+	else
+		joystickRight.listener = null;
+}
+
 function Awake () {		
 	motor.movementDirection = Vector2.zero;
 	motor.facingDirection = Vector2.zero;

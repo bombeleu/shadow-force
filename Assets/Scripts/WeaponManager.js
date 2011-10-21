@@ -67,6 +67,7 @@ private var oldIsFiring: boolean = false;
 private var joystickPos:Vector3;
 function Update () {
 	if (!networkView.isMine) return;//weapon manager only updates the local player, network update is done per weapon basis
+
 	//return;
 	//this is only needed if the terrain is uneven!
 	playerMovementPlane.normal = character.up;
@@ -82,7 +83,7 @@ function Update () {
 	var angle:float;
 	#if UNITY_IPHONE || UNITY_ANDROID
 		angle = 0;//TODO: compute angle base on the different between angle and joystick
-		cursorWorldPosition = character.position - Vector3(joystickPos.x,0,joystickPos.y) * 10;
+		cursorWorldPosition = character.position + character.forward * Vector3(joystickPos.x,0,joystickPos.y).magnitude * 10;
 	#else
 		// On PC, the cursor point is the mouse position
 		var cursorScreenPosition : Vector3 = Input.mousePosition;
@@ -101,6 +102,7 @@ function Update () {
 	if (weapon.needPositionUpdate){
 		weapon.gameObject.SendMessage("OnUpdateTarget", cursorWorldPosition);
 	}
+
 	if (weapon.cooldown > 0){
 		if (!oldIsFiring && isFiring){
 			bufferedShot=1;//maximum buffered 1 shot
@@ -112,6 +114,7 @@ function Update () {
 			altFireTimer = Time.time;
 			if (weapon.needPosition){
 				weapon.gameObject.SendMessage("OnLaunchBullet", cursorWorldPosition);
+				isFiring = false;
 			}else{
 				weapon.gameObject.SendMessage("OnLaunchBullet");
 			}
@@ -170,6 +173,13 @@ function RPCWeaponSwitch(newWeapon:int){
 	ws[curWeapon].SetEnable(false);
 	ws[newWeapon].SetEnable(true);
 	curWeapon = newWeapon;
+	
+	if (networkView.isMine){
+		if (ws[curWeapon].needPosition)
+			gameObject.SendMessage("SetJoystickReset",true);
+		else
+			gameObject.SendMessage("SetJoystickReset",false);
+	}
 }
 /*
 function RPCFireMissile(){
@@ -190,14 +200,20 @@ function FireMissile(pos : Vector3, quat : Quaternion){
 
 
 function OnStartFire(){
-	isFiring = true;
+	if (!ws[curWeapon].needPosition)
+		isFiring = true;
 	//Debug.Log("isFiring");
 }
 
 function OnStopFire(){
-	isFiring = false;
+	if (!ws[curWeapon].needPosition)
+		isFiring = false;
 }
 
 function OnUpdateTarget(pos:Vector3){
 	joystickPos = pos;
+}
+
+function OnJoystickRelease(){
+	isFiring = true;
 }

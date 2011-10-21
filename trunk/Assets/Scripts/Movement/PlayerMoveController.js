@@ -85,7 +85,9 @@ function Awake () {
 	cursorScreenPosition = Vector3 (0.5 * Screen.width, 0.5 * Screen.height, 0);
 	
 	// caching movement plane
+	//cursorPlaneHeight = -character.position.y;
 	playerMovementPlane = new Plane (character.up, character.position + character.up * cursorPlaneHeight);
+	//playerMovementPlane = new Plane (character.up, Vector3(character.position.x,0,character.position.z) + character.up * cursorPlaneHeight);
 }
 
 function Start () {

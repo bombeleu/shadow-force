@@ -31,8 +31,9 @@ function Awake(){
 		//ws[0] = go.GetComponent.<Weapon>();
 	}
 	
-	
+	//cursorPlaneHeight = -character.position.y;
 	playerMovementPlane = new Plane (character.up, character.position + character.up * cursorPlaneHeight);
+	//playerMovementPlane = new Plane (character.up, Vector3(character.position.x,0,character.position.z) + character.up * cursorPlaneHeight);
 	altFireTimer = Time.time;
 	lastWeaponSwitch = Time.time;
 }

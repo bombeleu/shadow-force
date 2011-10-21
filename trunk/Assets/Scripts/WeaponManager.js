@@ -64,6 +64,7 @@ private var firing:boolean = false;
 private var lastWeaponSwitch:float = -1;
 private var isFiring:boolean=false;
 private var oldIsFiring: boolean = false;
+private var joystickPos:Vector3;
 function Update () {
 	if (!networkView.isMine) return;//weapon manager only updates the local player, network update is done per weapon basis
 	//return;
@@ -71,11 +72,7 @@ function Update () {
 	playerMovementPlane.normal = character.up;
 	playerMovementPlane.distance = -character.position.y + cursorPlaneHeight;
 
-	// On PC, the cursor point is the mouse position
-	var cursorScreenPosition : Vector3 = Input.mousePosition;
-	
-	// Find out where the mouse ray intersects with the movement plane of the player
-	var cursorWorldPosition : Vector3 = ScreenPointToWorldPointOnPlane (cursorScreenPosition, playerMovementPlane, Camera.main);
+	var cursorWorldPosition : Vector3;
 
 	var weapon : Weapon = ws[curWeapon];
 	weapon.SetEnable(true);
@@ -85,7 +82,13 @@ function Update () {
 	var angle:float;
 	#if UNITY_IPHONE || UNITY_ANDROID
 		angle = 0;//TODO: compute angle base on the different between angle and joystick
+		cursorWorldPosition = character.position - Vector3(joystickPos.x,0,joystickPos.y) * 10;
 	#else
+		// On PC, the cursor point is the mouse position
+		var cursorScreenPosition : Vector3 = Input.mousePosition;
+		// Find out where the mouse ray intersects with the movement plane of the player
+		cursorWorldPosition = ScreenPointToWorldPointOnPlane (cursorScreenPosition, playerMovementPlane, Camera.main);
+
 		var quat: Quaternion = Quaternion.FromToRotation( character.transform.rotation * Vector3.forward, 
 			cursorWorldPosition - character.transform.position);
 		var axis:Vector3;
@@ -193,4 +196,8 @@ function OnStartFire(){
 
 function OnStopFire(){
 	isFiring = false;
+}
+
+function OnUpdateTarget(pos:Vector3){
+	joystickPos = pos;
 }

@@ -171,7 +171,7 @@ function Update () {
 		}else{
 			wm.OnStopFire();
 		}
-	
+		wm.OnUpdateTarget(joystickRight.position);	
 	#else
 	
 		#if !UNITY_EDITOR && (UNITY_XBOX360 || UNITY_PS3)

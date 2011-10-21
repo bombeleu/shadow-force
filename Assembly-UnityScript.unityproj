@@ -37,10 +37,10 @@
     <Reference Include="System.XML" />
 	<Reference Include="System.Core" />
 	<Reference Include="UnityEngine">
-	  <HintPath>/Applications/Unity/Unity.app/Contents/Frameworks/Managed/UnityEngine.dll</HintPath>
+	  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
 	</Reference>
 	<Reference Include="UnityEditor">
-	  <HintPath>/Applications/Unity/Unity.app/Contents/Frameworks/Managed/UnityEditor.dll</HintPath>
+	  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
 	</Reference>
   </ItemGroup>
   <ItemGroup>
@@ -74,6 +74,7 @@
      <Compile Include="Assets\Scripts\AutoKill.js" />
      <Compile Include="Assets\Scripts\Billboard.js" />
      <Compile Include="Assets\Scripts\ConnectionGUI.js" />
+     <Compile Include="Assets\Scripts\ExplodeOnImpact.js" />
      <Compile Include="Assets\Scripts\Fx\BrokenScreen.js" />
      <Compile Include="Assets\Scripts\Fx\ColoredNoise.js" />
      <Compile Include="Assets\Scripts\Fx\DeactivatorOnLowQuality.js" />

@@ -18,6 +18,7 @@ var normalize : boolean = false; 							// Normalize output after the dead-zone?
 var position : Vector2; 									// [-1, 1] in x,y
 var tapCount : int;											// Current tap count
 var directionalOnly : boolean = false;						
+var listener:GameObject;
 
 private var lastFingerId = -1;								// Finger last used for this joystick
 private var tapTimeWindow : float;							// How much time there is left for a tap to occur
@@ -30,6 +31,8 @@ private var defaultRect : Rect;								// Default position / extents of the joys
 private var guiBoundary : Boundary = Boundary ();			// Boundary for joystick graphic
 private var guiTouchOffset : Vector2;						// Offset to apply to touch input
 private var guiCenter : Vector2;							// Center of joystick
+
+
 
 #if !UNITY_IPHONE && !UNITY_ANDROID
 
@@ -86,10 +89,12 @@ function ResetJoystick () {
 	// Release the finger control and set the joystick back to the default position
 	gui.pixelInset = defaultRect;
 	lastFingerId = -1;
-	if (directionalOnly) 
-		position.Normalize();
-	else
-		position = Vector2.zero;
+	if (listener==null){
+		if (directionalOnly) 
+			position.Normalize();
+		else
+			position = Vector2.zero;
+	}
 	fingerDownPos = Vector2.zero;
 	
 	if (touchPad)
@@ -193,8 +198,12 @@ function Update () {
 					position.y = (touch.position.y - guiCenter.y) / guiTouchOffset.y;
 				}
 				
-				if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
+				if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled){
+					if (listener!=null) 
+						listener.SendMessage("OnJoystickRelease");
+					//else
 					ResetJoystick ();
+				}
 			}
 		}
 	}

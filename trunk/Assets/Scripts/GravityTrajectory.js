@@ -1,5 +1,6 @@
 #pragma strict
 @script RequireComponent (Rigidbody)
+@script RequireComponent (NetworkView)
 
 private var startTime:float;
 private var sVelo:Vector3;
@@ -7,9 +8,11 @@ private var sPos:Vector3;
 private var impact:boolean = false;
 function Start(){
 	startTime = Time.time;
-	sVelo = rigidbody.velocity;
+	//sVelo = rigidbody.velocity;
 	sPos = rigidbody.position;
 	rigidbody.useGravity = false;
+	
+	rigidbody.angularVelocity = Vector3(Random.value,Random.value,Random.value)*Random.value*4;
 }
 function Update () {
 	if (impact) return;
@@ -24,4 +27,16 @@ function OnCollisionEnter(collision : Collision) {
 	//if (Time.time - startTime <1) return;
     impact = true;
     rigidbody.useGravity = true;
+}
+
+function OnSerializeNetworkView (stream : BitStream, info : NetworkMessageInfo) {
+	stream.Serialize(sVelo);
+	if (stream.isReading){
+		rigidbody.velocity = sVelo;
+	}
+}
+
+function SetVelocity(velo:Vector3){
+	sVelo = velo;
+	rigidbody.velocity = sVelo;
 }

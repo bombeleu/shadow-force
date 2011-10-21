@@ -95,6 +95,9 @@ function Update () {
 		isFiring = fireAlt>=1;
 	#endif
 	
+	if (weapon.needPositionUpdate){
+		weapon.gameObject.SendMessage("OnUpdateTarget", cursorWorldPosition);
+	}
 	if (weapon.cooldown > 0){
 		if (!oldIsFiring && isFiring){
 			bufferedShot=1;//maximum buffered 1 shot

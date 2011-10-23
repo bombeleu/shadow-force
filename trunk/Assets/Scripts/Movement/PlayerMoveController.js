@@ -47,7 +47,10 @@ function SetJoystickReset(b:boolean){
 		joystickRight.listener = null;
 }
 
-function Awake () {		
+function Awake () {
+	//only control your own character!
+	if (!networkView.isMine) return;
+	
 	motor.movementDirection = Vector2.zero;
 	motor.facingDirection = Vector2.zero;
 	
@@ -98,6 +101,9 @@ function Awake () {
 }
 
 function Start () {
+	//only control your own character!
+	if (!networkView.isMine) return;
+	
 	#if UNITY_IPHONE || UNITY_ANDROID
 		// Move to right side of screen
 		var guiTex : GUITexture = joystickRightGO.GetComponent.<GUITexture> ();
@@ -112,6 +118,9 @@ function Start () {
 }
 
 function OnDisable () {
+	//only control your own character!
+	if (!networkView.isMine) return;
+	
 	if (joystickLeft) 
 		joystickLeft.enabled = false;
 	
@@ -120,6 +129,9 @@ function OnDisable () {
 }
 
 function OnEnable () {
+	//only control your own character!
+	if (!networkView.isMine) return;
+	
 	if (joystickLeft) 
 		joystickLeft.enabled = true;
 	

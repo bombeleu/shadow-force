@@ -16,7 +16,7 @@ var connectionTestResult = ConnectionTesterStatus.Undetermined;
 var useNat : boolean;
 var timer : float;
 
-static var dedicatedServer : boolean = false;
+static var dedicatedServer : boolean = true;
 
 function Awake(){
 	if (dedicatedServer){

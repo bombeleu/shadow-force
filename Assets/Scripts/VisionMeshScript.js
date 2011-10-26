@@ -1,13 +1,14 @@
-private var _mesh : Mesh;
+#pragma strict
+
+private var _mesh : Mesh; // current vision mesh
 private var _newVertices : Vector3[];
 private var _tmpVertices : Vector3[];
 private var _newTriangles: int[];
 
-private static var MAX_TRIANGLES : int = 100;
+private static var MAX_TRIANGLES : int = 50;
 private static var INFINITY : float = 1000.0;
-private var _blockers : GameObject[];
-private var _blockersDistance: float[];
-//private var _playerTransform : Transform;
+
+private var _playerTransform : Transform;
 
 public var viewDistance : float = 20;
 public var viewAngle : int = 30;
@@ -15,17 +16,18 @@ public var viewAngle : int = 30;
 private var _triangleCount : int;
 
 // cached variable
-private var corner : Vector2[] = new Vector2[4];
-private var angleCorner : float[] = new float[4];
-private var result : Vector2[] = new Vector2[4];
+private var _corner : Vector2[] = new Vector2[4];
+private var _angleCorner : float[] = new float[4];
+private var _result : Vector2[] = new Vector2[4];
+
 function Start() {
 	_mesh = GetComponent(MeshFilter).mesh;
 	// set position to the ground
 	//transform.localPosition.y = 0;
-	//_playerTransform = transform.parent;
+	_playerTransform = transform;
 	
 	//transform.parent = null;
-	transform.localPosition = Vector3(0,-0.5,0);
+	_playerTransform.localPosition = Vector3(0,-0.5,0);
 	
 	_newVertices = new Vector3[2*MAX_TRIANGLES+1];
 	_tmpVertices = new Vector3[2*MAX_TRIANGLES+1];
@@ -44,10 +46,6 @@ function Start() {
 	
 	_triangleCount = 0;
 	
-	// initialize static blockers
-	_blockers = GameObject.FindGameObjectsWithTag("Blocker");
-	_blockersDistance = new float[_blockers.Length];
-	Debug.Log("We have " + _blockers.Length + " blockers");
 }
 
 function Update () {
@@ -65,92 +63,122 @@ function Update () {
 	}
 	
 	_triangleCount = 1;
+	var pt1 : Vector3 = Vector3(-viewDistance*Mathf.Tan(Mathf.Deg2Rad*viewAngle),0,viewDistance) ;
+	var pt2 : Vector3 = Vector3(viewDistance*Mathf.Tan(Mathf.Deg2Rad*viewAngle),0,viewDistance);
+	_newVertices[1] = pt1;
+	_newVertices[2] = pt2;
 	
-	AddTriangle(0,
-				Vector3(-viewDistance*Mathf.Tan(Mathf.Deg2Rad*viewAngle),0,viewDistance) ,
-				Vector3(viewDistance*Mathf.Tan(Mathf.Deg2Rad*viewAngle),0,viewDistance));
-				//Vector3(0,0,viewDistance));
-	//Debug.Log("Angle");
-	//Debug.Log(Vector2.Dot(Vector2(-viewDistance*Mathf.Tan(Mathf.Deg2Rad*viewAngle),viewDistance),Vector2.up));
-	//Debug.Log(Vector2.Dot(Vector2(viewDistance*Mathf.Tan(Mathf.Deg2Rad*viewAngle),viewDistance),Vector2.up));
-	//Debug.Log(Sign(Vector2(-viewDistance*Mathf.Tan(Mathf.Deg2Rad*viewAngle)+5,viewDistance),Vector2.zero,Vector2(-viewDistance*Mathf.Tan(Mathf.Deg2Rad*viewAngle),viewDistance)));
-	//Debug.Log(Sign(Vector2(-viewDistance*Mathf.Tan(Mathf.Deg2Rad*viewAngle)-5,viewDistance),Vector2.zero,Vector2(-viewDistance*Mathf.Tan(Mathf.Deg2Rad*viewAngle),viewDistance)));
-	SortBlockers();
+	var blockers : GameObject[] ;
+	blockers = BlockerManager.GetObjsInTriangle(transform.position, transform.localToWorldMatrix.MultiplyPoint(pt1),transform.localToWorldMatrix.MultiplyPoint(pt2));
+	//blockers = BlockerManager.GetAllBlockers();
 	
-	for (var blocker: GameObject in _blockers)
+	for (var blocker: GameObject in BlockerManager.GetAllBlockers())
 	{
+		blocker.renderer.material.SetColor("_Color",Color.white);
+	}
+	
+	Debug.Log("Visible blockers : " + blockers.Length);
+	for (var blocker: GameObject in blockers)
+	{
+		//Debug.Log("Process blocker at:" + blocker.transform.position);
+		blocker.renderer.material.SetColor("_Color",Color.red);
 		Process(blocker);
 	}
 			
-	//Process(_blockers[0]);
-	
-
 	_mesh.vertices = _newVertices;
 	_mesh.triangles = _newTriangles;
+}
+
+private function Process( blocker : GameObject )
+{
+	if (GetDistance(blocker) == INFINITY) return;
+	var mesh : Mesh =  blocker.GetComponent(MeshFilter).mesh;
+	//Debug.Log("Process Blocker at position " + blocker.transform.position);
+	var i : int;
+	var currentTriangleCount : int = _triangleCount;
+	// process each triangle
+	_triangleCount = 0 ;
+	for (i = 0 ; i < currentTriangleCount; i++)
+	{
+		//Debug.Log("Process triangle : " + _newVertices[2*i+1].x + "," + _newVertices[2*i+1].z + "---" + _newVertices[2*i+2].x + "," +_newVertices[2*i+2].z);
+		var intersectPts : Vector2[] = GetIntersectPts(Vector2.zero,
+													 Vector2(_newVertices[2*i+1].x,_newVertices[2*i+1].z),
+													 Vector2(_newVertices[2*i+2].x,_newVertices[2*i+2].z),
+													 blocker);
+		// intersect
+		if (intersectPts[0] != Vector2.zero || intersectPts[3] != Vector2.zero ||
+			intersectPts[1] != Vector2.zero || intersectPts[2] != Vector2.zero)
+		{
+//			Debug.Log(intersectPts[0] +","+intersectPts[1]+","+intersectPts[2]+","+intersectPts[3]);
+//			var intersectPt1 : Vector2 = Vector2(intersectPts.x,intersectPts.y);
+//			var intersectPt2 : Vector2 = Vector2(intersectPts.z,intersectPts.w);
+//			if (intersectPt1 != Vector2.zero)
+			if (intersectPts[0] != Vector2.zero)
+			{
+				_tmpVertices[2*_triangleCount+1] = _newVertices[2*i+1];
+				_tmpVertices[2*_triangleCount+2] = Vector3(intersectPts[0].x, 0, intersectPts[0].y);
+				_triangleCount++;
+				//Debug.Log("add left point " + _triangleCount);
+			}
+			
+			//Debug.Log("test1");
+			_tmpVertices[2*_triangleCount+1] = Vector3(intersectPts[1].x, 0, intersectPts[1].y);
+			_tmpVertices[2*_triangleCount+2] = Vector3(intersectPts[2].x, 0, intersectPts[2].y);
+			_triangleCount++;
+			//Debug.Log("add middle point" + _triangleCount);
+			if (intersectPts[3] != Vector2.zero)
+			{
+				_tmpVertices[2*_triangleCount+1] = Vector3(intersectPts[3].x, 0, intersectPts[3].y);
+				_tmpVertices[2*_triangleCount+2] = _newVertices[2*i+2];
+				_triangleCount++;
+				//Debug.Log("add right point" + _triangleCount);
+			}
+			
+		} else
+		{
+			//_tmpVertices[3*_triangleCount] = _playerTransform.position;
+			_tmpVertices[2*_triangleCount+1] = _newVertices[2*i+1];
+			_tmpVertices[2*_triangleCount+2] = _newVertices[2*i+2];
+			_triangleCount++;
+		}
+		//Debug.Log("triangle : " + _newVertices[2*i+1].x + "," + _newVertices[2*i+1].z + "---" + _newVertices[2*i+2].x + "," +_newVertices[2*i+2].z);
+	}
+	
+	//Debug.Log(_tmpVertices[0] + ","+_tmpVertices[1] + ","+_tmpVertices[2]);
+	//Debug.Log(_tmpVertices[0] + ","+_tmpVertices[3] + ","+_tmpVertices[4]);
+	//Debug.Log(_tmpVertices[0] + ","+_tmpVertices[5] + ","+_tmpVertices[6]);
+
+	//Debug.Log("Triangle Count:" + _triangleCount);
+	//_newVertices = _tmpVertices;
+	for (i = 1 ; i <= 2*_triangleCount; i++)
+	{
+		_newVertices[i] = _tmpVertices[i];
+		//Debug.Log(_newVertices[i]);
+		//Debug.Log(_newTriangles[i]);
+	}
+	
 }
 
 private function GetDistance(blocker : GameObject) : float
 {
 	var distance: float;
-	if (IsCylinder(blocker))
+	if (BlockerManager.IsCylinder(blocker))
 	{
 		return INFINITY;
 		// handle cylinder shape
 		//var v : Vector4 = FindIntersectWith(blocker);
-		distance = (transform.position - blocker.transform.position).magnitude 
+		distance = (_playerTransform.position - blocker.transform.position).magnitude 
 		           - Mathf.Max(blocker.transform.localScale.x,blocker.transform.localScale.z);
 		
 		return (distance > viewDistance) ? INFINITY : distance;
 	} else 
 	{
-		distance = (transform.position - blocker.transform.position).magnitude;
+		distance = (_playerTransform.position - blocker.transform.position).magnitude;
 		
 		return (distance > viewDistance) ? INFINITY : distance;
 	}
 	
 	return INFINITY;
-}
-
-private function SortBlockers()
-{
-	var i : int;
-	var j : int;
-	
-	// calculate distance first
-	for ( i = 0 ; i < _blockers.Length;i++)
-	{
-		_blockersDistance[i] = GetDistance(_blockers[i]);
-	}
-	
-	// do bubble sort
-  	for (i = 0 ; i < _blockers.Length - 1;i++)
-  	{
-  		for ( j = i + 1 ; j < _blockers.Length;j++)
-  		{
-  			if (_blockersDistance[i] > _blockersDistance[j])
-  			{
-  				// swap
-  				var tempObj : GameObject = _blockers[i];
-  				_blockers[i] = _blockers[j];_blockers[j] = tempObj;
-  				
-  				var tempDist : float = _blockersDistance[i];
-  				_blockersDistance[i] = _blockersDistance[j];_blockersDistance[j] = tempDist;
-  			}
-  		}
-  	}
-}
-
-private function AddTriangle(index : int, pt1 : Vector3, pt2 : Vector3)
-{
-	//_newVertices[index*3] = transform.position;
-	_newVertices[index*2 + 1] = pt1;
-	_newVertices[index*2 + 2] = pt2;
-}
-
-private function IsCylinder(blocker : GameObject) : boolean
-{
-	if (blocker.name.Equals("Cylinder Instance") || blocker.name.Equals("Cylinder")) return true;
-	else return false;
 }
 
 private function GetAngleValue(v : Vector2) : float
@@ -173,14 +201,11 @@ private function GetAngleValue(v : Vector2) : float
 
 private function GetIntersectPts(pt0 : Vector2, pt1 : Vector2, pt2 : Vector2, blocker : GameObject)
 {
-	//var result : Vector4 = Vector4.zero;
+	//var _result : Vector4 = Vector4.zero;
 
-	if (IsCylinder(blocker))
+	if (BlockerManager.IsCylinder(blocker))
 	{
 		// find the intersection of the triangle and the circle
-		//var dot1 : float = Vector2.Dot(pt1-pt0,Vector2(blocker.transform.position.x,blocker.transform.position.z));
-		//var dot2 : float = Vector2.Dot(Vector2(blocker.transform.position.x,blocker.transform.position.z),pt2-pt0);
-		
 		/*
 		http://paulbourke.net/geometry/2circle/
 		http://www.mathopenref.com/consttangents.html 
@@ -188,7 +213,7 @@ private function GetIntersectPts(pt0 : Vector2, pt1 : Vector2, pt2 : Vector2, bl
 		//var point : Vector2 = Vector2(transform.position.x,transform.position.z);
 		var point : Vector2 = Vector2.zero;
 		//var center : Vector2 = Vector2(blocker.transform.position.x, blocker.transform.position.z);
-		var temp : Vector3 = transform.InverseTransformPoint(blocker.transform.position);
+		var temp : Vector3 = _playerTransform.InverseTransformPoint(blocker.transform.position);
 		var center : Vector2 = Vector2(temp.x,temp.z);
 		var r0 : float = blocker.transform.localScale.x * 0.5;
 		
@@ -218,144 +243,125 @@ private function GetIntersectPts(pt0 : Vector2, pt1 : Vector2, pt2 : Vector2, bl
 		if (IsPointInTri(tangent1,pt0,pt1,pt2))
 		{
 			//Debug.Log("Come here2");
-			result[0] = LineIntersectLine(pt0,tangent1,pt1,pt2,true);
-			result[1] = tangent1;
+			_result[0] = LineIntersectLine(pt0,tangent1,pt1,pt2,true);
+			_result[1] = tangent1;
 		} else
 		{
-			result[1] = LineIntersectCircle(pt0,pt1,center,r0);
+			_result[1] = LineIntersectCircle(pt0,pt1,center,r0);
 		}
 		
 		if (IsPointInTri(tangent2,pt0,pt1,pt2))
 		{
 			//Debug.Log("Come here3");
-			result[2] = tangent2;
-			result[3] = LineIntersectLine(pt0,tangent2,pt1,pt2,true);
+			_result[2] = tangent2;
+			_result[3] = LineIntersectLine(pt0,tangent2,pt1,pt2,true);
 		} else
 		{
-			result[2] = LineIntersectCircle(pt0,pt2,center,r0);
+			_result[2] = LineIntersectCircle(pt0,pt2,center,r0);
 		}
 	} else
 	{
 		//var w : float = blocker.transform.localScale.x;
 		//var h : float = blocker.transform.localScale.z;
-		var mat : Matrix4x4 = transform.worldToLocalMatrix * blocker.transform.localToWorldMatrix;
+		var mat : Matrix4x4 = _playerTransform.worldToLocalMatrix * blocker.transform.localToWorldMatrix;
 		
 		
 		var size : float = 0.5;
-		// get the 4 corners
-		temp = mat.MultiplyPoint(Vector3(-size,0,-size));corner[0]  = Vector2(temp.x,temp.z);
-		temp = mat.MultiplyPoint(Vector3(-size,0,size));corner[1]  = Vector2(temp.x,temp.z);
-		temp = mat.MultiplyPoint(Vector3(size,0,size));corner[2]  = Vector2(temp.x,temp.z);
-		temp = mat.MultiplyPoint(Vector3(size,0,-size));corner[3]  = Vector2(temp.x,temp.z);
+		// get the 4 _corners
+		temp = mat.MultiplyPoint3x4(Vector3(-size,0,-size));_corner[0]  = Vector2(temp.x,temp.z);
+		temp = mat.MultiplyPoint3x4(Vector3(-size,0,size));_corner[1]  = Vector2(temp.x,temp.z);
+		temp = mat.MultiplyPoint3x4(Vector3(size,0,size));_corner[2]  = Vector2(temp.x,temp.z);
+		temp = mat.MultiplyPoint3x4(Vector3(size,0,-size));_corner[3]  = Vector2(temp.x,temp.z);
 		var leftMost : int = 0;
 		var rightMost : int = 0;
 		
 		
-		for (i = 0; i < 4; i++)
+		for (var i : int = 0; i < 4; i++)
 		{
-			angleCorner[i] = GetAngleValue(corner[i]);
-			result[i] = Vector2.zero;
+			_angleCorner[i] = GetAngleValue(_corner[i]);
+			_result[i] = Vector2.zero;
 		}
 		
 		for (i = 1; i < 4; i++)
 		{
-			//if (corner[i].x < corner[leftMost].x) leftMost = i;
-			//if ((corner[i].x / corner[i].y) < (corner[leftMost].x / corner[leftMost].y)) leftMost = i;
-			//if ((corner[i].x / corner[i].y) > (corner[rightMost].x / corner[rightMost].y)) rightMost = i;
-			//if (Vector2.Angle(corner[i],Vector2.up) < Vector2.Angle(corner[leftMost],Vector2.up)) leftMost = i;
-			//if (Vector2.Angle(corner[i],Vector2.up) > Vector2.Angle(corner[rightMost],Vector2.up)) rightMost = i;
+			//if (_corner[i].x < _corner[leftMost].x) leftMost = i;
+			//if ((_corner[i].x / _corner[i].y) < (_corner[leftMost].x / _corner[leftMost].y)) leftMost = i;
+			//if ((_corner[i].x / _corner[i].y) > (_corner[rightMost].x / _corner[rightMost].y)) rightMost = i;
+			//if (Vector2.Angle(_corner[i],Vector2.up) < Vector2.Angle(_corner[leftMost],Vector2.up)) leftMost = i;
+			//if (Vector2.Angle(_corner[i],Vector2.up) > Vector2.Angle(_corner[rightMost],Vector2.up)) rightMost = i;
 			
-			if (angleCorner[i] < angleCorner[leftMost]) leftMost = i;
-			if (angleCorner[i] > angleCorner[rightMost]) rightMost = i;
+			if (_angleCorner[i] < _angleCorner[leftMost]) leftMost = i;
+			if (_angleCorner[i] > _angleCorner[rightMost]) rightMost = i;
 		}
 		//rightMost = (leftMost + 2)%4;
-		//Debug.Log("4 corner:" + corner[0] + " | "+ corner[1] + " | "+ corner[2] + " | "+ corner[3]);
+		//Debug.Log("4 _corner:" + _corner[0] + " | "+ _corner[1] + " | "+ _corner[2] + " | "+ _corner[3]);
 		//Debug.Log("Left - right" + leftMost + "," + rightMost);
 		
-		var intersectPt1 : Vector2 = LineIntersectLine(pt0,pt1,corner[leftMost],corner[rightMost],false);
-		var intersectPt2 : Vector2 = LineIntersectLine(pt0,pt2,corner[leftMost],corner[rightMost],false);
-		var intersectPt3 : Vector2 = LineIntersectLine(pt1,pt2,corner[leftMost],corner[rightMost],false);
+		var intersectPt1 : Vector2 = LineIntersectLine(pt0,pt1,_corner[leftMost],_corner[rightMost],false);
+		var intersectPt2 : Vector2 = LineIntersectLine(pt0,pt2,_corner[leftMost],_corner[rightMost],false);
+		var intersectPt3 : Vector2 = LineIntersectLine(pt1,pt2,_corner[leftMost],_corner[rightMost],false);
 		//Debug.Log("Intersect Pts:" + intersectPt1 + " | " + intersectPt2 + "|" + intersectPt3);
 		if (intersectPt1 != Vector2.zero)
 		{
-			result[1] = intersectPt1;
+			_result[1] = intersectPt1;
 			
 			if (intersectPt2 != Vector2.zero) // intersect 1,2
 			{
-				result[2] = intersectPt2;
+				_result[2] = intersectPt2;
 			} else if (intersectPt3 != Vector2.zero) // intersect 1,3
 			{
-				result[2] = intersectPt3;
-				result[3] = intersectPt3;
+				_result[2] = intersectPt3;
+				_result[3] = intersectPt3;
 			} else // only intersect 1
 			{
-				result[2] = corner[rightMost];
-				result[3] = LineIntersectLine(pt0,corner[rightMost],pt1,pt2,true);
+				_result[2] = _corner[rightMost];
+				_result[3] = LineIntersectLine(pt0,_corner[rightMost],pt1,pt2,true);
 			}
 		} else
 		{
 			if (intersectPt2 != Vector2.zero)
 			{
-				result[2] = intersectPt2;
+				_result[2] = intersectPt2;
 				if (intersectPt3 != Vector2.zero) // intersect 2,3
 				{
-					result[0] = intersectPt3;
-					result[1] = intersectPt3;
+					_result[0] = intersectPt3;
+					_result[1] = intersectPt3;
 				} else // intersect 2 only
 				{
-					result[0] = LineIntersectLine(pt0,corner[leftMost],pt1,pt2,true);
-					result[1] = corner[leftMost];
+					_result[0] = LineIntersectLine(pt0,_corner[leftMost],pt1,pt2,true);
+					_result[1] = _corner[leftMost];
 				}
 			} else 
 			{
 				if (intersectPt3 != Vector2.zero) // intersect 3 only
 				{
-					if (IsPointInTri(corner[leftMost],pt0,pt1,pt2)) // pt1 inside
+					if (IsPointInTri(_corner[leftMost],pt0,pt1,pt2)) // pt1 inside
 					{
-						result[0] = LineIntersectLine(pt0,corner[leftMost],pt1,pt2,true);
-						result[1] = corner[leftMost];
-						result[2] = intersectPt3;
-						result[3] = intersectPt3;	
+						_result[0] = LineIntersectLine(pt0,_corner[leftMost],pt1,pt2,true);
+						_result[1] = _corner[leftMost];
+						_result[2] = intersectPt3;
+						_result[3] = intersectPt3;	
 					} else // pt2 must be inside
 					{
-						result[0] = intersectPt3;
-						result[1] = intersectPt3;
-						result[2] = corner[rightMost];
-						result[3] = LineIntersectLine(pt0,corner[rightMost],pt1,pt2,true);
+						_result[0] = intersectPt3;
+						_result[1] = intersectPt3;
+						_result[2] = _corner[rightMost];
+						_result[3] = LineIntersectLine(pt0,_corner[rightMost],pt1,pt2,true);
 					}
-				} else if (IsPointInTri(corner[leftMost],pt0,pt1,pt2))// no intersections, both pts are inside triangle
+				} else if (IsPointInTri(_corner[leftMost],pt0,pt1,pt2))// no intersections, both pts are inside triangle
 				{
-					result[0] = LineIntersectLine(pt0,corner[leftMost],pt1,pt2,true);
-					result[1] = corner[leftMost];
-					result[2] = corner[rightMost];
-					result[3] = LineIntersectLine(pt0,corner[rightMost],pt1,pt2,true);
+					_result[0] = LineIntersectLine(pt0,_corner[leftMost],pt1,pt2,true);
+					_result[1] = _corner[leftMost];
+					_result[2] = _corner[rightMost];
+					_result[3] = LineIntersectLine(pt0,_corner[rightMost],pt1,pt2,true);
 				}
 			}
 		}
-		// below is old code
-//		if (IsPointInAngle(corner[leftMost],pt0,pt1,pt2))
-//		{
-//			Debug.Log("Come here2");
-//			result[0] = LineIntersectLine(pt0,corner[leftMost],pt1,pt2,true);
-//			result[1] = corner[leftMost];
-//		} else
-//		{
-//			result[1] = LineIntersectLine(pt0,pt1,corner[leftMost],corner[rightMost],true);
-//		}
-//		
-//		if (IsPointInAngle(corner[rightMost],pt0,pt1,pt2))
-//		{
-//			Debug.Log("Come here3");
-//			result[2] = corner[rightMost];
-//			result[3] = LineIntersectLine(pt0,corner[rightMost],pt1,pt2,true);
-//		} else
-//		{
-//			result[2] = LineIntersectLine(pt0,pt2,corner[leftMost],corner[rightMost],true);
-//		}
+
 	}
-	//Debug.Log("Result is" + result);
+	//Debug.Log("Result is" + _result);
 	
-	return result;
+	return _result;
 }
 
 private function perp(u : Vector2, v : Vector2) : float
@@ -421,72 +427,3 @@ private function IsPointInTri(pt :Vector2, v1:Vector2, v2:Vector2, v3:Vector2) :
 	return ((b1 == b2) && (b2 == b3));
 }
 
-private function Process( blocker : GameObject )
-{
-	if (GetDistance(blocker) == INFINITY) return;
-	var mesh : Mesh =  blocker.GetComponent(MeshFilter).mesh;
-	Debug.Log("Process Blocker at position " + blocker.transform.position);
-	var i : int;
-	var currentTriangleCount : int = _triangleCount;
-	// process each triangle
-	_triangleCount = 0 ;
-	for (i = 0 ; i < currentTriangleCount; i++)
-	{
-		//Debug.Log("Process triangle : " + _newVertices[2*i+1].x + "," + _newVertices[2*i+1].z + "---" + _newVertices[2*i+2].x + "," +_newVertices[2*i+2].z);
-		var intersectPts : Vector2[] = GetIntersectPts(Vector2.zero,
-													 Vector2(_newVertices[2*i+1].x,_newVertices[2*i+1].z),
-													 Vector2(_newVertices[2*i+2].x,_newVertices[2*i+2].z),
-													 blocker);
-		// intersect
-		if (intersectPts[0] != Vector2.zero || intersectPts[3] != Vector2.zero ||
-			intersectPts[1] != Vector2.zero || intersectPts[2] != Vector2.zero)
-		{
-			Debug.Log(intersectPts[0] +","+intersectPts[1]+","+intersectPts[2]+","+intersectPts[3]);
-//			var intersectPt1 : Vector2 = Vector2(intersectPts.x,intersectPts.y);
-//			var intersectPt2 : Vector2 = Vector2(intersectPts.z,intersectPts.w);
-//			if (intersectPt1 != Vector2.zero)
-			if (intersectPts[0] != Vector2.zero)
-			{
-				_tmpVertices[2*_triangleCount+1] = _newVertices[2*i+1];
-				_tmpVertices[2*_triangleCount+2] = Vector3(intersectPts[0].x, 0, intersectPts[0].y);
-				_triangleCount++;
-				//Debug.Log("add left point " + _triangleCount);
-			}
-			
-			//Debug.Log("test1");
-			_tmpVertices[2*_triangleCount+1] = Vector3(intersectPts[1].x, 0, intersectPts[1].y);
-			_tmpVertices[2*_triangleCount+2] = Vector3(intersectPts[2].x, 0, intersectPts[2].y);
-			_triangleCount++;
-			//Debug.Log("add middle point" + _triangleCount);
-			if (intersectPts[3] != Vector2.zero)
-			{
-				_tmpVertices[2*_triangleCount+1] = Vector3(intersectPts[3].x, 0, intersectPts[3].y);
-				_tmpVertices[2*_triangleCount+2] = _newVertices[2*i+2];
-				_triangleCount++;
-				//Debug.Log("add right point" + _triangleCount);
-			}
-			
-		} else
-		{
-			//_tmpVertices[3*_triangleCount] = _playerTransform.position;
-			_tmpVertices[2*_triangleCount+1] = _newVertices[2*i+1];
-			_tmpVertices[2*_triangleCount+2] = _newVertices[2*i+2];
-			_triangleCount++;
-		}
-		//Debug.Log("triangle : " + _newVertices[2*i+1].x + "," + _newVertices[2*i+1].z + "---" + _newVertices[2*i+2].x + "," +_newVertices[2*i+2].z);
-	}
-	
-	//Debug.Log(_tmpVertices[0] + ","+_tmpVertices[1] + ","+_tmpVertices[2]);
-	//Debug.Log(_tmpVertices[0] + ","+_tmpVertices[3] + ","+_tmpVertices[4]);
-	//Debug.Log(_tmpVertices[0] + ","+_tmpVertices[5] + ","+_tmpVertices[6]);
-
-	Debug.Log("Triangle Count:" + _triangleCount);
-	//_newVertices = _tmpVertices;
-	for (i = 1 ; i <= 2*_triangleCount; i++)
-	{
-		_newVertices[i] = _tmpVertices[i];
-		//Debug.Log(_newVertices[i]);
-		//Debug.Log(_newTriangles[i]);
-	}
-	
-}

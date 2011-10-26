@@ -72,16 +72,16 @@ function Update () {
 	blockers = BlockerManager.GetObjsInTriangle(transform.position, transform.localToWorldMatrix.MultiplyPoint(pt1),transform.localToWorldMatrix.MultiplyPoint(pt2));
 	//blockers = BlockerManager.GetAllBlockers();
 	
-	for (var blocker: GameObject in BlockerManager.GetAllBlockers())
-	{
-		blocker.renderer.material.SetColor("_Color",Color.white);
-	}
+//	for (var blocker: GameObject in BlockerManager.GetAllBlockers())
+//	{
+//		blocker.renderer.material.SetColor("_Color",Color.white);
+//	}
 	
-	Debug.Log("Visible blockers : " + blockers.Length);
+	//Debug.Log("Visible blockers : " + blockers.Length);
 	for (var blocker: GameObject in blockers)
 	{
 		//Debug.Log("Process blocker at:" + blocker.transform.position);
-		blocker.renderer.material.SetColor("_Color",Color.red);
+		//blocker.renderer.material.SetColor("_Color",Color.red);
 		Process(blocker);
 	}
 			

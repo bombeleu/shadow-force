@@ -65,31 +65,48 @@ class Cell {
 	
 	private static function ProcessBlocker(blocker : GameObject)
 	{
-		if (!IsCube(blocker)) return;
-		Debug.Log("Process Blocker at " + blocker.transform.position);
-		// now it's a cube, how to check which cell this cube intersects
-		var mat : Matrix4x4 = blocker.transform.localToWorldMatrix;
-		
-		var size : float = 0.5;
-		var corner : Vector2[] = new Vector2[4];
-		// get the 4 _corners
-		var temp : Vector3;
-		temp = mat.MultiplyPoint3x4( new Vector3(-size,0,-size));corner[0]  = new Vector2(temp.x,temp.z);
-		temp = mat.MultiplyPoint3x4(new Vector3(-size,0,size));corner[1]  = new Vector2(temp.x,temp.z);
-		temp = mat.MultiplyPoint3x4(new Vector3(size,0,size));corner[2]  = new Vector2(temp.x,temp.z);
-		temp = mat.MultiplyPoint3x4(new Vector3(size,0,-size));corner[3]  = new Vector2(temp.x,temp.z);
-		
-		var smallest : Vector2 = corner[0];
-		var largest : Vector2 = corner[0];
-		//Debug.Log(corner[0] + "|"+corner[1] + "|"+corner[2] + "|"+corner[3] );
-		//find smallest x, smallest y, largestX, largestY
-		for (var i : int = 1 ; i < 4; i++)
+		if (IsCube(blocker))
 		{
-			if (smallest.x > corner[i].x) smallest.x = corner[i].x;
-			if (smallest.y > corner[i].y) smallest.y = corner[i].y;
-			if (largest.x < corner[i].x) largest.x = corner[i].x;
-			if (largest.y < corner[i].y) largest.y = corner[i].y;
-		}
+			Debug.Log("Process Blocker Cube at " + blocker.transform.position);
+			// now it's a cube, how to check which cell this cube intersects
+			var mat : Matrix4x4 = blocker.transform.localToWorldMatrix;			
+			var size : float = 0.5;
+			var corner : Vector2[] = new Vector2[4];
+			// get the 4 _corners
+			var temp : Vector3;
+			temp = mat.MultiplyPoint3x4( new Vector3(-size,0,-size));corner[0]  = new Vector2(temp.x,temp.z);
+			temp = mat.MultiplyPoint3x4(new Vector3(-size,0,size));corner[1]  = new Vector2(temp.x,temp.z);
+			temp = mat.MultiplyPoint3x4(new Vector3(size,0,size));corner[2]  = new Vector2(temp.x,temp.z);
+			temp = mat.MultiplyPoint3x4(new Vector3(size,0,-size));corner[3]  = new Vector2(temp.x,temp.z);
+			
+			var smallest : Vector2 = corner[0];
+			var largest : Vector2 = corner[0];
+			//Debug.Log(corner[0] + "|"+corner[1] + "|"+corner[2] + "|"+corner[3] );
+			//find smallest x, smallest y, largestX, largestY
+			for (var i : int = 1 ; i < 4; i++)
+			{
+				if (smallest.x > corner[i].x) smallest.x = corner[i].x;
+				if (smallest.y > corner[i].y) smallest.y = corner[i].y;
+				if (largest.x < corner[i].x) largest.x = corner[i].x;
+				if (largest.y < corner[i].y) largest.y = corner[i].y;
+			}
+			
+		} else if (IsCylinder(blocker))
+		{
+			Debug.Log("Process Blocker Cylinder at " + blocker.transform.position);
+			// now it's a cylinder, how to check which cell this cube intersects
+			var capsule : CapsuleCollider = blocker.GetComponent(CapsuleCollider) ;
+			
+			var center : Vector2 = Vector2(capsule.center.x + blocker.transform.position.x, capsule.center.z + blocker.transform.position.z);
+			var radius : float = capsule.radius * blocker.transform.localScale.x;
+			
+			Debug.Log("Center" + center + "|||"+ "radius:" + radius);
+			smallest = center - Vector2(radius,radius);
+			largest = center + Vector2(radius,radius);
+		
+		} else return;
+		
+		// add to proper cells
 		//Debug.Log(smallest + "|||" + largest);
 		for (i = ToCell(smallest.x) ; i <= ToCell(largest.x); i++)
 		{

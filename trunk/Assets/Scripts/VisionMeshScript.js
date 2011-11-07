@@ -172,7 +172,7 @@ private function GetDistance(blocker : GameObject) : float
 	var distance: float;
 	if (BlockerManager.IsCylinder(blocker))
 	{
-		return INFINITY;
+		//return INFINITY;
 		// handle cylinder shape
 		//var v : Vector4 = FindIntersectWith(blocker);
 		distance = (_playerTransform.position - blocker.transform.position).magnitude 
@@ -218,7 +218,7 @@ private function GetIntersectPts(pt0 : Vector2, pt1 : Vector2, pt2 : Vector2, bl
 	_result[0] = _result[1] = _result[2] = _result[3] = Vector2.zero;
 	if (BlockerManager.IsCylinder(blocker))
 	{
-		return _result;
+		//return _result;
 		// find the intersection of the triangle and the circle
 		/*
 		http://paulbourke.net/geometry/2circle/

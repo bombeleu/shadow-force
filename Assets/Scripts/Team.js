@@ -1,3 +1,5 @@
+#pragma strict
+
 public static var ammo = 20;
 
 public var team: int = 0;
@@ -9,7 +11,7 @@ function Update () {
 function SetTeam(t:int){
 	team = t;
 	//transform.FindChild("TeamName").GetComponent(TextMesh).text = na;
-	transform.FindChild("Spotlight").GetComponent(Light).color = team==1?Color.blue:Color.red;
+	//transform.FindChild("Spotlight").GetComponent(Light).color = team==1?Color.blue:Color.red;
 }
 
 @RPC

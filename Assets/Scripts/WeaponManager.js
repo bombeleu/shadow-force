@@ -65,6 +65,13 @@ private var lastWeaponSwitch:float = -1;
 private var isFiring:boolean=false;
 private var oldIsFiring: boolean = false;
 private var joystickPos:Vector3;
+
+function OnSetVisible(visi:boolean){
+	/*for (var weapon:Weapon in ws)
+		weapon.SetEnable(false);*/
+	ws[curWeapon].SetEnable(visi);
+}
+
 function Update () {
 	if (!networkView.isMine) return;//weapon manager only updates the local player, network update is done per weapon basis
 
@@ -107,7 +114,7 @@ function Update () {
 		if (!oldIsFiring && isFiring){
 			bufferedShot=1;//maximum buffered 1 shot
 		}
-		if ((bufferedShot>0 || isFiring) && angle<=3 && (Time.time - altFireTimer > 0.5)){
+		if ((bufferedShot>0 || isFiring) && angle<=3 && (Time.time - altFireTimer > weapon.cooldown)){
 			bufferedShot = 0;
 			//RPCFireMissile();
 			//transform.SendMessage ("RPCFireMissile");
@@ -171,7 +178,8 @@ function OnSerializeNetworkView (stream : BitStream, info : NetworkMessageInfo) 
 @RPC
 function RPCWeaponSwitch(newWeapon:int){
 	ws[curWeapon].SetEnable(false);
-	ws[newWeapon].SetEnable(true);
+	if (GetComponent.<Visibility>().GetVisible())
+		ws[newWeapon].SetEnable(true);
 	curWeapon = newWeapon;
 	
 	if (networkView.isMine){

@@ -6,8 +6,8 @@ function Update () {
 	
 	//Debug.DrawLine(new Vector3(-5,0,13), new Vector3(-5,10,13), Color.white, 0);
 	//var players = GameObject.FindGameObjectsWithTag ("Player");
-	var players = GameObject.FindObjectsOfType(Observer);
-	var visiobjs = GameObject.FindObjectsOfType(Visibility);
+	var players : Observer[] = GameObject.FindObjectsOfType(Observer) as Observer[];
+	var visiobjs : Visibility[]= GameObject.FindObjectsOfType(Visibility) as Visibility[];
 	//Debug.Log(players.GetLength());
 	for (var viobj in visiobjs){
 		var p = viobj.gameObject;
@@ -19,7 +19,7 @@ function Update () {
 			//Debug.Log('same team', viobj);
 			//continue;
 		}else
-			for (var seer in players){
+			for (var seer : Observer in players){
 				//Debug.Log("get here 1");
 				if (seer.GetComponent.<Team>().team != myTeam){//only check allies vision
 					continue;

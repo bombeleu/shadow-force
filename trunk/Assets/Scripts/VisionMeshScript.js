@@ -287,7 +287,7 @@ private function GetIntersectPts(pt0 : Vector2, pt1 : Vector2, pt2 : Vector2, bl
 			}
 		} else 
 		{
-			if (sign12 * sign30 < 0) Debug.Log("SOMETHING WRONG !!");	
+			//if (sign12 * sign30 < 0) Debug.Log("SOMETHING WRONG !!");	
 			if (Mathf.Abs(sign12) < Mathf.Abs(sign30))
 			{
 				leftMost = _corner[1];rightMost = _corner[2];

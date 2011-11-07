@@ -1,46 +1,60 @@
+#pragma strict
+@script RequireComponent (Team)
+
 function Update () {
-	var myTeam = (GetComponent("Team") as Team).team;
+	var myTeam = GetComponent.<Team>().team;
 	
 	//Debug.DrawLine(new Vector3(-5,0,13), new Vector3(-5,10,13), Color.white, 0);
-	var players = GameObject.FindGameObjectsWithTag ("Player");
+	//var players = GameObject.FindGameObjectsWithTag ("Player");
+	var players = GameObject.FindObjectsOfType(Observer);
+	var visiobjs = GameObject.FindObjectsOfType(Visibility);
 	//Debug.Log(players.GetLength());
-	for (var p in players){
+	for (var viobj in visiobjs){
+		var p = viobj.gameObject;
+		//Debug.Log(p);
+		//if (p == gameObject) continue;
 		var visi : boolean = false;
-		if ((p.GetComponent("Team")as Team).team == myTeam){
+		if (viobj.visibilityType == VisibilityType.Always || p.GetComponent.<Team>().team == myTeam){
 			visi = true;
-			continue;
-		}
-		for (var seer in players){
-			//Debug.Log("get here 1");
-			if (/*!p.networkView.isMine p!=gameObject)*/(seer.GetComponent("Team")as Team).team != myTeam){
-				continue;
-			}
-			//Debug.DrawLine(transform.position, p.transform.position, Color.white, 3);
-			var sl = seer;
-			var local_visi : boolean = false;
-			if (sl){
-				var localPos :Vector3 = sl.transform.worldToLocalMatrix.MultiplyPoint(p.transform.position);
-				var angle : float;
-				var axis : Vector3;
-				Quaternion.FromToRotation(Vector3(0,0,1), localPos).ToAngleAxis(angle, axis);
-				//Debug.Log("angle "+angle);
-				local_visi = angle <= 45;
-			}
-			if (local_visi){
-				var hitInfo = RaycastHit ();
-				var dir : Vector3 = p.transform.position - seer.transform.position;
-				Physics.Raycast (seer.transform.position, dir, hitInfo);
-				if (hitInfo.transform){
-					var targetHealth : Health = hitInfo.transform.GetComponent.<Health> ();
-					//var pl = p.Find("player");
-					//var sl = gameObject.Find("SpotLight");
-					local_visi = targetHealth != null;
+			//Debug.Log('same team', viobj);
+			//continue;
+		}else
+			for (var seer in players){
+				//Debug.Log("get here 1");
+				if (seer.GetComponent.<Team>().team != myTeam){//only check allies vision
+					continue;
 				}
+				//Debug.DrawLine(transform.position, p.transform.position, Color.white, 3);
+				var sl = seer;
+				var local_visi : boolean = false;
+				if (sl){
+					var localPos :Vector3 = sl.transform.worldToLocalMatrix.MultiplyPoint(p.transform.position);
+					var angle : float;
+					var axis : Vector3;
+					Quaternion.FromToRotation(Vector3(0,0,1), localPos).ToAngleAxis(angle, axis);
+					//Debug.Log("angle "+angle);
+					local_visi = angle <= seer.angle/2;//45;
+				}
+				if (local_visi){
+					var hitInfo = RaycastHit ();
+					var dir : Vector3 = p.transform.position - seer.transform.position;
+					Physics.Raycast (seer.transform.position, dir, hitInfo);
+					if (hitInfo.transform){
+						if (hitInfo.distance > seer.range)
+							local_visi = false;
+						else{
+							var target : Visibility = hitInfo.transform.GetComponent.<Visibility> ();
+							//local_visi = target != null;
+							local_visi = target == viobj;
+						}
+					}
+				}
+				visi = visi || local_visi;
+				if (visi) break;
 			}
-			visi = visi || local_visi;
-			if (visi) break;
-		}
-		//*
+		//if (!visi) Debug.Log('hidden', viobj);
+		viobj.SetVisible(visi);
+		/*
 		var rr = p.GetComponentsInChildren(Renderer);
 		for (var r:Renderer in rr){
 			r.enabled = visi;

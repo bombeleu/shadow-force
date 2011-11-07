@@ -2,6 +2,8 @@
 
 @script RequireComponent (PerFrameRaycast)
 
+public var spawnPoint : Transform;
+
 public var scrollSpeed : float = 0.5;
 public var pulseSpeed : float = 1.5;
 
@@ -47,21 +49,32 @@ function Update () {
 	aniFactor = Mathf.Max (minWidth, aniFactor) * maxWidth;
 	lRenderer.SetWidth (aniFactor, aniFactor);
 	
+	lRenderer.SetPosition(0, spawnPoint.position);
+	
 	// Cast a ray to find out the end point of the laser
+	lRenderer.SetVertexCount(reflect?3:2);
 	var hitInfo : RaycastHit = raycast.GetHitInfo ();
 	if (hitInfo.transform) {
-		lRenderer.SetVertexCount(reflect?3:2);
-		var firstPos : Vector3 = (hitInfo.distance * Vector3.forward);
-		lRenderer.SetPosition (1, firstPos);
+		/*var firstPos : Vector3 = (hitInfo.distance * Vector3.forward);
+		lRenderer.SetPosition (1, firstPos);*/
+		lRenderer.SetPosition(1, hitInfo.point);
 		
 		if (reflect){
+			/*
 			var localNorm:Vector3 = transform.worldToLocalMatrix.MultiplyVector(hitInfo.normal);
 			var dir:Vector3 = Vector3.forward - localNorm * Vector3.Dot(Vector3.forward, localNorm) * 2;
 			dir.y = 0;
 			var secondHit:RaycastHit = RaycastHit ();
-			Physics.Raycast (transform.localToWorldMatrix.MultiplyPoint(firstPos /*+ dir.normalized*/), 
+			Physics.Raycast (transform.localToWorldMatrix.MultiplyPoint(firstPos), 
 				transform.localToWorldMatrix.MultiplyVector(dir), secondHit);
 			lRenderer.SetPosition (2, firstPos + secondHit.distance * dir);
+			*/
+			var dir:Vector3 = hitInfo.point - spawnPoint.position;
+			dir -= hitInfo.normal * Vector3.Dot(dir, hitInfo.normal) * 2;
+			dir.y = 0;
+			var secondHit:RaycastHit = RaycastHit();
+			Physics.Raycast(hitInfo.point, dir, secondHit);
+			lRenderer.SetPosition(2, secondHit.point);
 			//dir -= norm * Vector3.Dot(dir, norm) * 2;
     		//dir.y = 0;
 		}
@@ -81,7 +94,8 @@ function Update () {
 		if (pointer)
 			pointer.renderer.enabled = false;		
 		var maxDist : float = 200.0;
-		lRenderer.SetPosition (1, (maxDist * Vector3.forward));
+		//lRenderer.SetPosition (1, (maxDist * Vector3.forward));
+		lRenderer.SetPosition (1, spawnPoint.transform.position + spawnPoint.transform.forward* maxDist);
 		renderer.material.mainTextureScale.x = 0.1 * (maxDist);		
 		renderer.material.SetTextureScale ("_NoiseTex", Vector2 (0.1 * (maxDist) * noiseSize, noiseSize));		
 	}

@@ -1,3 +1,4 @@
+#pragma strict
 @script RequireComponent (Weapon)
 
 public var damagePerSecond : float = 20.0;
@@ -14,7 +15,7 @@ function Awake(){
 
 function OnLaunchBullet(){
 	if (Time.time > lastFireTime + interval) {
-		var hitInfo : RaycastHit = (gameObject.GetComponentInChildren.<PerFrameRaycast> () as PerFrameRaycast).GetHitInfo();
+		var hitInfo : RaycastHit = gameObject.GetComponentInChildren.<PerFrameRaycast>().GetHitInfo();
 		
 		if (hitInfo.transform) {
 			// Get the health component of the target if any

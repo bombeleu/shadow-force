@@ -5,7 +5,7 @@ public var recursive:boolean = false;
 function OnSetVisible(visi:boolean){
 	for (var obj:GameObject in visibleObjects){
 		if (recursive){
-			var rr = obj.GetComponentsInChildren(Renderer);
+			var rr : Renderer[] = obj.GetComponentsInChildren.<Renderer>();
 			for (var r:Renderer in rr)
 				r.enabled = visi;
 		}else

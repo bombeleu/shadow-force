@@ -13,6 +13,7 @@ private var _playerTransform : Transform;
 
 public var viewDistance : float = 20;
 public var viewAngle : int = 30;
+public var visionColor: Color = Color(0.8,0.2,0.3,0.2);
 
 private var _triangleCount : int;
 
@@ -21,6 +22,7 @@ private var _corner : Vector2[] = new Vector2[4];
 private var _angleCorner : float[] = new float[4];
 private var _result : Vector2[] = new Vector2[4];
 
+static var testCount : int = 0;
 function Start() {
 	_mesh = GetComponent(MeshFilter).mesh;
 	// set position to the ground
@@ -60,7 +62,7 @@ function Update () {
 	_mesh.Clear();
 	for (var i :int = 0 ; i < 2*MAX_TRIANGLES+1;i++)
 	{
-		_newVertices[i] = Vector3(0,0,0);
+		_newVertices[i] = Vector3.zero;
 	}
 	
 	_triangleCount = 1;
@@ -85,7 +87,16 @@ function Update () {
 		//blocker.renderer.material.SetColor("_Color",Color.red);
 		Process(blocker);
 	}
-			
+	
+	//Debug.Log("Position" + _playerTransform.position);			
+	//Debug.Log("Position" + gameObject.transform.position);			
+	
+	//Debug.Log(testCount++ + ":" + _playerTransform.position);
+	//Debug.Log(pt1 + "|" + pt2);
+	
+	renderer.material.SetFloat("_Distance",viewDistance);
+	renderer.material.SetColor("_VisionColor",visionColor);
+	
 	_mesh.vertices = _newVertices;
 	_mesh.triangles = _newTriangles;
 }

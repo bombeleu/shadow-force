@@ -38,7 +38,7 @@ function Update () {
 				if (local_visi){
 					var hitInfo = RaycastHit ();
 					var dir : Vector3 = p.transform.position - seer.transform.position;
-					Physics.Raycast (seer.transform.position, dir, hitInfo);
+					Physics.Raycast (seer.transform.position, dir, hitInfo/*, Mathf.Infinity, 1 << 8*/);
 					if (hitInfo.transform){
 						if (hitInfo.distance > seer.range)
 							local_visi = false;

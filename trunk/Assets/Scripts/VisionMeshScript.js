@@ -104,7 +104,7 @@ function Update () {
 private function Process( blocker : GameObject )
 {
 	if (GetDistance(blocker) == INFINITY) return;
-	var mesh : Mesh =  blocker.GetComponent(MeshFilter).mesh;
+	//var mesh : Mesh =  blocker.GetComponent(MeshFilter).mesh;
 	//Debug.Log("Process Blocker at position " + blocker.transform.position);
 	var i : int;
 	var currentTriangleCount : int = _triangleCount;

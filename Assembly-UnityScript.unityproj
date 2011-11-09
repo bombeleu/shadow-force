@@ -146,6 +146,7 @@
      <Compile Include="Assets\Scripts\Rain\RainsplashBox.js" />
      <Compile Include="Assets\Scripts\Rain\RainsplashManager.js" />
      <Compile Include="Assets\Scripts\SlowBullet.js" />
+     <Compile Include="Assets\Scripts\StickyCamScript.js" />
      <Compile Include="Assets\Scripts\Team.js" />
      <Compile Include="Assets\Scripts\TrajectoryRenderer.js" />
      <Compile Include="Assets\Scripts\Visibility.js" />

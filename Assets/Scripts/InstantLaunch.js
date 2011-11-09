@@ -18,7 +18,7 @@ function OnLaunchBullet(){
 		var pos:Vector3 = hitInfo.point + hitInfo.normal *0.5;
 		pos.y = 1.5;
 		var bullet = Network.Instantiate(bulletPrefab, pos, Quaternion.LookRotation(hitInfo.normal), 0);
-		bullet.GetComponent.<Team>().SetTeam(Camera.main.GetComponent.<Team>().team);
+		bullet.GetComponent.<Team>().SetTeam(3-Camera.main.GetComponent.<Team>().team);
 	}
 }
 

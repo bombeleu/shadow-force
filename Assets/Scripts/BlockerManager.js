@@ -63,7 +63,7 @@ class Cell {
 		else return false;
 	}
 	
-	private static function ProcessBlocker(blocker : GameObject)
+	public static function ProcessBlocker(blocker : GameObject)
 	{
 		if (IsCube(blocker))
 		{

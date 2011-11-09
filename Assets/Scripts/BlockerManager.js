@@ -12,6 +12,11 @@ class Cell {
 		listObjs.Add(obj);	
 	}
 	
+	function RemoveBlocker(obj : GameObject)
+	{
+		listObjs.Remove(obj);
+	}
+	
 	function GetList() : List.<GameObject> 
 	{
 		return listObjs;
@@ -23,14 +28,12 @@ class Cell {
 	public static var MAP_SIZE : int = 100; 
 	
 	public static var CELL_SIZE :float = MAP_SIZE/NUM_TILES;
-	var grid : Cell[,] = new Cell[NUM_TILES,NUM_TILES];
+	static var grid : Cell[,] = new Cell[NUM_TILES,NUM_TILES];
 	
-	static var blockerManager : BlockerManager;
 	static var allBlockers : GameObject[];
 	
 	// Use this for initialization
 	function Start () {
-		blockerManager = this;
 
 		for (var i : int = 0 ; i < NUM_TILES; i++)
 		{
@@ -45,7 +48,7 @@ class Cell {
 		
 		for (var blocker:GameObject in allBlockers)
 		{
-			ProcessBlocker(blocker);
+			AddBlocker(blocker);
 		}
 		// initialize map
 		Debug.Log("Total: " + allBlockers.Length + " blockers");
@@ -63,7 +66,7 @@ class Cell {
 		else return false;
 	}
 	
-	public static function ProcessBlocker(blocker : GameObject)
+	private static function GetBlockerBoundaries(blocker : GameObject) : Vector4
 	{
 		if (IsCube(blocker))
 		{
@@ -104,15 +107,37 @@ class Cell {
 			smallest = center - Vector2(radius,radius);
 			largest = center + Vector2(radius,radius);
 		
-		} else return;
+		} else return Vector4.zero;
+		
+		return Vector4(smallest.x,largest.x,smallest.y,largest.y);
+	}
+	
+	public static function RemoveBlocker(blocker : GameObject)
+	{
+		var boundary : Vector4 = GetBlockerBoundaries(blocker);
+		
+		//Debug.Log(smallest + "|||" + largest);
+		for (i = ToCell(boundary[0]) ; i <= ToCell(boundary[1]); i++)
+		{
+			for (var j : int = ToCell(boundary[2]) ; j <= ToCell(boundary[3]); j++)
+			{
+				grid[i,j].RemoveBlocker(blocker);
+				Debug.Log("Remove Cell:" + i +","+j);	
+			}
+		}
+	}
+	
+	public static function AddBlocker(blocker : GameObject)
+	{
+		var boundary : Vector4 = GetBlockerBoundaries(blocker);
 		
 		// add to proper cells
 		//Debug.Log(smallest + "|||" + largest);
-		for (i = ToCell(smallest.x) ; i <= ToCell(largest.x); i++)
+		for (i = ToCell(boundary[0]) ; i <= ToCell(boundary[1]); i++)
 		{
-			for (var j : int = ToCell(smallest.y) ; j <= ToCell(largest.y); j++)
+			for (var j : int = ToCell(boundary[2]) ; j <= ToCell(boundary[3]); j++)
 			{
-				blockerManager.grid[i,j].AddBlocker(blocker);
+				grid[i,j].AddBlocker(blocker);
 				Debug.Log("Add Cell:" + i +","+j);	
 			}
 		}
@@ -120,7 +145,10 @@ class Cell {
 	
 	private static function ToCell(pos : float) : int
 	{
-		return (pos/CELL_SIZE) + NUM_TILES/2;	
+		var cell : int = (pos/CELL_SIZE) + NUM_TILES/2;
+		if (cell < 0) return 0;
+		else if (cell >= NUM_TILES) return NUM_TILES;
+		else return cell;
 	}
 		 
 	public static function GetObjsInTriangle(pt0:Vector3, pt1:Vector3,pt2:Vector3) : GameObject[]
@@ -142,7 +170,7 @@ class Cell {
 			{
 				//Debug.Log(blockerManager.grid[i,j]);
 				//Debug.Log(blockerManager.grid[i,j].GetList());
-				for (var go : GameObject in blockerManager.grid[i,j].GetList())
+				for (var go : GameObject in grid[i,j].GetList())
 				{
 					if (!result.Contains(go)) result.Add(go);
 				}

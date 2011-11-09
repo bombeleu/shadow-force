@@ -33,6 +33,9 @@ function Awake(){
 		na = "name" + Mathf.FloorToInt(Random.value*9);
 		MasterServer.RequestHostList("inno_ShadowForce");
 	}
+	
+	Physics.IgnoreLayerCollision(0, 11, true);//default vs playertrigger
+	Physics.IgnoreLayerCollision(8, 11, true);//player vs playertrigger
 }
 
 function OnGUI () {

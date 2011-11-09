@@ -4,7 +4,7 @@
 //private var blockerManager: BlockerManager;
 function Awake(){
 	//blockerManager = GameObject.FindObjectOfType(BlockerManager);
-	BlockerManager.ProcessBlocker(gameObject);
+	BlockerManager.AddBlocker(gameObject);
 	//collider.enabled = false;
 }
 

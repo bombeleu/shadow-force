@@ -229,7 +229,8 @@ private function GetIntersectPts(pt0 : Vector2, pt1 : Vector2, pt2 : Vector2, bl
 		//var center : Vector2 = Vector2(blocker.transform.position.x, blocker.transform.position.z);
 		temp = _playerTransform.InverseTransformPoint(blocker.transform.position);
 		var center : Vector2 = Vector2(temp.x,temp.z);
-		var r0 : float = blocker.transform.localScale.x * 0.5;
+		
+		var r0 : float = blocker.transform.localScale.x * blocker.GetComponent(CapsuleCollider).radius;
 		
 		// find the mid point
 		var midPoint : Vector2 = 0.5 * (point+center);

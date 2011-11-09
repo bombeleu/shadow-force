@@ -3,6 +3,8 @@
 public var range: float = 15;
 public var angle: float = 90;
 
+private var enable: boolean = true;
+
 private var viMeshScript:VisionMeshScript;
 
 function Awake(){
@@ -17,3 +19,13 @@ function Start(){
 function Update () {
 }
 
+function SetEnable(b:boolean){
+	if (enable == b) return;
+	enable = b;
+	viMeshScript.enabled = b;
+	viMeshScript.GetComponent.<Renderer>().enabled = b;
+}
+
+function GetEnable():boolean{
+	return enable;
+}

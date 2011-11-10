@@ -1,5 +1,5 @@
 #pragma strict
-//@script RequireComponent (Team) //only need Team if visibilityType is TeamShare
+@script RequireComponent (Team) //only need Team if visibilityType is TeamShare
 
 public enum VisibilityType{
 	Always,

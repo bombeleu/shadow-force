@@ -9,11 +9,13 @@ public var observer : Observer;
 
 function Start(){
 	startTime = Time.time;
-	observer.SetEnable(false);
+	//observer.SetEnable(false);
+	observer.enabled = false;
 }
 function Update () {
 	if (!activated && (Time.time - startTime > timer)){
 		activated = true;
-		observer.SetEnable(true);
+		//observer.SetEnable(true);
+		observer.enabled = true;
 	}
 }

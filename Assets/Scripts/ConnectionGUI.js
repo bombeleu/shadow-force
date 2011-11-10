@@ -253,3 +253,16 @@ function TestConnection() {
         testStatus = "Done testing";
     }
 }
+
+
+
+//these function should be moved to another global file!
+public var stickyCamPrefab : GameObject;
+
+@RPC
+function CreateStickyCam(viewID:NetworkViewID, pos:Vector3, quat: Quaternion, team:int):void
+{
+	var go:GameObject = Instantiate(stickyCamPrefab, pos, quat);
+	go.GetComponent.<Team>().SetTeam(team);
+	go.networkView.viewID = viewID;
+}

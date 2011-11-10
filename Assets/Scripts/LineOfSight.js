@@ -20,7 +20,8 @@ function Update () {
 			//continue;
 		}else
 			for (var seer : Observer in players){
-				if (!seer.GetEnable()) continue;
+				//if (!seer.GetEnable()) continue;
+				if (!seer.enabled) continue;
 				//Debug.Log("get here 1");
 				if (seer.GetComponent.<Team>().team != myTeam){//only check allies vision
 					continue;

@@ -1,4 +1,5 @@
 #pragma strict
+@script RequireComponent (NetworkView)
 
 public static var ammo = 20;
 
@@ -11,17 +12,25 @@ function Awake(){
 }
 
 
-function Update () {
+function OnSerializeNetworkView (stream : BitStream, info : NetworkMessageInfo) {
+	stream.Serialize(team);
+	if (stream.isWriting){
+	}else{
+		_SetTeam(team);
+	}
 }
 
 @RPC
 function SetTeam(t:int){
 	team = t;
-	//transform.FindChild("TeamName").GetComponent(TextMesh).text = na;
-	//transform.FindChild("Spotlight").GetComponent(Light).color = team==1?Color.blue:Color.red;
+	_SetTeam(team);
+}
+
+function _SetTeam(t:int){
 	viMesh.visionColor = t==1?Color.blue:Color.red;
 	viMesh.visionColor.a = 0.2;
 }
+
 
 @RPC
 function SetName(name: String){

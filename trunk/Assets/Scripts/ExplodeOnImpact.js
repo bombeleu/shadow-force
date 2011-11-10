@@ -8,5 +8,5 @@ function Update () {
 
 function OnCollisionEnter(collision : Collision) {
 	Spawner.Destroy (gameObject);
-	Spawner.Spawn (explosionPrefab, transform.position, transform.rotation);
+	Spawner.Spawn (explosionPrefab, transform.position, Quaternion.identity/*transform.rotation*/);
 }

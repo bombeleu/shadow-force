@@ -8,5 +8,6 @@ function Awake(){
 	//collider.enabled = false;
 }
 
-function Update () {
+function OnDestroy(){
+	BlockerManager.RemoveBlocker(gameObject);
 }

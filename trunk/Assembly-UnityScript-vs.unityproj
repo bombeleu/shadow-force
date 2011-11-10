@@ -138,6 +138,7 @@
      <Compile Include="Assets\Scripts\Movement\MechMovementMotor.js" />
      <Compile Include="Assets\Scripts\Movement\MovementMotor.js" />
      <Compile Include="Assets\Scripts\Movement\PlayerMoveController.js" />
+     <Compile Include="Assets\Scripts\NoiseMaker.js" />
      <Compile Include="Assets\Scripts\Observer.js" />
      <Compile Include="Assets\Scripts\PerFrameTrajectory.js" />
      <Compile Include="Assets\Scripts\ProjectileBullet.js" />

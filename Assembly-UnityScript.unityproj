@@ -76,6 +76,7 @@
      <Compile Include="Assets\Scripts\BlockerAdder.js" />
      <Compile Include="Assets\Scripts\BlockerManager.js" />
      <Compile Include="Assets\Scripts\ConnectionGUI.js" />
+     <Compile Include="Assets\Scripts\DrillWall.js" />
      <Compile Include="Assets\Scripts\ExplodeOnImpact.js" />
      <Compile Include="Assets\Scripts\Fx\BrokenScreen.js" />
      <Compile Include="Assets\Scripts\Fx\ColoredNoise.js" />

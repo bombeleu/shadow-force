@@ -10,6 +10,7 @@ function Update () {
 	var visiobjs : Visibility[]= GameObject.FindObjectsOfType(Visibility) as Visibility[];
 	//Debug.Log(players.GetLength());
 	for (var viobj in visiobjs){
+		if (!viobj.enabled) continue;
 		var p = viobj.gameObject;
 		//Debug.Log(p);
 		//if (p == gameObject) continue;

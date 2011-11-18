@@ -1,3 +1,6 @@
+#pragma strict
+@script RequireComponent (Collider)
+
 public var drillEffect : GameObject;
 public var normalSpeed : float;
 public var drillSpeed : float;

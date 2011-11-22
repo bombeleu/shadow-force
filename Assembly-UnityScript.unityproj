@@ -72,6 +72,7 @@
      <Compile Include="Assets\Scripts\Animation\SpiderAnimationTest.js" />
      <Compile Include="Assets\Scripts\Animation\conveyorBelt.js" />
      <Compile Include="Assets\Scripts\AutoKill.js" />
+     <Compile Include="Assets\Scripts\AutoKillParticle.js" />
      <Compile Include="Assets\Scripts\Billboard.js" />
      <Compile Include="Assets\Scripts\BlockerAdder.js" />
      <Compile Include="Assets\Scripts\BlockerManager.js" />

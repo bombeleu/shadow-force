@@ -1,0 +1,7 @@
+fileFormatVersion: 1
+guid: c37e83f8f6c3cf242a23342949594712
+MonoImporter:
+  importerVersion: 1
+  defaultReferences:
+    SpaceCraft: {fileID: 400002, guid: f8e496f8b3ed63e4b90600c661a0968c, type: 2}
+    spawn: {}

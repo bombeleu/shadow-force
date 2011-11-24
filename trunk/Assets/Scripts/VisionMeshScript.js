@@ -52,9 +52,9 @@ function Start() {
 }
 
 function Update () {
-	var player : GameObject ;
+	/*var player : GameObject ;
 	player = GameObject.Find("Player(Clone)");
-	if (player == null) return;
+	if (player == null) return;*/
 	
 	//transform.position = _playerTransform.position;
 	

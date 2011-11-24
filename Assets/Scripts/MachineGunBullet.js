@@ -12,8 +12,11 @@ private var firing:boolean = false;
 private var lastFireTime : float = -1;
 
 private var spawnPoint:Transform;
+private var wp:Weapon;
+
 function Awake(){
 	spawnPoint = GetComponent.<Weapon>().spawnPoint;
+	wp = GetComponent.<Weapon>();
 	bulletPrefab = GetComponent.<Weapon>().bulletPrefab;
 	
 	//muzzleFlashFront = gameObject.Find("muzzleFlash");
@@ -48,7 +51,7 @@ function DisableFiring(){
 
 function Update(){
 	if (firing && Time.time > lastFireTime + 1 / frequency) {
-		var go : GameObject = Spawner.Spawn (bulletPrefab, spawnPoint.position, spawnPoint.rotation) as GameObject;
+		var go : GameObject = Spawner.Spawn (bulletPrefab, spawnPoint.position, wp.owner.transform.rotation) as GameObject;
 		
 		var bullet : SimpleBullet = go.GetComponent.<SimpleBullet> ();
 		var hitInfo : RaycastHit = raycast.GetHitInfo();

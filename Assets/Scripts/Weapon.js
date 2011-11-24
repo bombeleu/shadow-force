@@ -10,6 +10,7 @@ public var bulletPrefab: GameObject;
 public var spawnPoint : Transform;
 public var switchTime : float = 1;
 
+public var owner: Transform;
 /*class Weapon extends ScriptableObject{
 	public var needPosition:boolean = false;
 	public var cooldown:float = 0.5;

@@ -24,6 +24,7 @@ function Awake(){
 	for (var i:int = 0;i<weapons.length; i++){
 		ws[i] = Instantiate(weapons[i], weaponHoldPoint.position, weaponHoldPoint.rotation);
 		ws[i].transform.parent = weaponHoldPoint;
+		ws[i].owner = transform;
 		ws[i].SetEnable(false);
 
 		if (networkView.isMine && ws[i].networkView)

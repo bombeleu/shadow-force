@@ -1,0 +1,218 @@
+fileFormatVersion: 1
+guid: 618037ea9576da4418301c48659240d1
+ModelImporter:
+  importerVersion: 7
+  meshes:
+    scaleFactor: 0.041
+    useFileUnits: 1
+    meshCompression: 0
+    generateColliders: 0
+    swapUVs: 0
+  tangentSpace:
+    normalImportMode: 0
+    tangentImportMode: 1
+    smoothingAngle: 60
+    splitTangents: 1
+  materials:
+    generation: 1
+  animations:
+    generation: 3
+    bakeAnimations: 0
+    animationCompression: 1
+    animationWrapMode: 0
+    splitAnimations: 1
+    clips:
+      idle:
+        firstFrame: 510
+        lastFrame: 610
+        loop: 1
+        wrapMode: 2
+      run_forward:
+        firstFrame: 0
+        lastFrame: 30
+        loop: 1
+        wrapMode: 2
+      run_backward:
+        firstFrame: 40
+        lastFrame: 70
+        loop: 1
+        wrapMode: 2
+      run_right:
+        firstFrame: 160
+        lastFrame: 190
+        loop: 1
+        wrapMode: 2
+      run_left:
+        firstFrame: 190
+        lastFrame: 220
+        loop: 1
+        wrapMode: 2
+      jump:
+        firstFrame: 230
+        lastFrame: 260
+        loop: 1
+        wrapMode: 2
+      shoot:
+        firstFrame: 270
+        lastFrame: 290
+        loop: 1
+        wrapMode: 2
+      die:
+        firstFrame: 440
+        lastFrame: 500
+        loop: 1
+        wrapMode: 2
+  nodeInfo:
+    Bip01 L Calf:
+    - 100000
+    - 400000
+    //RootNode:
+    - 100004
+    - 400004
+    - 11100000
+    Bip01 R Finger31:
+    - 100006
+    - 400006
+    Bip01 L Finger1:
+    - 100012
+    - 400012
+    Bip01 R Finger41:
+    - 100014
+    - 400014
+    Bip01 L Toe0:
+    - 100016
+    - 400016
+    Bip01 R Finger01:
+    - 100018
+    - 400018
+    Bip01 L Forearm:
+    - 100022
+    - 400022
+    Bip01 R Finger11:
+    - 100024
+    - 400024
+    Bip01 L Finger3:
+    - 100026
+    - 400026
+    Bip01 L Finger0:
+    - 100030
+    - 400030
+    Bip01 R Calf:
+    - 100034
+    - 400034
+    Bip01:
+    - 100038
+    - 400038
+    clean_unwrap:
+    - 100040
+    - 400040
+    - 13700000
+    Bip01 R Finger1:
+    - 100044
+    - 400044
+    Bip01 L Finger2:
+    - 100046
+    - 400046
+    Bip01 L Hand:
+    - 100048
+    - 400048
+    Bip01 L Finger11:
+    - 100052
+    - 400052
+    Bip01 L Finger21:
+    - 100056
+    - 400056
+    Bip01 R Foot:
+    - 100058
+    - 400058
+    Bip01 L Foot:
+    - 100060
+    - 400060
+    Bip01 R Hand:
+    - 100062
+    - 400062
+    Bip01 R Forearm:
+    - 100064
+    - 400064
+    Bip01 L Finger31:
+    - 100066
+    - 400066
+    Bip01 L UpperArm:
+    - 100068
+    - 400068
+    Bip01 L Clavicle:
+    - 100070
+    - 400070
+    Bip01 L Finger41:
+    - 100074
+    - 400074
+    Bip01 R Finger2:
+    - 100076
+    - 400076
+    Bip01 R Finger3:
+    - 100078
+    - 400078
+    Bip01 Neck:
+    - 100082
+    - 400082
+    Bip01 Spine2:
+    - 100084
+    - 400084
+    Bip01 Spine1:
+    - 100086
+    - 400086
+    Bip01 Head:
+    - 100090
+    - 400090
+    Bip01 R Finger4:
+    - 100092
+    - 400092
+    Bip01 R Finger0:
+    - 100094
+    - 400094
+    Bip01 Spine:
+    - 100096
+    - 400096
+    Bip01 Pelvis:
+    - 100098
+    - 400098
+    Bip01 Footsteps:
+    - 100100
+    - 400100
+    Bip01 L Finger01:
+    - 100102
+    - 400102
+    Bip01 R UpperArm:
+    - 100104
+    - 400104
+    Bip01 R Clavicle:
+    - 100106
+    - 400106
+    Bip01 L Thigh:
+    - 100108
+    - 400108
+    Bip01 L Finger4:
+    - 100110
+    - 400110
+    Bip01 R Finger21:
+    - 100112
+    - 400112
+    Bip01 R Thigh:
+    - 100114
+    - 400114
+    Bip01 R Toe0:
+    - 100116
+    - 400116
+AssetImporter:
+  importerVersion: 1
+  fileIDToRecycleName:
+    4300000: clean_unwrap
+    7400000: Take 001 //// Cycone_animation
+    7400002: idle //// Cycone_animation
+    7400004: run_forward //// Cycone_animation
+    7400006: run_backward //// Cycone_animation
+    7400008: run_right //// Cycone_animation
+    7400010: run_left //// Cycone_animation
+    7400012: jump //// Cycone_animation
+    7400014: shoot //// Cycone_animation
+    7400016: die //// Cycone_animation

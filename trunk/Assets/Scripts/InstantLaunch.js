@@ -22,7 +22,11 @@ function OnLaunchBullet(){
 		//bullet.networkView.RPC("SetTeam", RPCMode.All, Camera.main.GetComponent.<Team>().team);//this method does not work well with newly joined players!
 		bullet.GetComponent.<Team>().SetTeam(Camera.main.GetComponent.<Team>().team);
 		//*/
-		Camera.main.GetComponent.<ConnectionGUI>().CreateStickyCam(Network.AllocateViewID(), pos, Quaternion.LookRotation(hitInfo.normal), Camera.main.GetComponent.<Team>().team);
+		var flatten_normal:Vector3 = hitInfo.normal;
+		flatten_normal.y = 0;
+		//Camera.main.GetComponent.<ConnectionGUI>().CreateStickyCam(Network.AllocateViewID(), pos, Quaternion.LookRotation(flatten_normal), Camera.main.GetComponent.<Team>().team);
+		ConnectionGUI.CreateTeamObject(bulletPrefab, Network.AllocateViewID(), pos, Quaternion.LookRotation(flatten_normal), 
+			Camera.main.GetComponent.<Team>().team);
 	}
 }
 

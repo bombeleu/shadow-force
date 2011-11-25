@@ -52,6 +52,11 @@ function Update () {
 						}
 					}
 				}
+				if (local_visi){
+					seer.SendMessage("OnDetectEnemy", viobj, SendMessageOptions.DontRequireReceiver);
+				}else{
+					seer.SendMessage("OnLoseSightEnemy", viobj, SendMessageOptions.DontRequireReceiver);
+				}
 				visi = visi || local_visi;
 				if (visi) break;
 			}

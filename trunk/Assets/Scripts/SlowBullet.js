@@ -4,15 +4,17 @@
 private var bulletPrefab: GameObject;
 
 private var spawnPoint:Transform;
+private var weapon : Weapon;
 
 function Awake(){
-	spawnPoint = GetComponent.<Weapon>().spawnPoint;
-	bulletPrefab = GetComponent.<Weapon>().bulletPrefab;
+	weapon = GetComponent.<Weapon>();
+	spawnPoint = weapon.spawnPoint;
+	bulletPrefab = weapon.bulletPrefab;
 }
 
 function OnLaunchBullet(){
 	//networkView.RPC("RPCLaunchBullet", RPCMode.All);//TODO: clone all current slow bullets to newly joined player
-	Network.Instantiate(bulletPrefab, spawnPoint.position, spawnPoint.rotation, 0);
+	Network.Instantiate(bulletPrefab, spawnPoint.position, weapon.owner.transform.rotation, 0);
 }
 
 /*

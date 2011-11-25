@@ -257,12 +257,27 @@ function TestConnection() {
 
 
 //these function should be moved to another global file!
-public var stickyCamPrefab : GameObject;
+//private static var objectPrefab : GameObject;
+public var prefabs: GameObject[];
+
+static function CreateTeamObject(prefab:GameObject, viewID:NetworkViewID, pos:Vector3, quat: Quaternion, team:int):void
+{
+	var i:int = Camera.main.GetComponent.<ConnectionGUI>().GetPrefabID(prefab);
+	Camera.main.GetComponent.<ConnectionGUI>().networkView.RPC("_CreateTeamObject", RPCMode.AllBuffered, [i, viewID, pos, quat, team]); 
+}
+
+function GetPrefabID(prefab:GameObject):int{
+	var i:int;
+	for (i=0; i<prefabs.length; i++){
+		if (prefab == prefabs[i]) break;
+	}
+	return i;	
+}
 
 @RPC
-function CreateStickyCam(viewID:NetworkViewID, pos:Vector3, quat: Quaternion, team:int):void
+function _CreateTeamObject(prefabID:int, viewID:NetworkViewID, pos:Vector3, quat: Quaternion, team:int):void
 {
-	var go:GameObject = Instantiate(stickyCamPrefab, pos, quat);
+	var go:GameObject = Instantiate(prefabs[prefabID], pos, quat);
 	go.GetComponent.<Team>().SetTeam(team);
 	go.networkView.viewID = viewID;
 }

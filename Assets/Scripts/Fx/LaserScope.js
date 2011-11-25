@@ -95,7 +95,11 @@ function Update () {
 			pointer.renderer.enabled = false;		
 		var maxDist : float = 200.0;
 		//lRenderer.SetPosition (1, (maxDist * Vector3.forward));
-		lRenderer.SetPosition (1, spawnPoint.transform.position + spawnPoint.transform.forward* maxDist);
+		
+		//lRenderer.SetPosition (1, spawnPoint.transform.position + spawnPoint.transform.forward* maxDist);
+		
+		lRenderer.SetPosition (1, spawnPoint.transform.position + raycast.weapon.owner.transform.forward* maxDist);
+		
 		renderer.material.mainTextureScale.x = 0.1 * (maxDist);		
 		renderer.material.SetTextureScale ("_NoiseTex", Vector2 (0.1 * (maxDist) * noiseSize, noiseSize));		
 	}

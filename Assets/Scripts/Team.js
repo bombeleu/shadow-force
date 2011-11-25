@@ -9,6 +9,7 @@ public var na: String = "p";
 private var viMesh: VisionMeshScript;
 function Awake(){
 	viMesh = gameObject.GetComponentInChildren(VisionMeshScript);
+	SetTeam(team);
 }
 
 

@@ -51,6 +51,17 @@ function Start() {
 	
 }
 
+public function TurnOn()
+{
+	enabled = true;
+}
+
+public function TurnOff()
+{
+	_mesh.Clear();
+	enabled = false;
+}
+
 function Update () {
 	/*var player : GameObject ;
 	player = GameObject.Find("Player(Clone)");
@@ -60,6 +71,7 @@ function Update () {
 	
 	// init mesh vertex
 	_mesh.Clear();
+		
 	for (var i :int = 0 ; i < 2*MAX_TRIANGLES+1;i++)
 	{
 		_newVertices[i] = Vector3.zero;

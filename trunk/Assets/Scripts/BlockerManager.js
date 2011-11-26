@@ -1,3 +1,4 @@
+#pragma strict
 class Cell {
 	
 	private var listObjs :List.<GameObject> = new List.<GameObject>();
@@ -117,7 +118,7 @@ class Cell {
 		var boundary : Vector4 = GetBlockerBoundaries(blocker);
 		
 		//Debug.Log(smallest + "|||" + largest);
-		for (i = ToCell(boundary[0]) ; i <= ToCell(boundary[1]); i++)
+		for (var i : int = ToCell(boundary[0]) ; i <= ToCell(boundary[1]); i++)
 		{
 			for (var j : int = ToCell(boundary[2]) ; j <= ToCell(boundary[3]); j++)
 			{
@@ -133,7 +134,7 @@ class Cell {
 		
 		// add to proper cells
 		//Debug.Log(smallest + "|||" + largest);
-		for (i = ToCell(boundary[0]) ; i <= ToCell(boundary[1]); i++)
+		for (var i : int = ToCell(boundary[0]) ; i <= ToCell(boundary[1]); i++)
 		{
 			for (var j : int = ToCell(boundary[2]) ; j <= ToCell(boundary[3]); j++)
 			{

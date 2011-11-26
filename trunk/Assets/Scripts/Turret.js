@@ -42,7 +42,7 @@ function Update () {
 		var found:boolean = false;
 		var fkey:String;
 		var i:GameObject;
-		for (i in enemies.Keys){
+		for (var i in enemies.Keys){
 			if (i!=null && enemies[i]==null){
 				found = true;
 				fkey = i;

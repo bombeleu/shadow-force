@@ -1,7 +1,7 @@
 #pragma strict
 @script RequireComponent (Weapon)
 
-public var plantingObject: GameObject;
+private var plantingObject: GameObject;
 public var plantingTime: float = 2;
 
 private var planted:boolean = false;
@@ -10,6 +10,7 @@ private var weapon:Weapon;
 
 function Awake(){
 	weapon = GetComponent.<Weapon>();
+	plantingObject = weapon.bulletPrefab;
 }
 
 function OnLaunchBullet(){

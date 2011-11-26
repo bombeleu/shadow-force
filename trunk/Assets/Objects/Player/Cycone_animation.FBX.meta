@@ -63,146 +63,146 @@ ModelImporter:
         loop: 1
         wrapMode: 2
   nodeInfo:
-    Bip01 L Calf:
+    Bip01 R Toe0:
     - 100000
     - 400000
+    Bip01 R Calf:
+    - 100002
+    - 400002
     //RootNode:
     - 100004
     - 400004
     - 11100000
-    Bip01 R Finger31:
+    Bip01 L Toe0:
     - 100006
     - 400006
-    Bip01 L Finger1:
+    Bip01 R Foot:
+    - 100008
+    - 400008
+    Bip01 L Calf:
+    - 100010
+    - 400010
+    Bip01 R Thigh:
     - 100012
     - 400012
     Bip01 R Finger41:
     - 100014
     - 400014
-    Bip01 L Toe0:
+    Bip01 L Foot:
     - 100016
     - 400016
-    Bip01 R Finger01:
+    Bip01 R Finger31:
     - 100018
     - 400018
-    Bip01 L Forearm:
+    Bip01 L Thigh:
+    - 100020
+    - 400020
+    Bip01 R Finger1:
     - 100022
     - 400022
-    Bip01 R Finger11:
+    Bip01 R Finger4:
     - 100024
     - 400024
-    Bip01 L Finger3:
+    Bip01 R Finger0:
     - 100026
     - 400026
-    Bip01 L Finger0:
+    Bip01 R Finger11:
+    - 100028
+    - 400028
+    Bip01 R Finger3:
     - 100030
     - 400030
-    Bip01 R Calf:
+    Bip01 R Finger01:
+    - 100032
+    - 400032
+    Bip01 R Forearm:
     - 100034
     - 400034
-    Bip01:
+    Bip01 R Finger2:
+    - 100036
+    - 400036
+    Bip01 R Finger21:
     - 100038
     - 400038
-    clean_unwrap:
+    Bip01 R Clavicle:
     - 100040
     - 400040
-    - 13700000
-    Bip01 R Finger1:
+    Bip01 R Hand:
+    - 100042
+    - 400042
+    Bip01 L Finger4:
     - 100044
     - 400044
-    Bip01 L Finger2:
+    Bip01 R UpperArm:
     - 100046
     - 400046
-    Bip01 L Hand:
+    Bip01 L Finger3:
     - 100048
     - 400048
-    Bip01 L Finger11:
+    Bip01 L Finger41:
+    - 100050
+    - 400050
+    Bip01 L Finger0:
     - 100052
     - 400052
-    Bip01 L Finger21:
+    Bip01 L Finger31:
+    - 100054
+    - 400054
+    Bip01 L Finger1:
     - 100056
     - 400056
-    Bip01 R Foot:
+    Bip01 L Finger01:
     - 100058
     - 400058
-    Bip01 L Foot:
+    Bip01 L Finger2:
     - 100060
     - 400060
-    Bip01 R Hand:
+    Bip01 L Finger11:
     - 100062
     - 400062
-    Bip01 R Forearm:
+    Bip01 L Forearm:
     - 100064
     - 400064
-    Bip01 L Finger31:
+    Bip01 L Finger21:
     - 100066
     - 400066
-    Bip01 L UpperArm:
+    Bip01 L Clavicle:
     - 100068
     - 400068
-    Bip01 L Clavicle:
+    Bip01 L Hand:
     - 100070
     - 400070
-    Bip01 L Finger41:
+    Bip01 Neck:
+    - 100072
+    - 400072
+    Bip01 L UpperArm:
     - 100074
     - 400074
-    Bip01 R Finger2:
+    Bip01 Spine1:
     - 100076
     - 400076
-    Bip01 R Finger3:
+    Bip01 Head:
     - 100078
     - 400078
-    Bip01 Neck:
+    Bip01 Pelvis:
+    - 100080
+    - 400080
+    Bip01 Spine2:
     - 100082
     - 400082
-    Bip01 Spine2:
+    Bip01:
     - 100084
     - 400084
-    Bip01 Spine1:
+    Bip01 Spine:
     - 100086
     - 400086
-    Bip01 Head:
+    Bip01 Footsteps:
+    - 100088
+    - 400088
+    clean_unwrap:
     - 100090
     - 400090
-    Bip01 R Finger4:
-    - 100092
-    - 400092
-    Bip01 R Finger0:
-    - 100094
-    - 400094
-    Bip01 Spine:
-    - 100096
-    - 400096
-    Bip01 Pelvis:
-    - 100098
-    - 400098
-    Bip01 Footsteps:
-    - 100100
-    - 400100
-    Bip01 L Finger01:
-    - 100102
-    - 400102
-    Bip01 R UpperArm:
-    - 100104
-    - 400104
-    Bip01 R Clavicle:
-    - 100106
-    - 400106
-    Bip01 L Thigh:
-    - 100108
-    - 400108
-    Bip01 L Finger4:
-    - 100110
-    - 400110
-    Bip01 R Finger21:
-    - 100112
-    - 400112
-    Bip01 R Thigh:
-    - 100114
-    - 400114
-    Bip01 R Toe0:
-    - 100116
-    - 400116
+    - 13700000
 AssetImporter:
   importerVersion: 1
   fileIDToRecycleName:

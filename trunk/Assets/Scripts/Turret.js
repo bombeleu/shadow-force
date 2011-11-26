@@ -27,6 +27,14 @@ function OnLoseSightEnemy(enemy:Visibility){
 
 function Start(){
 	altFireTimer = Time.time;
+	if (networkView.isMine){
+		networkView.RPC("SetWeaponNetworkViewID", RPCMode.AllBuffered, Network.AllocateViewID());
+	}
+}
+
+@RPC
+function SetWeaponNetworkViewID(id:NetworkViewID){
+	weapon.networkView.viewID = id;
 }
 
 private var target:GameObject;
@@ -40,8 +48,8 @@ function Update () {
 	while (true){
 		if (enemies.Count==0) break;
 		var found:boolean = false;
-		var fkey:String;
-		var i:GameObject;
+		var fkey:Object;
+		var i:Object;
 		for (var i in enemies.Keys){
 			if (i!=null && enemies[i]==null){
 				found = true;
@@ -61,8 +69,8 @@ function Update () {
 		return;
 	}
 	if (!enemies.Contains(target)){//lost current target
-		for (var i:GameObject in enemies.Values){
-			target = i;
+		for (var i:Object in enemies.Values){
+			target = i as GameObject;
 			break;
 		}
 	}

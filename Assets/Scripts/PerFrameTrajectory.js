@@ -77,6 +77,6 @@ function OnSerializeNetworkView (stream : BitStream, info : NetworkMessageInfo) 
 	stream.Serialize(pos);
 	if (stream.isReading){
 		Compute();
-		Debug.Log(pos);
+		//Debug.Log(pos);
 	}
 }

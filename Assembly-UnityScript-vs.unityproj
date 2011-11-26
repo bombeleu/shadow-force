@@ -18,7 +18,7 @@
 	<DebugType>full</DebugType>
 	<Optimize>false</Optimize>
 	<OutputPath>Temp\bin\Debug\</OutputPath>
-	<DefineConstants>DEBUG;TRACE;UNITY_3_4_1;UNITY_3_4;UNITY_EDITOR;ENABLE_PROFILER;UNITY_STANDALONE_WIN;ENABLE_GENERICS;ENABLE_DUCK_TYPING;ENABLE_TERRAIN;ENABLE_MOVIES;ENABLE_NETWORK;ENABLE_CLOTH;ENABLE_WWW</DefineConstants>
+	<DefineConstants>DEBUG;TRACE;UNITY_3_4_0;UNITY_3_4;UNITY_EDITOR;ENABLE_PROFILER;UNITY_STANDALONE_OSX;ENABLE_GENERICS;ENABLE_DUCK_TYPING;ENABLE_TERRAIN;ENABLE_MOVIES;ENABLE_NETWORK;ENABLE_CLOTH;ENABLE_WWW</DefineConstants>
 	<ErrorReport>prompt</ErrorReport>
 	<WarningLevel>4</WarningLevel>
 	<NoWarn>0169</NoWarn>
@@ -37,10 +37,10 @@
     <Reference Include="System.XML" />
 	<Reference Include="System.Core" />
 	<Reference Include="UnityEngine">
-	  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+	  <HintPath>/Applications/Unity/Unity.app/Contents/Frameworks/Managed/UnityEngine.dll</HintPath>
 	</Reference>
 	<Reference Include="UnityEditor">
-	  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+	  <HintPath>/Applications/Unity/Unity.app/Contents/Frameworks/Managed/UnityEditor.dll</HintPath>
 	</Reference>
   </ItemGroup>
   <ItemGroup>
@@ -79,6 +79,7 @@
      <Compile Include="Assets\Scripts\ConnectionGUI.js" />
      <Compile Include="Assets\Scripts\DrillWall.js" />
      <Compile Include="Assets\Scripts\ExplodeOnImpact.js" />
+     <Compile Include="Assets\Scripts\FramePerSeconds.js" />
      <Compile Include="Assets\Scripts\Fx\BrokenScreen.js" />
      <Compile Include="Assets\Scripts\Fx\ColoredNoise.js" />
      <Compile Include="Assets\Scripts\Fx\DeactivatorOnLowQuality.js" />
@@ -145,6 +146,7 @@
      <Compile Include="Assets\Scripts\PerFrameTrajectory.js" />
      <Compile Include="Assets\Scripts\Planter.js" />
      <Compile Include="Assets\Scripts\ProjectileBullet.js" />
+     <Compile Include="Assets\Scripts\RagdollController.js" />
      <Compile Include="Assets\Scripts\Rain\RainBox.js" />
      <Compile Include="Assets\Scripts\Rain\RainManager.js" />
      <Compile Include="Assets\Scripts\Rain\RainsplashBox.js" />

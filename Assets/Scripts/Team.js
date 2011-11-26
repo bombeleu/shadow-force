@@ -28,8 +28,10 @@ function SetTeam(t:int){
 }
 
 function _SetTeam(t:int){
-	viMesh.visionColor = t==1?Color.blue:Color.red;
-	viMesh.visionColor.a = 0.2;
+	if (viMesh){
+		viMesh.visionColor = t==1?Color.blue:Color.red;
+		viMesh.visionColor.a = 0.2;
+	}
 }
 
 

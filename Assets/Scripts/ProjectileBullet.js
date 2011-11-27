@@ -14,6 +14,7 @@ function Awake(){
 }
 
 function OnLaunchBullet(pos:Vector3){
+	trajectory.OnUpdateTarget(pos);
 	var velo:Vector3 = trajectory.GetComputedVelocity();
 	//var quat:Quaternion = Quaternion.FromToRotation(spawnPoint.forward, velo);
 	//networkView.RPC("RPCLaunchBullet", RPCMode.All);//TODO: clone all current slow bullets to newly joined player

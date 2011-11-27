@@ -26,7 +26,7 @@ function OnLaunchBullet(){
 		flatten_normal.y = 0;
 		//Camera.main.GetComponent.<ConnectionGUI>().CreateStickyCam(Network.AllocateViewID(), pos, Quaternion.LookRotation(flatten_normal), Camera.main.GetComponent.<Team>().team);
 		ConnectionGUI.CreateTeamObject(bulletPrefab, Network.AllocateViewID(), pos, Quaternion.LookRotation(flatten_normal), 
-			3-Camera.main.GetComponent.<Team>().team);
+			Camera.main.GetComponent.<Team>().team);
 	}
 }
 

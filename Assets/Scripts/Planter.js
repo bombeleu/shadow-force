@@ -3,6 +3,7 @@
 
 private var plantingObject: GameObject;
 public var plantingTime: float = 2;
+public var effect: Renderer;
 
 private var planted:boolean = false;
 private var startTime:float;
@@ -13,9 +14,14 @@ function Awake(){
 	plantingObject = weapon.bulletPrefab;
 }
 
+function Start(){
+	effect.enabled = false;
+}
+
 function OnLaunchBullet(){
 	startTime = Time.time;
 	planted = true;
+	effect.enabled = true && weapon.isEnable;
 }
 
 function Update () {
@@ -25,6 +31,7 @@ function Update () {
 			weapon.owner.transform.position, weapon.owner.transform.rotation, 
 			Camera.main.GetComponent.<Team>().team);
 		planted = false;
+		effect.enabled = false;
 		//DestroyObject(gameObject);
 	}
 }

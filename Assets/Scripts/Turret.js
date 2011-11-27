@@ -12,17 +12,21 @@ function Awake(){
 }
 
 function OnDetectEnemy(enemy:Visibility){
+	//weapon.gameObject.SendMessage("OnLaunchBullet");
 	//check for health component
 	//if (enemy.GetComponent.<Health>()==null) return;
 	//shoot it!
-	if (!enemies.ContainsKey(enemy.gameObject.name)){
-		enemies.Add(enemy.gameObject.name, enemy.gameObject);
+	if (!enemies.ContainsKey(enemy.gameObject.GetInstanceID())){
+		//target = enemy.gameObject;
+		enemies.Add(enemy.gameObject.GetInstanceID(), enemy.gameObject);
 	}
 	//Debug.Log("enemy detected!");
 }
 
 function OnLoseSightEnemy(enemy:Visibility){
-	enemies.Remove(enemy.gameObject.name);
+	var key:Object = enemy.gameObject.GetInstanceID();
+	if (enemies.ContainsKey(key))
+		enemies.Remove(key);
 }
 
 function Start(){
@@ -43,6 +47,8 @@ private var altFireTimer:float;
 private var curAngle:float = 0;
 
 function Update () {
+	//return;
+	//*
 	if (!networkView.isMine) return;
 	//remove dead
 	while (true){
@@ -68,12 +74,12 @@ function Update () {
 			weapon.gameObject.SendMessage("OnStopFiring");
 		return;
 	}
-	if (!enemies.Contains(target)){//lost current target
+	if (!enemies.ContainsValue(target)){//lost current target
 		for (var i:Object in enemies.Values){
 			target = i as GameObject;
 			break;
 		}
-	}
+	}//*/
 
 	var targetDir:Vector3 = target.transform.position - weaponHold.transform.position;
 	targetDir.y=0;
@@ -91,6 +97,7 @@ function Update () {
 	}
 	
 	weaponHold.rotation = transform.rotation * Quaternion.AngleAxis(curAngle, Vector3.up);
+	//*/
 						
 	if (weapon.cooldown > 0){
 		if (Time.time - altFireTimer > weapon.cooldown){

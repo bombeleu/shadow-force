@@ -2,6 +2,7 @@
 
 public var range: float = 15;
 public var angle: float = 90;
+public var wantEventTrigger : boolean = false;
 
 //private var enable: boolean = true;
 private var viMeshScript:VisionMeshScript;

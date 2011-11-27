@@ -1,0 +1,85 @@
+fileFormatVersion: 1
+guid: ecfb2e6c4bede6643bf21d59cb1fbb97
+ModelImporter:
+  importerVersion: 7
+  meshes:
+    scaleFactor: 0.01
+    useFileUnits: 1
+    meshCompression: 0
+    generateColliders: 0
+    swapUVs: 0
+  tangentSpace:
+    normalImportMode: 0
+    tangentImportMode: 1
+    smoothingAngle: 60
+    splitTangents: 1
+  materials:
+    generation: 1
+  animations:
+    generation: 3
+    bakeAnimations: 0
+    animationCompression: 1
+    animationWrapMode: 0
+    splitAnimations: 1
+  nodeInfo:
+    Line03:
+    - 100000
+    - 400000
+    - 3300000
+    - 2300000
+    Line07:
+    - 100002
+    - 400002
+    - 3300002
+    - 2300002
+    ChamferCyl04:
+    - 100004
+    - 400004
+    - 3300004
+    - 2300004
+    Line05:
+    - 100006
+    - 400006
+    - 3300006
+    - 2300006
+    Line06:
+    - 100008
+    - 400008
+    - 3300008
+    - 2300008
+    ChamferCyl02:
+    - 100010
+    - 400010
+    - 3300010
+    - 2300010
+    ChamferCyl03:
+    - 100012
+    - 400012
+    - 3300012
+    - 2300012
+    Line04:
+    - 100014
+    - 400014
+    - 3300014
+    - 2300014
+    ChamferCyl05:
+    - 100016
+    - 400016
+    - 3300016
+    - 2300016
+    //RootNode:
+    - 100018
+    - 400018
+    - 11100000
+AssetImporter:
+  importerVersion: 1
+  fileIDToRecycleName:
+    4300000: Line03
+    4300002: Line04
+    4300004: Line05
+    4300006: Line06
+    4300008: ChamferCyl02
+    4300010: ChamferCyl03
+    4300012: Line07
+    4300014: ChamferCyl04
+    4300016: ChamferCyl05

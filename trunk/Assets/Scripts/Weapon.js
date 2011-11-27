@@ -21,9 +21,20 @@ public var owner: Transform;
 }
 */
 
+private var visiBucket:VisibleBucket;
+function Awake(){
+	visiBucket = GetComponent.<VisibleBucket>();
+}
+public var isEnable:boolean=true;
+
 function SetEnable(b:boolean){
-	var rr = gameObject.GetComponentsInChildren(Renderer);
-	for (var r:Component in rr){
-		r.renderer.enabled = b;
+	isEnable = b;
+	if (visiBucket)
+		visiBucket.OnSetVisible(b);
+	else{
+		var rr = gameObject.GetComponentsInChildren(Renderer);
+		for (var r:Component in rr){
+			r.renderer.enabled = b;
+		}
 	}
 }

@@ -183,12 +183,14 @@ function RPCWeaponSwitch(newWeapon:int){
 		ws[newWeapon].SetEnable(true);
 	curWeapon = newWeapon;
 	
-	if (networkView.isMine){
-		if (ws[curWeapon].needPosition)
-			gameObject.SendMessage("SetJoystickReset",true);
-		else
-			gameObject.SendMessage("SetJoystickReset",false);
-	}
+	#if UNITY_IPHONE || UNITY_ANDROID
+		if (networkView.isMine){
+			if (ws[curWeapon].needPosition)
+				gameObject.SendMessage("SetJoystickReset",true);
+			else
+				gameObject.SendMessage("SetJoystickReset",false);
+		}
+	#endif
 }
 /*
 function RPCFireMissile(){

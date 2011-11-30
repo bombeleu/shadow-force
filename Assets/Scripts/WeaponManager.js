@@ -192,23 +192,6 @@ function RPCWeaponSwitch(newWeapon:int){
 		}
 	#endif
 }
-/*
-function RPCFireMissile(){
-	if (!networkView.isMine) return;
-	if (Team.ammo<=0) return;
-	networkView.RPC("FireMissile", RPCMode.All, [spawnPoint.position, spawnPoint.rotation]);
-	//var go : GameObject = Network.Instantiate(missilePrefab, spawnPoint.position, spawnPoint.rotation, 0) as GameObject;
-	Team.ammo--;
-}*/
-
-public var missilePrefab:GameObject;
-
-//*
-@RPC
-function FireMissile(pos : Vector3, quat : Quaternion){
-	var go : GameObject = Instantiate (missilePrefab, pos, quat);
-}//*/
-
 
 function OnStartFire(){
 	if (!ws[curWeapon].needPosition)

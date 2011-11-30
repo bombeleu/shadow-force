@@ -39,9 +39,9 @@ function CheckObserver(seer:Observer, viobj:Visibility):boolean{
 			seer.SendMessage("OnLoseSightEnemy", viobj);
 		}
 	}
-	Debug.Log(seer);
+	/*Debug.Log(seer);
 	Debug.Log(viobj);
-	Debug.Log(local_visi);
+	Debug.Log(local_visi);*/
 	return local_visi;
 }
 

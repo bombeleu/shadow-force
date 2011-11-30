@@ -56,6 +56,8 @@
      <Compile Include="Assets\Scripts\AI\AttackMoveController.js" />
      <Compile Include="Assets\Scripts\AI\BuzzerKamikazeControllerAndAi.js" />
      <Compile Include="Assets\Scripts\AI\DisableOutsideRadius.js" />
+     <Compile Include="Assets\Scripts\AI\DodgingAI.js" />
+     <Compile Include="Assets\Scripts\AI\LinearDodger.js" />
      <Compile Include="Assets\Scripts\AI\MechAttackMoveController.js" />
      <Compile Include="Assets\Scripts\AI\PatrolMoveController.js" />
      <Compile Include="Assets\Scripts\AI\PatrolPoint.js" />

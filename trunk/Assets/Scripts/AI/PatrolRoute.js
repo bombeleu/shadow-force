@@ -11,6 +11,7 @@ public var patrolPoints : System.Collections.Generic.List.<PatrolPoint> = new Sy
 
 private var activePatrollers : System.Collections.Generic.List.<GameObject> = new System.Collections.Generic.List.<GameObject> ();
 
+/*
 function Register (go : GameObject) {
 	activePatrollers.Add (go);
 }
@@ -33,7 +34,7 @@ function OnTriggerExit (other : Collider) {
 		if (ai)
 			ai.OnExitInterestArea ();
 	}
-}
+}*/
 
 function GetClosestPatrolPoint (pos : Vector3) : int {
 	if (patrolPoints.Count == 0)

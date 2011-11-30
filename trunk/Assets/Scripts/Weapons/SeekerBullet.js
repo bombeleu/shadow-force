@@ -16,6 +16,7 @@ private var spawnTime : float;
 private var tr : Transform;
 private var sideBias : float;
 
+public var dodger:LinearDodger;
 function OnEnable () {
 	tr = transform;
 	dir = transform.forward;
@@ -23,6 +24,13 @@ function OnEnable () {
 	//targetObject = GameObject.FindWithTag ("Player");
 	spawnTime = Time.time;
 	sideBias = Mathf.Sin (Time.time * 5);
+	
+	if (dodger){
+		dodger.velocity = speed;
+		dodger.velVector = dir.normalized * speed;
+		dodger.affectRadius = (collider as SphereCollider).radius;
+		dodger.Initialize();
+	}
 }
 
 function Update () {
@@ -48,25 +56,6 @@ function Update () {
 	tr.rotation = Quaternion.LookRotation(dir); 	
 	tr.position += (dir * speed) * Time.deltaTime;
 	
-	// Check if this one hits something
-	var hits : Collider[] = Physics.OverlapSphere (tr.position, radius, ~ignoreLayers.value);
-	var collided : boolean = false;
-	for (var c : Collider in hits) {
-		// Don't collide with triggers
-		if (c.isTrigger)
-			continue;
-		
-		var targetHealth : Health = c.GetComponent.<Health> ();
-		if (targetHealth) {
-			// Apply damage
-			//targetHealth.OnDamage (damageAmount, -tr.forward);
-			
-			if (targetHealth.networkView.isMine){//only apply damage if it hits MY character!
-				targetHealth.transform.networkView.RPC("OnDamage", RPCMode.All, 
-					[damageAmount, -tr.forward]);
-			}
-			collided = true;
-		}
 		/*// Get the rigidbody if any
 		if (c.rigidbody) {
 			// Apply force to the target object
@@ -74,10 +63,6 @@ function Update () {
 			force.y = 0;
 			c.rigidbody.AddForce (force, ForceMode.Impulse);
 		}*/
-	}
-	if (collided) {
-		Explode();
-	}
 }
 
 function Explode(){
@@ -90,6 +75,16 @@ function Explode(){
 
 public var bounceTime : int = 5;
 function OnCollisionEnter(collision : Collision) {
+	var targetHealth : Health = collision.transform.GetComponent.<Health> ();
+	if (targetHealth) {
+		if (targetHealth.networkView.isMine){//only apply damage if it hits MY character!
+			targetHealth.transform.networkView.RPC("OnDamage", RPCMode.All, 
+				[damageAmount, -transform.forward]);
+		}
+		Explode();
+		return;
+	}
+
     // Debug-draw all contact points and normals
     if (bounceTime==0){
     	Explode();
@@ -104,4 +99,9 @@ function OnCollisionEnter(collision : Collision) {
     
     dir -= norm * Vector3.Dot(dir, norm) * 2;
     dir.y = 0;
+    
+    if (dodger){
+		//dodger.velocity = speed;
+		dodger.velVector = dir.normalized * speed;
+	}
 }

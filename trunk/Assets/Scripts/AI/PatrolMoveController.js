@@ -13,7 +13,7 @@ private var patrolDirection : int = 1;
 
 function Start () {
 	character = motor.transform;
-	patrolRoute.Register (transform.parent.gameObject);
+	//patrolRoute.Register (transform.parent.gameObject);
 }
 
 function OnEnable () {
@@ -21,7 +21,7 @@ function OnEnable () {
 }
 
 function OnDestroy () {
-	patrolRoute.UnRegister (transform.parent.gameObject);
+	//patrolRoute.UnRegister (transform.parent.gameObject);
 }
 
 function Update () {

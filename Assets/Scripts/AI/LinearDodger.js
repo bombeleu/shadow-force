@@ -1,9 +1,15 @@
 #pragma strict
 @script RequireComponent (SphereCollider)
 
+@HideInInspector
 public var velVector:Vector3;
+
+@HideInInspector
 public var velocity:float;
+
+@HideInInspector
 public var affectRadius:float;
+
 static public var slowestDodgerVel : float = 3;
 static public var dodgerRadius : float = 1;
 
@@ -78,7 +84,7 @@ function OnTriggerExit (other : Collider) : void{
 
 function OnDestroy(){
 	for (var a:Object in affecting.Values){
-		Debug.Log('dead!');
+		Debug.Log('linear dodger dead!');
 		(a as DodgingAI).OnEvaded(gameObject);
 	}
 }

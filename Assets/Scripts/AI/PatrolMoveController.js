@@ -60,5 +60,5 @@ function Update () {
 	motor.movementDirection = targetVector;
 	// Set the facing direction.
 	motor.facingDirection = targetVector;
-	Debug.Log('patrolling!');
+	//Debug.Log('patrolling!');
 }

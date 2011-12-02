@@ -70,14 +70,25 @@ private var isFiring:boolean=false;
 private var oldIsFiring: boolean = false;
 private var joystickPos:Vector3;
 
+private var manualFire:boolean = false;
+
 function OnSetVisible(visi:boolean){
 	/*for (var weapon:Weapon in ws)
 		weapon.SetEnable(false);*/
 	ws[curWeapon].SetEnable(visi);
 }
 
+function WeaponStartFire(){
+	manualFire = true;
+}
+
+function WeaponStopFire(){
+	manualFire = false;
+}
+
+
 function Update () {
-	if (!controllable || !networkView.isMine) return;//weapon manager only updates the local player, network update is done per weapon basis
+	if (!networkView.isMine) return;//weapon manager only updates the local player, network update is done per weapon basis
 
 	//return;
 	//this is only needed if the terrain is uneven!
@@ -92,27 +103,44 @@ function Update () {
 	//direction takes from mouse position
 	//wait for the character rotation to trigger the attack on Fire1 or Fire2 axis possitive
 	var angle:float;
-	#if UNITY_IPHONE || UNITY_ANDROID
-		angle = 0;//TODO: compute angle base on the different between angle and joystick
-		cursorWorldPosition = character.position + character.forward * Vector3(joystickPos.x,0,joystickPos.y).magnitude * 10;
-	#else
-		// On PC, the cursor point is the mouse position
-		var cursorScreenPosition : Vector3 = Input.mousePosition;
-		// Find out where the mouse ray intersects with the movement plane of the player
-		cursorWorldPosition = ScreenPointToWorldPointOnPlane (cursorScreenPosition, playerMovementPlane, Camera.main);
-
-		var quat: Quaternion = Quaternion.FromToRotation( character.transform.rotation * Vector3.forward, 
-			cursorWorldPosition - character.transform.position);
-		var axis:Vector3;
-		quat.ToAngleAxis(angle, axis);
-		var fireAlt:float = Input.GetAxis("Fire1");
-		oldIsFiring = isFiring;
-		isFiring = fireAlt>=1;
-	#endif
+	if (!controllable){
+		isFiring = manualFire;
+	}else{
+		#if UNITY_IPHONE || UNITY_ANDROID
+			angle = 0;//TODO: compute angle base on the different between angle and joystick
+			cursorWorldPosition = character.position + character.forward * Vector3(joystickPos.x,0,joystickPos.y).magnitude * 10;
+		#else
+			// On PC, the cursor point is the mouse position
+			var cursorScreenPosition : Vector3 = Input.mousePosition;
+			// Find out where the mouse ray intersects with the movement plane of the player
+			cursorWorldPosition = ScreenPointToWorldPointOnPlane (cursorScreenPosition, playerMovementPlane, Camera.main);
 	
-	if (weapon.needPositionUpdate){
-		weapon.gameObject.SendMessage("OnUpdateTarget", cursorWorldPosition);
+			var quat: Quaternion = Quaternion.FromToRotation( character.transform.rotation * Vector3.forward, 
+				cursorWorldPosition - character.transform.position);
+			var axis:Vector3;
+			quat.ToAngleAxis(angle, axis);
+			var fireAlt:float = Input.GetAxis("Fire1");
+			oldIsFiring = isFiring;
+			isFiring = fireAlt>=1;
+		#endif
+		if (weapon.needPositionUpdate){
+			weapon.gameObject.SendMessage("OnUpdateTarget", cursorWorldPosition);
+		}
+		var weaponSwitch:boolean;
+		#if UNITY_IPHONE || UNITY_ANDROID
+			if (Input.isGyroAvailable)
+				weaponSwitch = Input.gyro.userAcceleration.z < -0.5;
+			else
+				weaponSwitch = Input.acceleration.z <-0.9;
+		#else
+			weaponSwitch = Input.GetAxis("Fire2")>=1;
+		#endif
+		if (weaponSwitch && Time.time > lastWeaponSwitch + weapon.switchTime){
+			lastWeaponSwitch = Time.time;
+			RPCWeaponSwitch((curWeapon+1)%ws.length);//use networkView to control weapon sync
+		}
 	}
+	
 
 	if (weapon.cooldown > 0){
 		if (!oldIsFiring && isFiring){
@@ -142,20 +170,6 @@ function Update () {
 			firing = false;
 			weapon.gameObject.SendMessage("OnStopFiring");
 		}
-	}
-	
-	var weaponSwitch:boolean;
-	#if UNITY_IPHONE || UNITY_ANDROID
-		if (Input.isGyroAvailable)
-			weaponSwitch = Input.gyro.userAcceleration.z < -0.5;
-		else
-			weaponSwitch = Input.acceleration.z <-0.9;
-	#else
-		weaponSwitch = Input.GetAxis("Fire2")>=1;
-	#endif
-	if (weaponSwitch && Time.time > lastWeaponSwitch + weapon.switchTime){
-		lastWeaponSwitch = Time.time;
-		RPCWeaponSwitch((curWeapon+1)%ws.length);//use networkView to control weapon sync
 	}
 }
 

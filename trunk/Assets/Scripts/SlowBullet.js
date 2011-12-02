@@ -14,7 +14,7 @@ function Awake(){
 
 function OnLaunchBullet(){
 	//networkView.RPC("RPCLaunchBullet", RPCMode.All);//TODO: clone all current slow bullets to newly joined player
-	Network.Instantiate(bulletPrefab, spawnPoint.position, weapon.owner.transform.rotation, 0);
+	Network.Instantiate(bulletPrefab, spawnPoint.position + weapon.owner.transform.forward, weapon.owner.transform.rotation, 0);
 }
 
 /*

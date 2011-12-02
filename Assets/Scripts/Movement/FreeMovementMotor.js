@@ -7,7 +7,9 @@ class FreeMovementMotor extends MovementMotor {
 	//public var movement : MoveController;
 	public var walkingSpeed : float = 5.0;
 	public var walkingSnappyness : float = 50;
-	public var turningSmoothing : float = 0.3;
+	//public var turningSmoothing : float = 0.3;
+	public var maxTurnSpeed: float = 7;
+	public static var threshold : float = 5;
 	
 	function FixedUpdate () {
 		// Handle the movement of the character
@@ -28,7 +30,11 @@ class FreeMovementMotor extends MovementMotor {
 		}
 		else {
 			var rotationAngle : float = AngleAroundAxis (transform.forward, faceDir, Vector3.up);
-			rigidbody.angularVelocity = (Vector3.up * rotationAngle * turningSmoothing);
+			//rigidbody.angularVelocity = (Vector3.up * rotationAngle * turningSmoothing);
+			if (Mathf.Abs(rotationAngle)>threshold){
+				rotationAngle = rotationAngle>0?maxTurnSpeed:-maxTurnSpeed;
+			}
+			rigidbody.angularVelocity = (Vector3.up * rotationAngle);
 		}
 	}
 	

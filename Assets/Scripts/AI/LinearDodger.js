@@ -51,7 +51,7 @@ function OnTriggerStay (other : Collider) : void{
 		if (dotN<0) return;
 		var offset:Vector3 = dir - velN*dotN;
 		var offsetM:float = offset.magnitude;
-		var affectDist:float = affectRadius + dodgerRadius;
+		var affectDist:float = affectRadius + dodgerRadius + 0.5;
 		if (offsetM < affectDist){
 			ai.OnEvadeZone(offset.normalized*(affectDist-offsetM));
 		}

@@ -4,6 +4,9 @@
 private var character : Transform;
 public var cursorPlaneHeight : float = 0;
 public var weaponHoldPoint : Transform;
+
+public var controllable:boolean = true;
+
 //public var spawnPoint : Transform;
 
 //public var weapons: MonoScript[];
@@ -74,7 +77,7 @@ function OnSetVisible(visi:boolean){
 }
 
 function Update () {
-	if (!networkView.isMine) return;//weapon manager only updates the local player, network update is done per weapon basis
+	if (!controllable || !networkView.isMine) return;//weapon manager only updates the local player, network update is done per weapon basis
 
 	//return;
 	//this is only needed if the terrain is uneven!

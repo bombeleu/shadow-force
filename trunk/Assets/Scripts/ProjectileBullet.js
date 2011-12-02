@@ -22,6 +22,14 @@ function OnLaunchBullet(pos:Vector3){
 		spawnPoint.rotation, 0);
 	//go.rigidbody.velocity = velo;
 	go.SendMessage("SetVelocity",velo);
+	var dodger: GravityDodger = go.GetComponentInChildren.<GravityDodger>();
+	if (dodger){
+		dodger.affectRadius = 5;
+		dodger.landingTime = trajectory.GetDuration();
+		dodger.landingPos = pos;
+		dodger.Initialize();
+	}
+	
 	//go.rigidbody.angularVelocity = Vector3(Random.value,Random.value,Random.value)*Random.value*4;
 	/*var go2:GameObject = Network.Instantiate(bulletPrefab, oriPos, 
 		spawnPoint.rotation, 0);*/

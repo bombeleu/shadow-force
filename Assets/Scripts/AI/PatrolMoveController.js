@@ -14,10 +14,11 @@ private var patrolDirection : int = 1;
 function Start () {
 	character = motor.transform;
 	//patrolRoute.Register (transform.parent.gameObject);
+	nextPatrolPoint = patrolRoute.GetClosestPatrolPoint (transform.position);
 }
 
 function OnEnable () {
-	nextPatrolPoint = patrolRoute.GetClosestPatrolPoint (transform.position);
+	//nextPatrolPoint = patrolRoute.GetClosestPatrolPoint (transform.position);
 }
 
 function OnDestroy () {

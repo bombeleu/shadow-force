@@ -10,7 +10,7 @@ public var landingPos:Vector3;
 public var affectRadius:float;
 
 static public var slowestDodgerVel : float = 3;
-static public var dodgerRadius : float = 1;
+static public var dodgerRadius : float = 1.5;
 
 private var startEvadeTime:float;
 private var sphereC:SphereCollider;
@@ -35,7 +35,7 @@ function Update () {
 }
 
 function OnTriggerStay (other : Collider) : void{
-	var ai : DodgingAI = other.GetComponentInChildren.<DodgingAI>();
+	var ai : DodgingAI = other.GetComponent.<DodgingAI>();
 	if (ai){
 		var dir:Vector3 = other.transform.position - landingPos;
 		dir.y = 0;

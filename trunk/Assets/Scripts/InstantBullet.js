@@ -13,9 +13,10 @@ function Awake(){
 	interval = 1/frequency;
 }
 
+public var raycast: PerFrameRaycast;
 function OnLaunchBullet(){
+	var hitInfo : RaycastHit = raycast.GetHitInfo();
 	if (Time.time > lastFireTime + interval) {
-		var hitInfo : RaycastHit = gameObject.GetComponentInChildren.<PerFrameRaycast>().GetHitInfo();
 		
 		if (hitInfo.transform) {
 			// Get the health component of the target if any
@@ -30,6 +31,17 @@ function OnLaunchBullet(){
 		}
 		lastFireTime = Time.time;
 	}
+	
+	if (hitInfo.transform) {
+		var ai : DodgingAI = hitInfo.transform.GetComponent.<DodgingAI>();
+		if (ai){
+			var dir:Vector3 = hitInfo.transform.position - spawnPoint.position;
+			dir.y = 0;
+			var velN : Vector3 = raycast.GetDir().normalized;
+			var offset:Vector3 = dir - velN*Vector3.Dot(dir, velN);
+			ai.OnEvadeZone(offset.normalized);//TODO: use real size
+		}
+	}	
 }
 
 function OnStopFiring(){

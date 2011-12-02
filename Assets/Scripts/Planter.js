@@ -27,8 +27,10 @@ function OnLaunchBullet(){
 function Update () {
 	if (!planted) return;
 	if (Time.time - startTime > plantingTime){
+		var plantingPos:Vector3 = weapon.owner.transform.position;
+		plantingPos.y = 1.2;
 		ConnectionGUI.CreateTeamObject(plantingObject, Network.AllocateViewID(), 
-			weapon.owner.transform.position, weapon.owner.transform.rotation, 
+			plantingPos, weapon.owner.transform.rotation, 
 			Camera.main.GetComponent.<Team>().team);
 		planted = false;
 		effect.enabled = false;

@@ -19,16 +19,21 @@ function GetDir () {
 		}
 	}
 }*/
-
+private var dir:Vector3;
 function Update () {
 	//if (dir==null) GetDir();
-	var dir:Vector3 = weapon.owner.transform.forward;
+	dir = weapon.owner.transform.forward;
+	dir.y=0;
 	// Cast a ray to find out the end point of the laser
 	hitInfo = RaycastHit ();
 	//Physics.Raycast (tr.position, tr.forward, hitInfo);
-	Physics.Raycast (tr.position, Vector3(dir.x,0,dir.z), hitInfo, Mathf.Infinity, (1 <<0) | (1 << 8));//default + Player mask
+	Physics.Raycast (tr.position, dir, hitInfo, Mathf.Infinity, (1 <<0) | (1 << 8));//default + Player mask
 }
 
 function GetHitInfo () : RaycastHit {
 	return hitInfo;
+}
+
+function GetDir():Vector3{
+	return dir;
 }

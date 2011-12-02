@@ -47,7 +47,9 @@ function OnTriggerStay (other : Collider) : void{
 		var dir:Vector3 = other.transform.position - transform.position;
 		dir.y = 0;
 		var velN : Vector3 = velVector.normalized;
-		var offset:Vector3 = dir - velN*Vector3.Dot(dir, velN);
+		var dotN:float = Vector3.Dot(dir, velN);
+		if (dotN<0) return;
+		var offset:Vector3 = dir - velN*dotN;
 		var offsetM:float = offset.magnitude;
 		var affectDist:float = affectRadius + dodgerRadius;
 		if (offsetM < affectDist){

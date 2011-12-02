@@ -19,7 +19,7 @@ function LateUpdate(){
 	if (isActive){
 		motor.movementDirection = escapeV.normalized;
 		//motor.facingDirection = escapeV.normalized;
-		Debug.Log('dodging!');
+		//Debug.Log('dodging!');
 	}
 	escapeV = Vector3.zero;
 	_isActive = isActive;

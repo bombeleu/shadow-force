@@ -12,7 +12,7 @@ function Update () {
 }
 
 function OnDetectEnemy(enemy:Visibility){
-	Debug.Log('see ya!');
+	//Debug.Log('see ya!');
 	patrolling = false;
 	var targetV:Vector3 = (enemy.transform.position - transform.position).normalized;
 	motor.facingDirection = targetV;

@@ -98,7 +98,7 @@ function Update () {
 	var cursorWorldPosition : Vector3;
 
 	var weapon : Weapon = ws[curWeapon];
-	weapon.SetEnable(true);
+	//weapon.SetEnable(true);
 
 	//direction takes from mouse position
 	//wait for the character rotation to trigger the attack on Fire1 or Fire2 axis possitive

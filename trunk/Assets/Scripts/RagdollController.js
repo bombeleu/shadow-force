@@ -25,6 +25,10 @@ function Update ()
 			DieByForce(Vector3.up, 500.0);
 		} else if (Input.GetKeyDown(KeyCode.J)) {
 			DieByExplosion(transform.position + Vector3(1,0,0));
+		} else if (Input.GetKeyDown(KeyCode.P)) {
+			var temp : FadingEffect = GetComponent(FadingEffect);
+			Debug.Log(temp);
+			temp.FadeOut() ;
 		}
 	}
 }

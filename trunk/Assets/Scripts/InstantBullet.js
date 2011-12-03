@@ -7,6 +7,7 @@ private var interval:float;
 
 private var lastFireTime : float = -1;
 private var spawnPoint:Transform;
+
 function Awake(){
 	spawnPoint = GetComponent.<Weapon>().spawnPoint;
 	frequency = Network.sendRate;

@@ -38,8 +38,6 @@ function Awake(){
 	//cursorPlaneHeight = -character.position.y;
 	playerMovementPlane = new Plane (character.up, character.position + character.up * cursorPlaneHeight);
 	//playerMovementPlane = new Plane (character.up, Vector3(character.position.x,0,character.position.z) + character.up * cursorPlaneHeight);
-	altFireTimer = Time.time;
-	lastWeaponSwitch = Time.time;
 }
 
 @RPC
@@ -71,6 +69,7 @@ private var oldIsFiring: boolean = false;
 private var joystickPos:Vector3;
 
 private var manualFire:boolean = false;
+private var manualPos:Vector3;
 
 function OnSetVisible(visi:boolean){
 	/*for (var weapon:Weapon in ws)
@@ -78,14 +77,20 @@ function OnSetVisible(visi:boolean){
 	ws[curWeapon].SetEnable(visi);
 }
 
-function WeaponStartFire(){
+function WeaponStartFire(pos:Vector3){
 	manualFire = true;
+	manualPos = pos;
 }
 
 function WeaponStopFire(){
 	manualFire = false;
 }
 
+function Start(){
+	ws[curWeapon].SetEnable(true);
+	altFireTimer = Time.time;
+	lastWeaponSwitch = Time.time;
+}
 
 function Update () {
 	if (!networkView.isMine) return;//weapon manager only updates the local player, network update is done per weapon basis
@@ -103,11 +108,13 @@ function Update () {
 	//direction takes from mouse position
 	//wait for the character rotation to trigger the attack on Fire1 or Fire2 axis possitive
 	var angle:float;
+	oldIsFiring = isFiring;
 	if (!controllable){
 		isFiring = manualFire;
+		if (manualFire) cursorWorldPosition = manualPos;
 	}else{
 		#if UNITY_IPHONE || UNITY_ANDROID
-			angle = 0;//TODO: compute angle base on the different between angle and joystick
+			//angle = 0;//TODO: compute angle base on the different between angle and joystick
 			cursorWorldPosition = character.position + character.forward * Vector3(joystickPos.x,0,joystickPos.y).magnitude * 10;
 		#else
 			// On PC, the cursor point is the mouse position
@@ -115,12 +122,7 @@ function Update () {
 			// Find out where the mouse ray intersects with the movement plane of the player
 			cursorWorldPosition = ScreenPointToWorldPointOnPlane (cursorScreenPosition, playerMovementPlane, Camera.main);
 	
-			var quat: Quaternion = Quaternion.FromToRotation( character.transform.rotation * Vector3.forward, 
-				cursorWorldPosition - character.transform.position);
-			var axis:Vector3;
-			quat.ToAngleAxis(angle, axis);
 			var fireAlt:float = Input.GetAxis("Fire1");
-			oldIsFiring = isFiring;
 			isFiring = fireAlt>=1;
 		#endif
 		if (weapon.needPositionUpdate){
@@ -140,7 +142,12 @@ function Update () {
 			RPCWeaponSwitch((curWeapon+1)%ws.length);//use networkView to control weapon sync
 		}
 	}
-	
+	var fromV:Vector3 = character.transform.rotation * Vector3.forward;
+	var toV:Vector3 = cursorWorldPosition - character.transform.position;
+	toV.y = fromV.y;
+	var quat: Quaternion = Quaternion.FromToRotation( fromV, toV);
+	var axis:Vector3;
+	quat.ToAngleAxis(angle, axis);
 
 	if (weapon.cooldown > 0){
 		if (!oldIsFiring && isFiring){

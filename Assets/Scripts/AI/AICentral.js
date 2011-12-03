@@ -16,8 +16,8 @@ function OnDetectEnemy(enemy:Visibility){
 	patrolling = false;
 	var targetV:Vector3 = (enemy.transform.position - transform.position).normalized;
 	motor.facingDirection = targetV;
-	motor.movementDirection = targetV;
-	GetComponent.<WeaponManager>().WeaponStartFire();
+	motor.movementDirection = Vector3.zero;//targetV;
+	GetComponent.<WeaponManager>().WeaponStartFire(enemy.transform.position);
 }
 
 function OnLoseSightEnemy(enemy:Visibility){

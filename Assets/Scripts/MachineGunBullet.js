@@ -54,6 +54,7 @@ function Update(){
 		var go : GameObject = Spawner.Spawn (bulletPrefab, spawnPoint.position, wp.owner.transform.rotation) as GameObject;
 		
 		var bullet : SimpleBullet = go.GetComponent.<SimpleBullet> ();
+		bullet.InitializeDirection();
 		var hitInfo : RaycastHit = raycast.GetHitInfo();
 		bullet.dist = hitInfo.transform?hitInfo.distance:1000;
 		

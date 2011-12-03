@@ -5,16 +5,18 @@ var lifeTime : float = 0.5;
 var dist : float = 10000;
 
 public var coneAngle:float = 1.5;
+public var angle : float = 0;
 
 private var spawnTime : float = 0.0;
 private var tr : Transform;
 
-function OnEnable () {
-	var coneRandomRotation = Quaternion.Euler (Random.Range (-coneAngle, coneAngle), Random.Range (-coneAngle, coneAngle), 0);
+function InitializeDirection () {
+	var coneRandomRotation = Quaternion.Euler (Random.Range (-coneAngle, coneAngle) , Random.Range (-coneAngle, coneAngle) + angle, 0);
 	transform.rotation *= coneRandomRotation;
 	tr = transform;
 	spawnTime = Time.time;
 }
+
 
 function Update () {
 	tr.position += tr.forward * speed * Time.deltaTime;

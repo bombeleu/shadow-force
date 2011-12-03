@@ -1,4 +1,5 @@
 var SpaceCraft : Transform;
+public var conGUI:ConnectionGUI;
 
 function OnNetworkLoadedLevel () {
 	if (ConnectionGUI.dedicatedServer && Network.isServer) return;
@@ -20,7 +21,7 @@ function OnNetworkLoadedLevel () {
 	var controller : Team;
 	controller = character.GetComponent("Team");
 	//controller.character = character.transform;
-	var t:int = (Camera.main.GetComponent("ConnectionGUI")as ConnectionGUI).GetTeamNum();
+	var t:int = conGUI.GetTeamNum();
 	character.networkView.RPC("SetTeam", RPCMode.AllBuffered, t);
 	var na:String = ConnectionGUI.na;
 	character.networkView.RPC("SetName", RPCMode.AllBuffered, na);

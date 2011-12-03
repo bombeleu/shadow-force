@@ -3,7 +3,7 @@
 // TODO: Wait for this - will work in 3.3
 //import System.Collections.Generic;
 
-@script RequireComponent (Collider)
+//@script RequireComponent (Collider)
 
 public var pingPong : boolean = false;
 // TODO: In Unity 3.3 remove the System.Collections.Generic and impoprt the namespace instead

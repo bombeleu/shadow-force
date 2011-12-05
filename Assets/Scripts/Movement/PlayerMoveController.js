@@ -39,6 +39,7 @@ private var joystickRightGO : GameObject;
 private var screenMovementSpace : Quaternion;
 private var screenMovementForward : Vector3;
 private var screenMovementRight : Vector3;
+private var healthComp : Health;
 
 function SetJoystickReset(b:boolean){
 	if (b)
@@ -103,6 +104,7 @@ function Awake () {
 function Start () {
 	//only control your own character!
 	if (!networkView.isMine) return;
+	healthComp = GetComponent(Health);
 	
 	#if UNITY_IPHONE || UNITY_ANDROID
 		// Move to right side of screen
@@ -142,6 +144,8 @@ function OnEnable () {
 function Update () {
 	//only control your own character!
 	if (!networkView.isMine) return;
+	//if (healthComp.dead) return;
+	
 	//if (myPlayer != Network.player.guid) return;
 
 	// HANDLE CHARACTER MOVEMENT DIRECTION

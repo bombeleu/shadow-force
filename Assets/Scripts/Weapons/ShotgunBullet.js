@@ -7,6 +7,7 @@ public var frequency : float = 1;
 public var muzzleFlashFront : GameObject;
 public var raycast: PerFrameConeCast;
 public var numBullets : int  = 5;
+public var range : int = 10;
 
 private var bulletPrefab: GameObject;
 private var firing:boolean = false;
@@ -58,12 +59,12 @@ function Update(){
 			var go : GameObject = Spawner.Spawn (bulletPrefab, spawnPoint.position, wp.owner.transform.rotation) as GameObject;
 			
 			var bullet : SimpleBullet = go.GetComponent.<SimpleBullet> ();
-			bullet.angle = -angle + ((i+0.00001)/numBullets*(2*angle));
+			bullet.angle = -angle + ((2.0*angle*i)/numBullets);
 			bullet.InitializeDirection();
-			
+			Debug.Log("range" + range);
 			var hitInfo : RaycastHit = raycast.GetHitInfo();
-			bullet.dist = hitInfo.transform?hitInfo.distance:1000;
-		
+			bullet.dist = hitInfo.transform?Mathf.Min(hitInfo.distance,range):range;
+		    Debug.Log("Bullet dist " + bullet.dist);
 		}
 		lastFireTime = Time.time;
 	}

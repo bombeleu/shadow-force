@@ -1,17 +1,13 @@
 #pragma strict
 @script RequireComponent (Weapon)
 
-public var damagePerSecond : float = 20.0;
-private var frequency : float;
-private var interval:float;
+public var damage : float = 100.0;
 
 private var lastFireTime : float = -1;
 private var spawnPoint:Transform;
 
 function Awake(){
 	spawnPoint = GetComponent.<Weapon>().spawnPoint;
-	frequency = Network.sendRate;
-	interval = 1/frequency;
 }
 
 function OnLaunchBullet(){
@@ -25,7 +21,7 @@ function OnLaunchBullet(){
 				// Apply damage
 				if (networkView.isMine){//only apply damage if this is MY character!
 					hitInfo.transform.networkView.RPC("OnDamage", RPCMode.All, 
-						[damagePerSecond / frequency, -spawnPoint.forward]);
+						[damage, -spawnPoint.forward]);
 				}
 			}
 		}

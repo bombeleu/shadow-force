@@ -263,7 +263,7 @@ private function GetIntersectPts(pt0 : Vector2, pt1 : Vector2, pt2 : Vector2, bl
 	} else
 	{
 		var mat : Matrix4x4 = _playerTransform.worldToLocalMatrix * blocker.transform.localToWorldMatrix;
-		var size : Vector3 = blocker.GetComponent(BoxCollider).size;
+		var size : Vector3 = 0.5 * blocker.GetComponent(BoxCollider).size;
 		
 		// get the 4 _corners
 		temp = mat.MultiplyPoint(Vector3(-size.x,0,-size.z));_corner[0]  = Vector2(temp.x,temp.z);

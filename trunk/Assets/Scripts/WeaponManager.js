@@ -1,7 +1,7 @@
 #pragma strict
 @script RequireComponent (NetworkView)
 
-private var character : Transform;
+//private var character : Transform;
 public var cursorPlaneHeight : float = 0;
 public var weaponHoldPoint : Transform;
 
@@ -17,7 +17,7 @@ private var ws: Weapon[];
 private var playerMovementPlane : Plane;
 
 function OnEnable(){
-	character = transform;
+	//character = transform;
 	ws = new Weapon[weapons.length];
 	//ws[0] =( ScriptableObject.CreateInstance(weapons[0].GetClass()) as Weapon);
 	//ws[0].saySth();
@@ -39,7 +39,7 @@ function OnEnable(){
 private var weaponGUI:SelectWeaponGUI;
 function Awake(){
 	weaponGUI = GameObject.FindObjectOfType(SelectWeaponGUI);
-	playerMovementPlane = new Plane (character.up, character.position + character.up * cursorPlaneHeight);
+	playerMovementPlane = new Plane (transform.up, transform.position + transform.up * cursorPlaneHeight);
 }
 
 function SetWeaponSelection(){
@@ -115,8 +115,8 @@ function Update () {
 
 	//return;
 	//this is only needed if the terrain is uneven!
-	playerMovementPlane.normal = character.up;
-	playerMovementPlane.distance = -character.position.y + cursorPlaneHeight;
+	playerMovementPlane.normal = transform.up;
+	playerMovementPlane.distance = -transform.position.y + cursorPlaneHeight;
 
 	var cursorWorldPosition : Vector3;
 
@@ -133,7 +133,7 @@ function Update () {
 	}else{
 		#if UNITY_IPHONE || UNITY_ANDROID
 			//angle = 0;//TODO: compute angle base on the different between angle and joystick
-			cursorWorldPosition = character.position + character.forward * Vector3(joystickPos.x,0,joystickPos.y).magnitude * 10;
+			cursorWorldPosition = tranform.position + tranform.forward * Vector3(joystickPos.x,0,joystickPos.y).magnitude * 10;
 		#else
 			// On PC, the cursor point is the mouse position
 			var cursorScreenPosition : Vector3 = Input.mousePosition;
@@ -160,8 +160,8 @@ function Update () {
 			RPCWeaponSwitch((curWeapon+1)%ws.length);//use networkView to control weapon sync
 		}
 	}
-	var fromV:Vector3 = character.transform.rotation * Vector3.forward;
-	var toV:Vector3 = cursorWorldPosition - character.transform.position;
+	var fromV:Vector3 = transform.rotation * Vector3.forward;
+	var toV:Vector3 = cursorWorldPosition - transform.position;
 	toV.y = fromV.y;
 	var quat: Quaternion = Quaternion.FromToRotation( fromV, toV);
 	var axis:Vector3;

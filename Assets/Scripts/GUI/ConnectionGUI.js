@@ -262,8 +262,11 @@ public var prefabs: GameObject[];
 
 static function CreateTeamObject(prefab:GameObject, viewID:NetworkViewID, pos:Vector3, quat: Quaternion, team:int):void
 {
-	var i:int = Camera.main.GetComponent.<ConnectionGUI>().GetPrefabID(prefab);
-	Camera.main.GetComponent.<ConnectionGUI>().networkView.RPC("_CreateTeamObject", RPCMode.AllBuffered, [i, viewID, pos, quat, team]); 
+// this is bad, very bad
+	var connection : ConnectionGUI = FindObjectOfType(ConnectionGUI) as ConnectionGUI;
+	Debug.Log(prefab);
+	var i:int = connection.GetComponent(ConnectionGUI).GetPrefabID(prefab);
+	connection.GetComponent(ConnectionGUI).networkView.RPC("_CreateTeamObject", RPCMode.AllBuffered, [i, viewID, pos, quat, team]); 
 }
 
 function GetPrefabID(prefab:GameObject):int{
@@ -277,6 +280,7 @@ function GetPrefabID(prefab:GameObject):int{
 @RPC
 function _CreateTeamObject(prefabID:int, viewID:NetworkViewID, pos:Vector3, quat: Quaternion, team:int):void
 {
+	//Debug.Log(prefabID);
 	var go:GameObject = Instantiate(prefabs[prefabID], pos, quat);
 	go.GetComponent.<Team>().SetTeam(team);
 	go.networkView.viewID = viewID;

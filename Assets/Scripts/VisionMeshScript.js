@@ -84,7 +84,8 @@ function Update () {
 	_newVertices[2] = pt2;
 	
 	var blockers : GameObject[] ;
-	blockers = BlockerManager.GetObjsInTriangle(transform.position, transform.localToWorldMatrix.MultiplyPoint(pt1),transform.localToWorldMatrix.MultiplyPoint(pt2));
+	//Debug.Log(BlockerManager.Instance);
+	blockers = BlockerManager.Instance.GetObjsInTriangle(transform.position, transform.localToWorldMatrix.MultiplyPoint(pt1),transform.localToWorldMatrix.MultiplyPoint(pt2));
 	//blockers = BlockerManager.GetAllBlockers();
 	
 //	for (var blocker: GameObject in BlockerManager.GetAllBlockers())
@@ -262,12 +263,13 @@ private function GetIntersectPts(pt0 : Vector2, pt1 : Vector2, pt2 : Vector2, bl
 	} else
 	{
 		var mat : Matrix4x4 = _playerTransform.worldToLocalMatrix * blocker.transform.localToWorldMatrix;
-		var size : float = 0.5;
+		var size : Vector3 = blocker.GetComponent(BoxCollider).size;
+		
 		// get the 4 _corners
-		temp = mat.MultiplyPoint3x4(Vector3(-size,0,-size));_corner[0]  = Vector2(temp.x,temp.z);
-		temp = mat.MultiplyPoint3x4(Vector3(-size,0,size));_corner[1]  = Vector2(temp.x,temp.z);
-		temp = mat.MultiplyPoint3x4(Vector3(size,0,size));_corner[2]  = Vector2(temp.x,temp.z);
-		temp = mat.MultiplyPoint3x4(Vector3(size,0,-size));_corner[3]  = Vector2(temp.x,temp.z);
+		temp = mat.MultiplyPoint(Vector3(-size.x,0,-size.z));_corner[0]  = Vector2(temp.x,temp.z);
+		temp = mat.MultiplyPoint(Vector3(-size.x,0,size.z));_corner[1]  = Vector2(temp.x,temp.z);
+		temp = mat.MultiplyPoint(Vector3( size.x,0,size.z));_corner[2]  = Vector2(temp.x,temp.z);
+		temp = mat.MultiplyPoint(Vector3( size.x,0,-size.z));_corner[3]  = Vector2(temp.x,temp.z);
 		
 		
 		var sign01 : float = Sign2(_corner[0],_corner[1]) ;

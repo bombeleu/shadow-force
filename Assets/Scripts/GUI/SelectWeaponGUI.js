@@ -1,11 +1,12 @@
 public var selectedWeapons : GameObject[];
 private var nWeapons : int;
 public var availableWeapons: GameObject[];
-
+public var finished : boolean;
 function Start()
 {
 	nWeapons = 0;
 	selectedWeapons = new GameObject[2];
+	finished = false;
 }
 
 function Update () {
@@ -51,10 +52,6 @@ function ChooseWeapon(weapon : GameObject)
 	nWeapons++;
 	if (nWeapons >= 2)
 	{
-		Finish();
+		finished = true;
 	}
-}
-function Finish()
-{
-	UIController.guiState = GUIState.Connection;
 }

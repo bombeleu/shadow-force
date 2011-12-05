@@ -25,17 +25,20 @@ class Cell {
 }
 
 	
-	public static var NUM_TILES : int = 10;
-	public static var MAP_SIZE : int = 100; 
+	public var NUM_TILES : int = 10;
+	public var MAP_SIZE : int = 100; 
 	
-	public static var CELL_SIZE :float = MAP_SIZE/NUM_TILES;
-	static var grid : Cell[,] = new Cell[NUM_TILES,NUM_TILES];
+	private var CELL_SIZE :float ;
+	private var grid : Cell[,] = new Cell[NUM_TILES,NUM_TILES];
 	
-	static var allBlockers : GameObject[];
+	private var allBlockers : GameObject[];
+	
+	public static var Instance : BlockerManager;
 	
 	// Use this for initialization
 	function Start () {
-
+		CELL_SIZE = MAP_SIZE/NUM_TILES;
+		Debug.Log(CELL_SIZE + " ---- " + MAP_SIZE);
 		for (var i : int = 0 ; i < NUM_TILES; i++)
 		{
 			for (var j:int = 0; j < NUM_TILES; j++)
@@ -53,6 +56,8 @@ class Cell {
 		}
 		// initialize map
 		Debug.Log("Total: " + allBlockers.Length + " blockers");
+		
+		Instance = this;
 	}
 	
 	public static function IsCylinder(blocker : GameObject) :boolean
@@ -67,7 +72,7 @@ class Cell {
 		else return false;
 	}
 	
-	private static function GetBlockerBoundaries(blocker : GameObject) : Vector4
+	private function GetBlockerBoundaries(blocker : GameObject) : Vector4
 	{
 		if (IsCube(blocker))
 		{
@@ -113,7 +118,7 @@ class Cell {
 		return Vector4(smallest.x,largest.x,smallest.y,largest.y);
 	}
 	
-	public static function RemoveBlocker(blocker : GameObject)
+	public function RemoveBlocker(blocker : GameObject)
 	{
 		var boundary : Vector4 = GetBlockerBoundaries(blocker);
 		
@@ -128,7 +133,7 @@ class Cell {
 		}
 	}
 	
-	public static function AddBlocker(blocker : GameObject)
+	public function AddBlocker(blocker : GameObject)
 	{
 		var boundary : Vector4 = GetBlockerBoundaries(blocker);
 		
@@ -138,13 +143,14 @@ class Cell {
 		{
 			for (var j : int = ToCell(boundary[2]) ; j <= ToCell(boundary[3]); j++)
 			{
-				grid[i,j].AddBlocker(blocker);
 				Debug.Log("Add Cell:" + i +","+j);	
+				grid[i,j].AddBlocker(blocker);
+				//Debug.Log("Add Cell:" + i +","+j);	
 			}
 		}
 	}
 	
-	private static function ToCell(pos : float) : int
+	private function ToCell(pos : float) : int
 	{
 		var cell : int = (pos/CELL_SIZE) + NUM_TILES/2;
 		if (cell < 0) return 0;
@@ -152,7 +158,7 @@ class Cell {
 		else return cell;
 	}
 		 
-	public static function GetObjsInTriangle(pt0:Vector3, pt1:Vector3,pt2:Vector3) : GameObject[]
+	public function GetObjsInTriangle(pt0:Vector3, pt1:Vector3,pt2:Vector3) : GameObject[]
 	{
 		var result : List.<GameObject>  = new List.<GameObject>();
 		
@@ -185,7 +191,7 @@ class Cell {
 		return result.ToArray();
 	}
 	
-	public static function GetAllBlockers() : GameObject[]
+	public function GetAllBlockers() : GameObject[]
 	{
 		return allBlockers;
 	}

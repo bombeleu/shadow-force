@@ -4,10 +4,10 @@
 //private var blockerManager: BlockerManager;
 function Awake(){
 	//blockerManager = GameObject.FindObjectOfType(BlockerManager);
-	BlockerManager.AddBlocker(gameObject);
+	BlockerManager.Instance.AddBlocker(gameObject);
 	//collider.enabled = false;
 }
 
 function OnDestroy(){
-	BlockerManager.RemoveBlocker(gameObject);
+	BlockerManager.Instance.RemoveBlocker(gameObject);
 }

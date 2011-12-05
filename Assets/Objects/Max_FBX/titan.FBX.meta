@@ -1,0 +1,273 @@
+fileFormatVersion: 1
+guid: 65475630a504c0c43bc4cec230d44ef6
+ModelImporter:
+  importerVersion: 7
+  meshes:
+    scaleFactor: 0.035
+    useFileUnits: 1
+    meshCompression: 0
+    generateColliders: 0
+    swapUVs: 0
+  tangentSpace:
+    normalImportMode: 0
+    tangentImportMode: 1
+    smoothingAngle: 60
+    splitTangents: 1
+  materials:
+    generation: 1
+  animations:
+    generation: 3
+    bakeAnimations: 0
+    animationCompression: 1
+    animationWrapMode: 0
+    splitAnimations: 1
+    clips:
+      run_forward:
+        firstFrame: 1
+        lastFrame: 30
+        loop: 1
+        wrapMode: 2
+      run_backward:
+        firstFrame: 40
+        lastFrame: 70
+        loop: 1
+        wrapMode: 2
+      walk:
+        firstFrame: 80
+        lastFrame: 110
+        loop: 1
+        wrapMode: 2
+      walk_back:
+        firstFrame: 120
+        lastFrame: 150
+        loop: 1
+        wrapMode: 2
+      run_right:
+        firstFrame: 160
+        lastFrame: 190
+        loop: 1
+        wrapMode: 2
+      run_left:
+        firstFrame: 190
+        lastFrame: 220
+        loop: 1
+        wrapMode: 2
+      jump:
+        firstFrame: 230
+        lastFrame: 260
+        loop: 1
+        wrapMode: 2
+      shoot:
+        firstFrame: 270
+        lastFrame: 290
+        loop: 1
+        wrapMode: 2
+      die:
+        firstFrame: 440
+        lastFrame: 500
+        loop: 1
+        wrapMode: 2
+      idle:
+        firstFrame: 510
+        lastFrame: 610
+        loop: 1
+        wrapMode: 2
+  nodeInfo:
+    Bip01 R Calf:
+    - 100000
+    - 400000
+    Bip01 R Toe0Nub:
+    - 100002
+    - 400002
+    titan_uv:
+    - 100004
+    - 400004
+    - 13700000
+    Bip01 R Foot:
+    - 100006
+    - 400006
+    //RootNode:
+    - 100008
+    - 400008
+    - 11100000
+    Bip01 R Thigh:
+    - 100010
+    - 400010
+    Bip01 R Toe0:
+    - 100012
+    - 400012
+    Bip01 L Toe0Nub:
+    - 100014
+    - 400014
+    Bip01 L Toe0:
+    - 100016
+    - 400016
+    Bip01 L Foot:
+    - 100018
+    - 400018
+    Bip01 L Calf:
+    - 100020
+    - 400020
+    Bip01 L Thigh:
+    - 100022
+    - 400022
+    Bip01 R Finger4:
+    - 100024
+    - 400024
+    Bip01 R Finger3:
+    - 100026
+    - 400026
+    Bip01 R Finger0:
+    - 100028
+    - 400028
+    Bip01 R Finger1:
+    - 100030
+    - 400030
+    Bip01 R Finger2:
+    - 100032
+    - 400032
+    Bip01 R Hand:
+    - 100034
+    - 400034
+    Bip01 R Forearm:
+    - 100036
+    - 400036
+    Bip01 L Finger4:
+    - 100038
+    - 400038
+    Bip01 L Finger3:
+    - 100040
+    - 400040
+    Bip01 L Finger0:
+    - 100042
+    - 400042
+    Bip01 L Finger1:
+    - 100044
+    - 400044
+    Bip01 L Finger2:
+    - 100046
+    - 400046
+    Bip01 L Hand:
+    - 100048
+    - 400048
+    Bip01 L Forearm:
+    - 100050
+    - 400050
+    Bip01 HeadNub:
+    - 100052
+    - 400052
+    Bip01 Head:
+    - 100054
+    - 400054
+    Bip01 Neck:
+    - 100056
+    - 400056
+    Bip01 Spine2:
+    - 100058
+    - 400058
+    Bip01 Spine1:
+    - 100060
+    - 400060
+    Bip01 Spine:
+    - 100062
+    - 400062
+    Bip01 Pelvis:
+    - 100064
+    - 400064
+    Bip01 Footsteps:
+    - 100066
+    - 400066
+    Bip01:
+    - 100068
+    - 400068
+    Bip01 R Finger0Nub:
+    - 100070
+    - 400070
+    Bip01 R Finger4Nub:
+    - 100072
+    - 400072
+    Bip01 R Finger3Nub:
+    - 100074
+    - 400074
+    Bip01 R Finger31:
+    - 100076
+    - 400076
+    Bip01 R Finger41:
+    - 100078
+    - 400078
+    Bip01 R Finger01:
+    - 100080
+    - 400080
+    Bip01 R Finger1Nub:
+    - 100082
+    - 400082
+    Bip01 R Finger11:
+    - 100084
+    - 400084
+    Bip01 R Finger2Nub:
+    - 100086
+    - 400086
+    Bip01 R Finger21:
+    - 100088
+    - 400088
+    Bip01 R UpperArm:
+    - 100090
+    - 400090
+    Bip01 R Clavicle:
+    - 100092
+    - 400092
+    Bip01 L Finger4Nub:
+    - 100094
+    - 400094
+    Bip01 L Finger41:
+    - 100096
+    - 400096
+    Bip01 L Finger3Nub:
+    - 100098
+    - 400098
+    Bip01 L Finger31:
+    - 100100
+    - 400100
+    Bip01 L Finger0Nub:
+    - 100102
+    - 400102
+    Bip01 L Finger01:
+    - 100104
+    - 400104
+    Bip01 L Finger1Nub:
+    - 100106
+    - 400106
+    Bip01 L Finger11:
+    - 100108
+    - 400108
+    Bip01 L Finger2Nub:
+    - 100110
+    - 400110
+    Bip01 L Finger21:
+    - 100112
+    - 400112
+    Bip01 L UpperArm:
+    - 100114
+    - 400114
+    Bip01 L Clavicle:
+    - 100116
+    - 400116
+AssetImporter:
+  importerVersion: 1
+  fileIDToRecycleName:
+    4300000: titan_uv
+    7400000: Take 001 //// titan
+    7400002: run //// titan
+    7400004: run_back //// titan
+    7400006: walk //// titan
+    7400008: walk_back //// titan
+    7400010: move_right //// titan
+    7400012: move_left //// titan
+    7400014: jump //// titan
+    7400016: shoot //// titan
+    7400018: die //// titan
+    7400020: idle //// titan
+    7400022: run_forward //// titan
+    7400024: run_backward //// titan
+    7400026: run_right //// titan
+    7400028: run_left //// titan

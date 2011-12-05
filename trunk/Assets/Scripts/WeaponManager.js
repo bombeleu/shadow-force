@@ -12,12 +12,9 @@ public var controllable:boolean = true;
 //public var weapons: MonoScript[];
 public var weapons: Weapon[];
 private var curWeapon: int = 0;
-
 private var ws: Weapon[];
 
-
 private var playerMovementPlane : Plane;
-
 
 function OnEnable(){
 	character = transform;
@@ -36,8 +33,28 @@ function OnEnable(){
 	}
 	
 	//cursorPlaneHeight = -character.position.y;
-	playerMovementPlane = new Plane (character.up, character.position + character.up * cursorPlaneHeight);
 	//playerMovementPlane = new Plane (character.up, Vector3(character.position.x,0,character.position.z) + character.up * cursorPlaneHeight);
+}
+
+private var weaponGUI:SelectWeaponGUI;
+function Awake(){
+	weaponGUI = GameObject.FindObjectOfType(SelectWeaponGUI);
+	playerMovementPlane = new Plane (character.up, character.position + character.up * cursorPlaneHeight);
+}
+
+function SetWeaponSelection(){
+	var params:Object[] = new Object[2];
+	params[0] = weaponGUI.selectedWeapons[0];
+	params[1] = weaponGUI.selectedWeapons[1];
+	networkView.RPC("_SetWeaponSelection", RPCMode.AllBuffered, params);
+}
+
+@RPC
+function _SetWeaponSelection(weapon0:int, weapon1:int):void{
+	weapons = new Weapon[2];
+	weapons[0] = weaponGUI.availableWeapons[weapon0];
+	weapons[1] = weaponGUI.availableWeapons[weapon1];
+	this.enabled = true;
 }
 
 @RPC

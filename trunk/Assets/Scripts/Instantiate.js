@@ -1,6 +1,5 @@
 public var playerPrefab : Transform;
 public var conGUI:ConnectionGUI;
-public var selectGUI:SelectWeaponGUI;
 
 function OnNetworkLoadedLevel () {
 	if (ConnectionGUI.dedicatedServer && Network.isServer) return;
@@ -14,9 +13,9 @@ function OnNetworkLoadedLevel () {
 	spawn = spawners[ Mathf.Floor( (spawners.length-1) * Random.value)].transform;
 		
 	var character = Network.Instantiate(playerPrefab, spawn.position + Vector3(0,4,0), spawn.rotation, 0);
-	var wm:WeaponManager = character.GetComponent.<WeaponManager>();
-	wm.weapons = selectGUI.selectedWeapons;
-	wm.enabled = true;
+
+	character.GetComponent.<WeaponManager>().SetWeaponSelection();
+		
 	/*var controller : PlayerMoveController;
 	controller = character.GetComponent("PlayerMoveController");
 	//controller.character = character.transform;

@@ -1,11 +1,11 @@
-public var selectedWeapons : GameObject[];
+public var selectedWeapons : Weapon[];
 private var nWeapons : int;
-public var availableWeapons: GameObject[];
+public var availableWeapons: Weapon[];
 public var finished : boolean;
 function Start()
 {
 	nWeapons = 0;
-	selectedWeapons = new GameObject[2];
+	selectedWeapons = new Weapon[2];
 	finished = false;
 }
 
@@ -37,7 +37,7 @@ function DrawGUI() {
 	}
 	
 }
-function ChooseWeapon(weapon : GameObject)
+function ChooseWeapon(weapon : Weapon)
 {
 	if (nWeapons == 0)
 	{

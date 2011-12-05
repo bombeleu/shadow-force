@@ -19,7 +19,7 @@ private var ws: Weapon[];
 private var playerMovementPlane : Plane;
 
 
-function Awake(){
+function OnEnable(){
 	character = transform;
 	ws = new Weapon[weapons.length];
 	//ws[0] =( ScriptableObject.CreateInstance(weapons[0].GetClass()) as Weapon);

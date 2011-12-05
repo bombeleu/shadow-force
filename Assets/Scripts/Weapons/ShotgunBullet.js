@@ -61,10 +61,10 @@ function Update(){
 			var bullet : SimpleBullet = go.GetComponent.<SimpleBullet> ();
 			bullet.angle = -angle + ((2.0*angle*i)/numBullets);
 			bullet.InitializeDirection();
-			Debug.Log("range" + range);
+			
 			var hitInfo : RaycastHit = raycast.GetHitInfo();
 			bullet.dist = hitInfo.transform?Mathf.Min(hitInfo.distance,range):range;
-		    Debug.Log("Bullet dist " + bullet.dist);
+		    
 		}
 		lastFireTime = Time.time;
 	}

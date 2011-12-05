@@ -39,6 +39,19 @@ function OnLaunchBullet(){
 function EnableFiring(){
 	firing = true;
 	muzzleFlashFront.active = true;
+
+	var angle : int = raycast.angle;
+	for (var i : int = 0 ; i < numBullets; i++)
+	{
+		var go : GameObject = Spawner.Spawn (bulletPrefab, spawnPoint.position, wp.owner.transform.rotation) as GameObject;
+		
+		var bullet : SimpleBullet = go.GetComponent.<SimpleBullet> ();
+		bullet.angle = -angle + ((2.0*angle*i)/numBullets);
+		bullet.InitializeDirection();
+		
+		var hitInfo : RaycastHit = raycast.GetHitInfo();
+		bullet.dist = hitInfo.transform?Mathf.Min(hitInfo.distance,range):range;
+	}
 }
 
 function OnStopFiring(){
@@ -49,23 +62,4 @@ function OnStopFiring(){
 function DisableFiring(){
 	firing = false;
 	muzzleFlashFront.active = false;
-}
-
-function Update(){
-	if (firing && Time.time > lastFireTime + 1 / frequency) {
-		var angle : int = raycast.angle;
-		for (var i : int = 0 ; i < numBullets; i++)
-		{
-			var go : GameObject = Spawner.Spawn (bulletPrefab, spawnPoint.position, wp.owner.transform.rotation) as GameObject;
-			
-			var bullet : SimpleBullet = go.GetComponent.<SimpleBullet> ();
-			bullet.angle = -angle + ((2.0*angle*i)/numBullets);
-			bullet.InitializeDirection();
-			
-			var hitInfo : RaycastHit = raycast.GetHitInfo();
-			bullet.dist = hitInfo.transform?Mathf.Min(hitInfo.distance,range):range;
-		    
-		}
-		lastFireTime = Time.time;
-	}
 }

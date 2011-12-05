@@ -24,7 +24,7 @@ function Update ()
 		} else if (Input.GetKeyDown(KeyCode.H)) {
 			DieByForce(Vector3.up, 500.0);
 		} else if (Input.GetKeyDown(KeyCode.J)) {
-			DieByExplosion(transform.position + Vector3(1,0,0));
+			//DieByExplosion(transform.position + Vector3(1,0,0));
 		} else if (Input.GetKeyDown(KeyCode.P)) {
 			var temp : FadingEffect = GetComponent(FadingEffect);
 			Debug.Log(temp);
@@ -78,11 +78,13 @@ public function DieByForce(forceDir : Vector3, force : float)
 	Die();
 	var go : GameObject = ragDoll.Find("Bip01");
 	Debug.Log(go);
+	
 	//ragDoll.Find("Bip01").rigidbody.AddForce(forceDir * force,ForceMode.Impulse);
-	//rootRagDoll.rigidbody.AddForce(forceDir*force,ForceMode.Impulse);
+	rootRagDoll.rigidbody.AddForce(forceDir*force,ForceMode.Impulse);
 }
 
-public function DieByExplosion(explodedPos : Vector3)
+public function DieByExplosion(explosionPos : Vector3, explolsionRadius : Vector3)
 {
-
+	Die();
+	//rootRagDoll.rigidbody.AddExplosionForce(forceDir*force,explosionPos,explosioRadius,2.0,ForceMode.Impulse);
 }

@@ -1,9 +1,10 @@
-var SpaceCraft : Transform;
+public var playerPrefab : Transform;
 public var conGUI:ConnectionGUI;
+public var selectGUI:SelectWeaponGUI;
 
 function OnNetworkLoadedLevel () {
 	if (ConnectionGUI.dedicatedServer && Network.isServer) return;
-	// Instantiating SpaceCraft when Network is loaded
+	// Instantiating playerPrefab when Network is loaded
 	var spawn: Transform;
 	var spawners = GameObject.FindGameObjectsWithTag ("Respawn");
 	/*Debug.Log("aa"+spawners.length);
@@ -12,7 +13,10 @@ function OnNetworkLoadedLevel () {
 	Debug.Log(Random.value);*/
 	spawn = spawners[ Mathf.Floor( (spawners.length-1) * Random.value)].transform;
 		
-	var character = Network.Instantiate(SpaceCraft, spawn.position + Vector3(0,4,0), spawn.rotation, 0);
+	var character = Network.Instantiate(playerPrefab, spawn.position + Vector3(0,4,0), spawn.rotation, 0);
+	var wm:WeaponManager = character.GetComponent.<WeaponManager>();
+	wm.weapons = selectGUI.selectedWeapons;
+	wm.enabled = true;
 	/*var controller : PlayerMoveController;
 	controller = character.GetComponent("PlayerMoveController");
 	//controller.character = character.transform;
@@ -39,7 +43,4 @@ function OnNetworkLoadedLevel () {
 function OnPlayerDisconnected (player : NetworkPlayer) {
 	Network.RemoveRPCs(player, 0);
 	Network.DestroyPlayerObjects(player);
-}
-
-function Update () {
 }

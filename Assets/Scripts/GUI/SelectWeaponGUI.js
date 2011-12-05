@@ -1,15 +1,18 @@
-public var selectedWeapons : Weapon[];
-private var nWeapons : int;
+@HideInInspector
+public var selectedWeapons : int[];
+
 public var availableWeapons: Weapon[];
+
+@HideInInspector
 public var finished : boolean;
+
+private var nWeapons : int;
+
 function Start()
 {
 	nWeapons = 0;
-	selectedWeapons = new Weapon[2];
+	selectedWeapons = new int[2];
 	finished = false;
-}
-
-function Update () {
 }
 
 function DrawGUI() {
@@ -17,34 +20,37 @@ function DrawGUI() {
 
 	if (GUILayout.Button("MachineGun"))
 	{
-		ChooseWeapon(availableWeapons[0]);
+		ChooseWeapon(0);
 	}
 	if (GUILayout.Button("BoltGun"))
 	{
-		ChooseWeapon(availableWeapons[1]);
+		ChooseWeapon(1);
 	}
 	if (GUILayout.Button("GrenadeLaunch"))
 	{
-		ChooseWeapon(availableWeapons[2]);
+		ChooseWeapon(2);
 	}
 	if (GUILayout.Button("StickyCam"))
 	{
-		ChooseWeapon(availableWeapons[3]);
+		ChooseWeapon(3);
 	}
 	if (GUILayout.Button("ShotGun"))
 	{
-		ChooseWeapon(availableWeapons[4]);
+		ChooseWeapon(4);
 	}
-	
+	if (GUILayout.Button("Turret"))
+	{
+		ChooseWeapon(5);
+	}	
 }
-function ChooseWeapon(weapon : Weapon)
+function ChooseWeapon(weaponID : int)
 {
 	if (nWeapons == 0)
 	{
-		selectedWeapons[0] = weapon;
-	} else if (weapon != selectedWeapons[0])
+		selectedWeapons[0] = weaponID;
+	} else if (weaponID != selectedWeapons[0])
 	{
-		selectedWeapons[1] = weapon;
+		selectedWeapons[1] = weaponID;
 	} else
 	{
 		return;

@@ -1,22 +1,32 @@
-public var connectionGUI : ConnectionGUI;
-public var selectWeaponGUI : SelectWeaponGUI;
+#pragma strict
+@script RequireComponent (SelectWeaponGUI)
+@script RequireComponent (ConnectionGUI)
+
+private var connectionGUI : ConnectionGUI;
+private var selectWeaponGUI : SelectWeaponGUI;
 
 enum GUIState {
+	None,
 	SelectWeapon,
 	Connection
 };
 
-public static var guiState : GUIState = GUIState.Connection;
+public var state : GUIState = GUIState.SelectWeapon;
 
-function Update () {
-
+function Start() {
+	connectionGUI = GetComponent.<ConnectionGUI>();
+	selectWeaponGUI = GetComponent.<SelectWeaponGUI>();
 }
 
 function OnGUI() {
-	switch (guiState)
+	switch (state)
 	{
 		case GUIState.SelectWeapon:
 			selectWeaponGUI.DrawGUI();
+			if (selectWeaponGUI.finished)
+			{
+				state = GUIState.Connection;
+			}
 			break;
 		case GUIState.Connection:
 			connectionGUI.DrawGUI();

@@ -42,6 +42,7 @@ function Awake(){
 
 @RPC
 function RPCSetWeaponViewID(weaponID:int, viewID:NetworkViewID){
+	Debug.Log("RPC Set WeaponViewID " + weaponID + "..." + viewID);
 	ws[weaponID].networkView.viewID = viewID;
 }
 
@@ -202,6 +203,7 @@ function OnSerializeNetworkView (stream : BitStream, info : NetworkMessageInfo) 
 
 @RPC
 function RPCWeaponSwitch(newWeapon:int){
+	Debug.Log("RPC Switch weapon " + newWeapon);
 	ws[curWeapon].SetEnable(false);
 	if (GetComponent.<Visibility>().GetVisible())
 		ws[newWeapon].SetEnable(true);
@@ -215,6 +217,10 @@ function RPCWeaponSwitch(newWeapon:int){
 				gameObject.SendMessage("SetJoystickReset",false);
 		}
 	#endif
+}
+@RPC
+function RPCWeaponInialize() {
+	Debug.Log("RPC Weapon Initalize");
 }
 
 function OnStartFire(){

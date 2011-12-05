@@ -77,7 +77,8 @@ function OnDamage (amount : float, fromDirection : Vector3) {
 	
 	// Show damage effect if there is one
 	if (damageEffect) {
-		damageEffect.transform.rotation = Quaternion.LookRotation (fromDirection, Vector3.up);
+		if (fromDirection.sqrMagnitude != 0)
+			damageEffect.transform.rotation = Quaternion.LookRotation (fromDirection, Vector3.up);
 		if(!damageEffectCentered) {
 			var dir : Vector3 = fromDirection;
 			dir.y = 0.0;

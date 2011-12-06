@@ -3,8 +3,8 @@
 
 public var fadingTime : float = 1.0; // in seconds
 //public var PairMaterial ;
-public var opaqueShader : Shader;
-public var transparentShader : Shader;
+private var opaqueShader : Shader;
+private var transparentShader : Shader;
 
 enum FadingState { Out, In, None};
 private var _fadingState : FadingState ;
@@ -55,7 +55,7 @@ function Reset() {
 
 function Update () {
 	_elapsedTime -= Time.deltaTime;
-	Debug.Log("Alpha" + _color.a);
+	//Debug.Log("Alpha" + _color.a);
 	if ( _elapsedTime < 0) {
 		enabled = false;
 		return;

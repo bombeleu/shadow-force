@@ -11,14 +11,15 @@ private var _fadingState : FadingState ;
 
 private var _color : Color;
 private var _colorStart : Color;
-private var _elapsedTime : float; 
 private var _renderer : SkinnedMeshRenderer;
+private var _alpha : float = 1;
 
 function Awake() {
 	_renderer = gameObject.GetComponentInChildren.<SkinnedMeshRenderer>();
-	enabled = false;
 	opaqueShader = Shader.Find("FateHunter/Normal-Character");
 	transparentShader = Shader.Find("FateHunter/Transparent-Character");
+	enabled = false;
+	_colorStart = _renderer.material.GetColor("_Color");
 	Reset();
 }
 
@@ -33,8 +34,7 @@ public function FadeIn() {
 }
 
 function OnEnable() {
-	_elapsedTime = fadingTime;
-	_colorStart = _renderer.material.GetColor("_Color");
+	_renderer.enabled = true;
 	_color = _colorStart;
 	_renderer.material.shader = transparentShader;
 }
@@ -44,6 +44,8 @@ function OnDisable(){
 	{
 		_renderer.material.shader = opaqueShader;
 		_color = _colorStart;
+	}else{
+		_renderer.enabled = false;
 	}
 }
 
@@ -54,18 +56,27 @@ function Reset() {
 }
 
 function Update () {
-	_elapsedTime -= Time.deltaTime;
 	//Debug.Log("Alpha" + _color.a);
-	if ( _elapsedTime < 0) {
-		enabled = false;
-		return;
-	}
+	var done:boolean = false;
 	
 	if (_fadingState == FadingState.Out){
-		_color.a =  255*( _elapsedTime / fadingTime);
+		_alpha -= Time.deltaTime / fadingTime;
+		if (_alpha<0){
+			_alpha = 0;
+			done = true;
+		}
 	} else {
-		_color.a = 255*(1.0 -  ( _elapsedTime / fadingTime));
+		_alpha += Time.deltaTime / fadingTime;
+		if (_alpha>1){
+			_alpha = 1;
+			done = true;
+		}
 	}
 	
+	_color.a =  255*_alpha;
+	
 	_renderer.material.SetColor("_Color",_color);
+	if (done){
+		enabled = false;
+	}
 }

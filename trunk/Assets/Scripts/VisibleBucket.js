@@ -3,8 +3,17 @@
 public var visibleObjects:GameObject[];
 public var recursive:boolean = false;
 
+private var fade:FadingEffect;
+private var visible : boolean = true;
+
+function Awake(){
+	fade = GetComponent(FadingEffect);
+}
+
 function OnSetVisible(visi:boolean){
-	Debug.Log("Enemy set visible:" + visi);
+	if (visi == visible) return;
+	visible = visi;
+	//Debug.Log("Enemy set visible:" + visi);
 	for (var obj:GameObject in visibleObjects){
 		if (recursive){
 			var rr : Renderer[] = obj.GetComponentsInChildren.<Renderer>();
@@ -16,10 +25,9 @@ function OnSetVisible(visi:boolean){
 	}
 	if (!visi)
 	{
-		gameObject.GetComponent(FadingEffect).FadeOut();
+		fade.FadeOut();
 	} else
 	{
-		gameObject.GetComponent(FadingEffect).FadeIn();
+		fade.FadeIn();
 	}
-	
 }

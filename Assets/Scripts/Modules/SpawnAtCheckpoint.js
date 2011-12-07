@@ -14,8 +14,8 @@ function OnSignal () {
 	var spawners = GameObject.FindGameObjectsWithTag ("Respawn");
 	checkpoint = spawners[ Mathf.Floor( (spawners.length-1) * Random.value)].transform;
 	if (networkView.isMine){
-		Team.ammo = 20;
-		var myTeam = (gameObject.GetComponent("Team")as Team).team;
+		//Team.ammo = 20;
+		var myTeam = gameObject.GetComponent(Team).team;
 		
 		Camera.main.networkView.RPC("ReportDeath",RPCMode.AllBuffered, myTeam);
 		//if (myTeam == 1) Team.team1D++;
@@ -27,14 +27,14 @@ function OnSignal () {
 	transform.rotation = checkpoint.rotation;
 	
 	
-	ResetHealthOnAll ();
+	//ResetHealthOnAll ();
 }
 
 @RPC
 function CreateDeathMark(pos : Vector3){
 	Instantiate(deathMark, pos, Quaternion.identity);
 }
-
+/*
 static function ResetHealthOnAll () {
 	var healthObjects : Health[] = FindObjectsOfType (Health);
 	for (var health : Health in healthObjects) {
@@ -42,3 +42,4 @@ static function ResetHealthOnAll () {
 		health.health = health.maxHealth;
 	}
 }
+*/

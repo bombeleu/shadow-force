@@ -133,7 +133,7 @@ function Update () {
 	}else{
 		#if UNITY_IPHONE || UNITY_ANDROID
 			//angle = 0;//TODO: compute angle base on the different between angle and joystick
-			cursorWorldPosition = tranform.position + tranform.forward * Vector3(joystickPos.x,0,joystickPos.y).magnitude * 10;
+			cursorWorldPosition = transform.position + transform.forward * Vector3(joystickPos.x,0,joystickPos.y).magnitude * 10;
 		#else
 			// On PC, the cursor point is the mouse position
 			var cursorScreenPosition : Vector3 = Input.mousePosition;

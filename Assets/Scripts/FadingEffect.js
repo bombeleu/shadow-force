@@ -19,7 +19,6 @@ function Awake() {
 	opaqueShader = Shader.Find("FateHunter/Normal-Character");
 	transparentShader = Shader.Find("FateHunter/Transparent-Character");
 	enabled = false;
-	_colorStart = _renderer.material.GetColor("_Color");
 	Reset();
 }
 

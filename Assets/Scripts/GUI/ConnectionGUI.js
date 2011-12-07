@@ -45,10 +45,11 @@ function DrawGUI () {
 	    GUILayout.Label("Current Status: " + testStatus);
 	    GUILayout.Label("Test result : " + testMessage);
 	    GUILayout.Label(shouldEnableNatMessage);
-	    if (!doneTesting)
+	    /*if (!doneTesting)
 	        TestConnection();
+	    //*/
 
-				GUILayout.BeginHorizontal();
+		GUILayout.BeginHorizontal();
 		if (GUILayout.Button("Scan for games")){
 			MasterServer.RequestHostList("inno_ShadowForce");
 		}
@@ -86,22 +87,7 @@ function DrawGUI () {
 			}
 			GUILayout.EndHorizontal();
 		}
-		/*
-		// If not connected
-		if (GUI.Button (new Rect(5,10,55,30),"Team1"))
-		{
-			//Network.useNat = useNAT;
-			// Connecting to the server
-			teamNum = 1;
-			Network.Connect(remoteIP, remotePort);
-		}
-		if (GUI.Button (new Rect(60,10,55,30),"Team2"))
-		{
-			//Network.useNat = useNAT;
-			// Connecting to the server
-			teamNum = 2;
-			Network.Connect(remoteIP, remotePort);
-		}*/
+
 		GUILayout.BeginHorizontal();
 		if (GUILayout.Button ("Create game"))
 		{
@@ -117,13 +103,7 @@ function DrawGUI () {
 				SendMessageOptions.DontRequireReceiver);
 			}
 		}
-		/*
-		// Fields to insert ip address and port
-		remoteIP = GUI.TextField(new Rect(130,10,100,20),remoteIP);
-		remotePort = parseInt(GUI.TextField(new
-			Rect(240,10,40,20),remotePort.ToString()));
-		*/
-		//teamNum = parseInt(GUI.TextField(new Rect(120, 30, 40, 20), teamNum.ToString()));
+
 		GUILayout.Label("Enter your name:");
 		na = GUILayout.TextField(na.ToString());
 		GUILayout.EndHorizontal();

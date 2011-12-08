@@ -1,8 +1,10 @@
 #pragma strict
+@script RequireComponent (MainMenu)
 @script RequireComponent (SelectWeaponGUI)
-@script RequireComponent (ConnectionGUI)
+//@script RequireComponent (ConnectionGUI)
 
-private var connectionGUI : ConnectionGUI;
+
+private var mainMenu : MainMenu;
 private var selectWeaponGUI : SelectWeaponGUI;
 
 enum GUIState {
@@ -13,13 +15,20 @@ enum GUIState {
 
 public var state : GUIState = GUIState.SelectWeapon;
 
-function Start() {
-	connectionGUI = GetComponent.<ConnectionGUI>();
+function Awake() {
+	DontDestroyOnLoad(gameObject);
+	//mainMenu = new MainMenuC();
+	mainMenu = GetComponent.<MainMenu>();
+	//connectionGUI = GetComponent.<ConnectionGUI>();
 	selectWeaponGUI = GetComponent.<SelectWeaponGUI>();
+	
+	curGUI = mainMenu as ScreenGUI;
 }
 
 function OnGUI() {
-	switch (state)
+	if (curGUI)
+		curGUI.DrawGUI();
+	/*switch (state)
 	{
 		case GUIState.SelectWeapon:
 			selectWeaponGUI.DrawGUI();
@@ -31,5 +40,12 @@ function OnGUI() {
 		case GUIState.Connection:
 			connectionGUI.DrawGUI();
 			break;
-	}
+	}*/
+}
+public class ScreenGUI extends MonoBehaviour{
+	function DrawGUI(){};
+}
+private static var curGUI : ScreenGUI;
+function SetCurrentGUI(gui : ScreenGUI){
+	curGUI = gui;
 }

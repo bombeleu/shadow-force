@@ -45,7 +45,7 @@ function GetEnable():boolean{
 }*/
 
 function OnSetVisible(visi:boolean){
-	SetViMeshVisible(visi & enabled);
+	//SetViMeshVisible(visi & enabled);
 }
 
 function SetViMeshVisible(b:boolean){

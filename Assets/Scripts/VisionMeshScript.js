@@ -14,6 +14,7 @@ private var _playerTransform : Transform;
 public var viewDistance : float = 20;
 public var viewAngle : int = 30;
 public var visionColor: Color = Color(0.8,0.2,0.3,0.2);
+public var alpha : float = 1.0;
 
 private var _triangleCount : int;
 
@@ -71,7 +72,9 @@ function Update () {
 	
 	// init mesh vertex
 	_mesh.Clear();
-		
+
+	if (alpha <0.00001) return;
+				
 	for (var i :int = 0 ; i < 2*MAX_TRIANGLES+1;i++)
 	{
 		_newVertices[i] = Vector3.zero;
@@ -107,8 +110,10 @@ function Update () {
 	//Debug.Log(testCount++ + ":" + _playerTransform.position);
 	//Debug.Log(pt1 + "|" + pt2);
 	
+	var color : Color = visionColor; 
+	color.a *= alpha;
 	renderer.material.SetFloat("_Distance",viewDistance);
-	renderer.material.SetColor("_VisionColor",visionColor);
+	renderer.material.SetColor("_VisionColor",color);
 	
 	_mesh.vertices = _newVertices;
 	_mesh.triangles = _newTriangles;

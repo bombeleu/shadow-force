@@ -102,6 +102,7 @@ function DrawGUI () {
 				go.SendMessage("OnNetworkLoadedLevel",
 				SendMessageOptions.DontRequireReceiver);
 			}
+			//Debug.Log(Application.persistentDataPath);
 		}
 
 		GUILayout.Label("Enter your name:");

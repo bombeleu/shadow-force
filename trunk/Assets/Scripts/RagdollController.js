@@ -26,9 +26,9 @@ function Update ()
 		} else if (Input.GetKeyDown(KeyCode.J)) {
 			//DieByExplosion(transform.position + Vector3(1,0,0));
 		} else if (Input.GetKeyDown(KeyCode.P)) {
-			var temp : FadingEffect = GetComponent(FadingEffect);
+			var temp : VisibleBucket = GetComponent(VisibleBucket);
 			Debug.Log(temp);
-			temp.FadeOut() ;
+			temp.OnSetVisible(false);
 		}
 	}
 }

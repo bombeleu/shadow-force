@@ -1,6 +1,7 @@
 #pragma strict
 @script RequireComponent (UIController)
 @script RequireComponent (ConnectionGUI)
+@script RequireComponent (SelectWeaponGUI)
 
 class MainMenu extends ScreenGUI{
 	private var currentLevel : int = 0;
@@ -10,7 +11,7 @@ class MainMenu extends ScreenGUI{
 	function Awake () {
 		uiController = GetComponent(UIController);
 		
-		currentLevel = PlayerPrefs.GetInt("curLevel",2);
+		currentLevel = PlayerPrefs.GetInt("curLevel",0);
 		//stars = new int[Application.levelCount];
 		stars = new int[levelList.Length];
 		for (var i:int = 0; i < levelList.Length; i++){
@@ -18,9 +19,32 @@ class MainMenu extends ScreenGUI{
 		}
 	}
 	
+	function ResetData(){
+		currentLevel = 0;
+		for (var i:int = 0; i < stars.Length; i++){
+			stars[i] = 0;
+		}
+		SaveConfig();
+	}
+	
+	function UnlockAll(){
+		currentLevel = levelList.Length - 1;
+		SaveConfig();
+	}
+	
+	function SaveConfig(){
+		PlayerPrefs.SetInt("curLevel", currentLevel);
+		for (var i:int = 0; i < levelList.Length; i++){
+			PlayerPrefs.SetInt("stars"+i, stars[i]);
+		}
+		
+		PlayerPrefs.Save();
+	}
+	
 	public enum MenuState{
 		OuterMost,
 		Single,
+		SinglePlaying,
 		Coop,
 		Multi
 	}
@@ -30,28 +54,35 @@ class MainMenu extends ScreenGUI{
 	
 	function DrawGUI () {
 		if (state == MenuState.OuterMost){
+			GUILayout.BeginHorizontal();
 			if (GUILayout.Button("Single play")){
 				state = MenuState.Single;
 			}
-			if (GUILayout.Button("(doing)Co-op VS computer")){
+			if (GUILayout.Button("(debug)Reset data")){
+				ResetData();
+			}
+			if (GUILayout.Button("(debug)Unlock all")){
+				UnlockAll();
+			}
+			GUILayout.EndHorizontal();
 			
+			if (GUILayout.Button("(doing)Co-op VS computer")){
 			}
 			if (GUILayout.Button("Online battle")){
 				//state = MenuState.Multi;
 				Application.LoadLevel(levelList[0]);
-				uiController.SetCurrentGUI(GetComponent(ConnectionGUI));
+				uiController.SetCurrentGUI(GetComponent(SelectWeaponGUI));
 			}
 			if (GUILayout.Button("(doing)Scoreboard")){
-			
 			}
 			if (GUILayout.Button("(doing)Weapon store")){
-			
 			}
 		}else if (state == MenuState.Single){
 			GUILayout.Label("Select an unlocked level");
 			for (var i:int = 0; i <= currentLevel; i++){
 				GUILayout.BeginHorizontal();
 				if (GUILayout.Button("Level " + levelList[i])){
+					state = MenuState.SinglePlaying;
 					Application.LoadLevel(levelList[i]);
 				}
 				GUILayout.Label("stars earned: "+stars[i]);
@@ -60,14 +91,21 @@ class MainMenu extends ScreenGUI{
 			if (GUILayout.Button("Back")){
 				state = MenuState.OuterMost;
 			}
+		}else if (state == MenuState.SinglePlaying){
+			if (GUILayout.Button("Exit")){
+				Network.Disconnect();
+				state = MenuState.OuterMost;
+				Application.LoadLevel("MainMenu");
+			}
 		}
 	}
 }
 
 function OnLevelWasLoaded (level : int) {
-	if (state == MenuState.Single){
+	if (state == MenuState.SinglePlaying){
 		Network.InitializeServer(32, ConnectionGUI.listenPort, !Network.HavePublicAddress());
-		SendMessage("OnNetworkLoadedLevel",	SendMessageOptions.DontRequireReceiver);
-		uiController.SetCurrentGUI(null);
+		state = MenuState.SinglePlaying;
+		//uiController.SetCurrentGUI(null);
+		//yield WaitForSeconds(0.5);
 	}
 }

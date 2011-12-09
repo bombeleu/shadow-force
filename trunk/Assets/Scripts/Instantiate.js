@@ -17,7 +17,7 @@ function OnNetworkLoadedLevel () {
 	if (ConnectionGUI.dedicatedServer && Network.isServer) return;
 	var spawn: Transform;
 	var spawners = GameObject.FindGameObjectsWithTag ("Respawn");
-	Debug.Log("reach here"+spawners.length);
+	Debug.Log("Instantiate here"+spawners.length);
 	spawn = spawners[ Mathf.Floor( (spawners.length-1) * Random.value)].transform;
 		
 	var character : Transform = Network.Instantiate(playerPrefab, spawn.position + Vector3(0,4,0), spawn.rotation, 0);

@@ -59,7 +59,7 @@ function _SetWeaponSelection(weapon0:int, weapon1:int):void{
 
 @RPC
 function RPCSetWeaponViewID(weaponID:int, viewID:NetworkViewID){
-	Debug.Log("RPC Set WeaponViewID " + weaponID + "..." + viewID);
+	//Debug.Log("RPC Set WeaponViewID " + weaponID + "..." + viewID);
 	ws[weaponID].networkView.viewID = viewID;
 }
 

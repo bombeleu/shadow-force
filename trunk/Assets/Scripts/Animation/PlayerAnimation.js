@@ -33,6 +33,10 @@ class MoveAnimation {
 var rigid : Rigidbody;
 var rootBone : Transform;
 var upperBodyBone : Transform;
+
+var lowSpineBone : Transform;
+var lThighBone : Transform;
+var rThighBone : Transform;
 var maxIdleSpeed : float = 0.5;
 var minWalkSpeed : float = 2.0;
 var idle : AnimationClip;
@@ -57,6 +61,8 @@ private var lastAnimTime : float = 0;
 
 public var animationComponent : Animation;
 
+public var shootingTime : float;
+
 function Awake () {
 	tr = rigid.transform;
 	lastPosition = tr.position;
@@ -65,6 +71,9 @@ function Awake () {
 		moveAnimation.Init ();
 		animationComponent[moveAnimation.clip.name].layer = 1;
 		animationComponent[moveAnimation.clip.name].enabled = true;
+		/*if (lThighBone) animationComponent[moveAnimation.clip.name].AddMixingTransform(lThighBone, true);
+		if (rThighBone) animationComponent[moveAnimation.clip.name].AddMixingTransform(rThighBone, true);
+		if (lowSpineBone) animationComponent[moveAnimation.clip.name].AddMixingTransform(lowSpineBone, false);*/
 	}
 	animationComponent.SyncLayer (1);
 	
@@ -73,9 +82,11 @@ function Awake () {
 	animationComponent[idle.name].enabled = true;
 	
 	animationComponent[shootAdditive.name].layer = 4;
-	animationComponent[shootAdditive.name].weight = 1;
-	animationComponent[shootAdditive.name].speed = 0.6;
+	animationComponent[shootAdditive.name].weight = 2;
+	animationComponent[shootAdditive.name].speed = 1.0;
 	animationComponent[shootAdditive.name].blendMode = AnimationBlendMode.Additive;
+	
+	shootingTime = animationComponent[shootAdditive.name].length;
 	
 	//animation[turn.name].enabled = true;
 }
@@ -92,16 +103,17 @@ function RPCOnStopFire(){
 	networkView.RPC("OnStopFire", RPCMode.All, []);
 }
 
+private var firing : boolean = false;
 @RPC
 function OnStartFire () {
-	if (Time.timeScale == 0)
-		return;
-	
+	//if (Time.timeScale == 0) return;
+	firing = true;
 	animationComponent[shootAdditive.name].enabled = true;
 }
 
 @RPC
 function OnStopFire () {
+	firing = false;
 	animationComponent[shootAdditive.name].enabled = false;
 }
 
@@ -133,7 +145,7 @@ function FixedUpdate () {
 
 function Update () {
 	idleWeight = Mathf.Lerp (idleWeight, Mathf.InverseLerp (minWalkSpeed, maxIdleSpeed, speed), Time.deltaTime * 10);
-	animationComponent[idle.name].weight = idleWeight;
+	animationComponent[idle.name].weight = /*firing?0:idleWeight*/idleWeight;
 	
 	if (speed > 0) {
 		var smallestDiff : float = Mathf.Infinity;

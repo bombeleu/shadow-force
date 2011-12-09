@@ -110,6 +110,8 @@ function Start(){
 	lastWeaponSwitch = Time.time;
 }
 
+public var playerAnimation : PlayerAnimation;
+
 function Update () {
 	if (!networkView.isMine) return;//weapon manager only updates the local player, network update is done per weapon basis
 
@@ -182,6 +184,7 @@ function Update () {
 			}else{
 				weapon.gameObject.SendMessage("OnLaunchBullet");
 			}
+			networkView.RPC("onetimeFireAnimation", RPCMode.All);
 		}
 	}else{//continuous firing
 		if (isFiring && (firing || angle<=3)){
@@ -191,11 +194,30 @@ function Update () {
 			}else{
 				weapon.gameObject.SendMessage("OnLaunchBullet");
 			}
+			networkView.RPC("startFireAnimation", RPCMode.All);
 		}else{
 			firing = false;
 			weapon.gameObject.SendMessage("OnStopFiring");
+			networkView.RPC("stopFireAnimation", RPCMode.All);
 		}
 	}
+}
+
+@RPC
+function startFireAnimation(){
+	playerAnimation.OnStartFire();
+}
+
+@RPC
+function stopFireAnimation(){
+	playerAnimation.OnStopFire();
+}
+
+@RPC
+function onetimeFireAnimation(){
+	playerAnimation.OnStartFire();
+	yield WaitForSeconds(playerAnimation.shootingTime);
+	playerAnimation.OnStopFire();
 }
 
 function OnSerializeNetworkView (stream : BitStream, info : NetworkMessageInfo) {

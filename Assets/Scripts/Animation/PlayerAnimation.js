@@ -34,14 +34,15 @@ var rigid : Rigidbody;
 var rootBone : Transform;
 var upperBodyBone : Transform;
 
-var lowSpineBone : Transform;
-var lThighBone : Transform;
-var rThighBone : Transform;
+var lowerBones : Transform[];
+var lowerBonesRecur : Transform[];
+
 var maxIdleSpeed : float = 0.5;
 var minWalkSpeed : float = 2.0;
 var idle : AnimationClip;
 var turn : AnimationClip;
 var shootAdditive : AnimationClip;
+var reload: AnimationClip;
 var moveAnimations : MoveAnimation[];
 var footstepSignals : SignalSender;
 
@@ -61,7 +62,15 @@ private var lastAnimTime : float = 0;
 
 public var animationComponent : Animation;
 
+@HideInInspector
 public var shootingTime : float;
+
+function addMixTransform(boneName:String):void{
+	for (var bone:Transform in lowerBones)
+		animationComponent[boneName].AddMixingTransform(bone, false);
+	for (var bone:Transform in lowerBonesRecur)
+		animationComponent[boneName].AddMixingTransform(bone, true);
+}
 
 function Awake () {
 	tr = rigid.transform;
@@ -71,26 +80,39 @@ function Awake () {
 		moveAnimation.Init ();
 		animationComponent[moveAnimation.clip.name].layer = 1;
 		animationComponent[moveAnimation.clip.name].enabled = true;
-		/*if (lThighBone) animationComponent[moveAnimation.clip.name].AddMixingTransform(lThighBone, true);
-		if (rThighBone) animationComponent[moveAnimation.clip.name].AddMixingTransform(rThighBone, true);
-		if (lowSpineBone) animationComponent[moveAnimation.clip.name].AddMixingTransform(lowSpineBone, false);*/
+		addMixTransform(moveAnimation.clip.name);
 	}
 	animationComponent.SyncLayer (1);
 	
 	animationComponent[idle.name].layer = 2;
+	addMixTransform(idle.name);
+	
 	animationComponent[turn.name].layer = 3;
+	addMixTransform(turn.name);
 	animationComponent[idle.name].enabled = true;
 	
 	animationComponent[shootAdditive.name].layer = 4;
-	animationComponent[shootAdditive.name].weight = 2;
-	animationComponent[shootAdditive.name].speed = 1.0;
-	animationComponent[shootAdditive.name].blendMode = AnimationBlendMode.Additive;
+	animationComponent[shootAdditive.name].weight = 1;
+	//animationComponent[shootAdditive.name].speed = 1.0;
+	//animationComponent[shootAdditive.name].blendMode = AnimationBlendMode.Additive;
+	animationComponent[shootAdditive.name].AddMixingTransform(upperBodyBone, true);
+	//animationComponent[shootAdditive.name].enabled = true;
+	
+	if (reload){
+		//Debug.Log('has reload');
+		animationComponent[reload.name].layer = 4;
+		animationComponent[reload.name].AddMixingTransform(upperBodyBone, true);
+		animationComponent[reload.name].weight = 1;
+		animationComponent[reload.name].wrapMode = WrapMode.Once;
+		animationComponent.CrossFade(reload.name);
+	}
+
+	//animationComponent.SyncLayer (4);
 	
 	shootingTime = animationComponent[shootAdditive.name].length;
-	
 	//animation[turn.name].enabled = true;
 }
-
+/*
 function RPCOnStartFire(){
 	if (!networkView.isMine) return;
 
@@ -101,20 +123,34 @@ function RPCOnStopFire(){
 	if (!networkView.isMine) return;
 
 	networkView.RPC("OnStopFire", RPCMode.All, []);
-}
+}*/
 
 private var firing : boolean = false;
-@RPC
+//@RPC
 function OnStartFire () {
+	if (firing) return;
 	//if (Time.timeScale == 0) return;
 	firing = true;
+	/*if (animationComponent[reload.name]){
+		animationComponent[reload.name].enabled = true;
+	}*/
 	animationComponent[shootAdditive.name].enabled = true;
+	animationComponent[shootAdditive.name].time = 0;
+	animationComponent.CrossFade (shootAdditive.name);
+	//animationComponent.CrossFade (shootAdditive.name);
 }
 
-@RPC
+//@RPC
 function OnStopFire () {
+	if (!firing) return;
 	firing = false;
-	animationComponent[shootAdditive.name].enabled = false;
+	//animationComponent[shootAdditive.name].enabled = true;
+	if (animationComponent[reload.name]){
+		Debug.Log('has reload animation');
+		animationComponent[reload.name].enabled = true;
+		animationComponent[reload.name].time = 0;
+		animationComponent.CrossFade (reload.name);
+	}
 }
 
 private var aveDist:Vector3 = Vector3.zero;

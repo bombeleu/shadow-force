@@ -72,6 +72,11 @@ ModelImporter:
         lastFrame: 610
         loop: 1
         wrapMode: 2
+      reload:
+        firstFrame: 300
+        lastFrame: 368
+        loop: 1
+        wrapMode: 2
   nodeInfo:
     Bip01 R Calf:
     - 100000
@@ -271,3 +276,5 @@ AssetImporter:
     7400024: run_backward //// titan
     7400026: run_right //// titan
     7400028: run_left //// titan
+    7400030: idle0 //// titan
+    7400032: reload //// titan

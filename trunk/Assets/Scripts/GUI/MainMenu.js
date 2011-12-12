@@ -51,6 +51,7 @@ class MainMenu extends ScreenGUI{
 	public var state : MenuState = MenuState.OuterMost;
 	
 	public var levelList : String[];
+	public var curLevel : int = 0;
 	
 	function DrawGUI () {
 		if (state == MenuState.OuterMost){
@@ -83,7 +84,8 @@ class MainMenu extends ScreenGUI{
 				GUILayout.BeginHorizontal();
 				if (GUILayout.Button("Level " + levelList[i])){
 					state = MenuState.SinglePlaying;
-					Application.LoadLevel(levelList[i]);
+					curLevel = i;
+					Application.LoadLevel(levelList[curLevel]);
 				}
 				GUILayout.Label("stars earned: "+stars[i]);
 				GUILayout.EndHorizontal();
@@ -99,13 +101,26 @@ class MainMenu extends ScreenGUI{
 			}
 		}
 	}
-}
-
-function OnLevelWasLoaded (level : int) {
-	if (state == MenuState.SinglePlaying){
-		Network.InitializeServer(32, ConnectionGUI.listenPort, !Network.HavePublicAddress());
-		state = MenuState.SinglePlaying;
-		//uiController.SetCurrentGUI(null);
-		//yield WaitForSeconds(0.5);
+	
+	function OnLevelWasLoaded (level : int) {
+		if (state == MenuState.SinglePlaying){
+			if (!Network.isServer){
+				Network.InitializeServer(32, ConnectionGUI.listenPort, !Network.HavePublicAddress());
+			}
+			/*else{
+				Debug.Log("Server already here");
+				SendMessage("OnNetworkLoadedLevel",	SendMessageOptions.DontRequireReceiver);
+			}*/
+			state = MenuState.SinglePlaying;
+			//uiController.SetCurrentGUI(null);
+			//yield WaitForSeconds(0.5);
+		}
+	}
+	
+	function NextLevel(){
+		curLevel ++;
+		if (currentLevel < curLevel) currentLevel = curLevel;
+		SaveConfig();
+		Application.LoadLevel(levelList[curLevel]);
 	}
 }

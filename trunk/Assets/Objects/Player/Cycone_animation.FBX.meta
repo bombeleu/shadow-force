@@ -62,6 +62,11 @@ ModelImporter:
         lastFrame: 500
         loop: 1
         wrapMode: 2
+      reload:
+        firstFrame: 300
+        lastFrame: 368
+        loop: 1
+        wrapMode: 2
   nodeInfo:
     Bip01 R Toe0:
     - 100000
@@ -216,3 +221,4 @@ AssetImporter:
     7400012: jump //// Cycone_animation
     7400014: shoot //// Cycone_animation
     7400016: die //// Cycone_animation
+    7400018: reload //// Cycone_animation

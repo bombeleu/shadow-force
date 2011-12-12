@@ -188,28 +188,30 @@ function Update () {
 		}
 	}else{//continuous firing
 		if (isFiring && (firing || angle<=3)){
+			if (!firing) networkView.RPC("startFireAnimation", RPCMode.All);
 			firing = true;
 			if (weapon.needPosition){
 				weapon.gameObject.SendMessage("OnLaunchBullet", cursorWorldPosition);
 			}else{
 				weapon.gameObject.SendMessage("OnLaunchBullet");
 			}
-			networkView.RPC("startFireAnimation", RPCMode.All);
 		}else{
+			if (firing) networkView.RPC("stopFireAnimation", RPCMode.All);
 			firing = false;
 			weapon.gameObject.SendMessage("OnStopFiring");
-			networkView.RPC("stopFireAnimation", RPCMode.All);
 		}
 	}
 }
 
 @RPC
 function startFireAnimation(){
+	Debug.Log('start fire!');
 	playerAnimation.OnStartFire();
 }
 
 @RPC
 function stopFireAnimation(){
+	Debug.Log('stop fire!');
 	playerAnimation.OnStopFire();
 }
 

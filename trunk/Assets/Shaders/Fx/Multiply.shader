@@ -1,5 +1,5 @@
 
-Shader "AngryBots/FX/Multiply" {
+Shader "FateHunter/Multiply" {
 	Properties {
 		_MainTex ("Base", 2D) = "white" {}
 	}

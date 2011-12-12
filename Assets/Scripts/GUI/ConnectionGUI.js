@@ -129,15 +129,12 @@ class ConnectionGUI extends ScreenGUI{
 			GUI.Label(new Rect(10,65,250,40),"Score: "+Team.team2D+" - "+Team.team1D);
 		}
 	}
-	
+	/*
 	function OnConnectedToServer () {
-		// Notify our objects that the level and the network are ready
 		for (var go : GameObject in FindObjectsOfType(GameObject))
 			go.SendMessage("OnNetworkLoadedLevel",
 				SendMessageOptions.DontRequireReceiver);
-		/*SendMessage("OnNetworkLoadedLevel",
-				SendMessageOptions.DontRequireReceiver);*/
-	}
+	}*/
 	
 	function OnFailedToConnect(error : NetworkConnectionError){
 		Debug.Log("connect: "+error);

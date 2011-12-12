@@ -10,7 +10,7 @@ function Awake(){
 }
 
 function OnLaunchBullet(){
-	var hitInfo : RaycastHit = gameObject.GetComponentInChildren.<PerFrameConeCast>().GetHitInfo();
+	var hitInfo : RaycastHit = gameObject.GetComponentInChildren.<PerFrameRaycast>().GetHitInfo();
 	
 	if (hitInfo.transform) {
 		// Get the health component of the target if any

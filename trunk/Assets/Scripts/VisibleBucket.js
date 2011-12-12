@@ -65,7 +65,8 @@ private function AddFadingData(count : int, obj : GameObject) {
 
 private function SetRenderer(activate : boolean) {
 	for (var obj:GameObject in visibleObjects){
-		obj.renderer.enabled = activate;
+		if (obj != null) 
+			obj.renderer.enabled = activate;
 	}
 	if (_vision != null) _vision.enabled = activate;
 	if (_textMesh != null) _textMesh.gameObject.renderer.enabled = activate;

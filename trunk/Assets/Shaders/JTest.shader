@@ -1,4 +1,4 @@
-Shader "FateHunter/JTest" {
+Shader "FateHunter/Vision" {
 	Properties {
 		//_VisionColor ("Vision Color", Color) = (1.0, 0.0, 1.0, 0.2)
 		//_LightPos ("Light Position", Vector) = (0.0,0.0,0.0,1.0)
@@ -33,7 +33,7 @@ Shader "FateHunter/JTest" {
 			float dist = length(distV);
 			
 			if (dist > _Distance) return fixed4(0,0,0,0);
-			else return _VisionColor;
+			else return _VisionColor * (1.5-dist/_Distance);
 		}
 	
 	ENDCG

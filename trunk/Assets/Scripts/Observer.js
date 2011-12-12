@@ -49,6 +49,8 @@ function OnSetVisible(visi:boolean){
 }
 
 function SetViMeshVisible(b:boolean){
-	viMeshScript.enabled = b;
-	viMeshScript.renderer.enabled = b;
+	if (viMeshScript) {
+		viMeshScript.enabled = b;
+		viMeshScript.renderer.enabled = b;
+	}
 }

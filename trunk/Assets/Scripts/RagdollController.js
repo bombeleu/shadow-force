@@ -22,7 +22,7 @@ function Update ()
 		} else if (Input.GetKeyDown(KeyCode.G)) {
 			Die();
 		} else if (Input.GetKeyDown(KeyCode.H)) {
-			DieByForce(Vector3.up, 500.0);
+			DieByForce(Vector3.back * 500.0);
 		} else if (Input.GetKeyDown(KeyCode.J)) {
 			//DieByExplosion(transform.position + Vector3(1,0,0));
 		} else if (Input.GetKeyDown(KeyCode.P)) {
@@ -73,14 +73,14 @@ public function Die()
 	ragDoll.GetComponentInChildren.<SkinnedMeshRenderer>().enabled = true;
 }
 
-public function DieByForce(forceDir : Vector3, force : float)
+public function DieByForce(force : Vector3)
 {
 	Die();
 	var go : GameObject = ragDoll.Find("Bip01");
 	Debug.Log(go);
 	
 	//ragDoll.Find("Bip01").rigidbody.AddForce(forceDir * force,ForceMode.Impulse);
-	rootRagDoll.rigidbody.AddForce(forceDir*force,ForceMode.Impulse);
+	rootRagDoll.rigidbody.AddForce(force,ForceMode.Impulse);
 }
 
 public function DieByExplosion(explosionPos : Vector3, explolsionRadius : Vector3)

@@ -1,13 +1,14 @@
 #pragma strict
 @script RequireComponent (Weapon)
 @script RequireComponent (AOEBullet)
+@script RequireComponent (PerFrameRaycast)
 @script RequireComponent (NetworkView)
 
-public var frequency : float = 1;
 public var muzzleFlashFront : GameObject;
-public var raycast: PerFrameConeCast;
+public var raycast: PerFrameRaycast;
 public var numBullets : int  = 5;
 public var range : int = 10;
+public var angle : int = 15;
 
 private var bulletPrefab: GameObject;
 private var firing:boolean = false;
@@ -40,7 +41,6 @@ function EnableFiring(){
 	firing = true;
 	muzzleFlashFront.active = true;
 
-	var angle : int = raycast.angle;
 	for (var i : int = 0 ; i < numBullets; i++)
 	{
 		var go : GameObject = Spawner.Spawn (bulletPrefab, spawnPoint.position, wp.owner.transform.rotation) as GameObject;

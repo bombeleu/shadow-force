@@ -41,6 +41,9 @@ private var screenMovementForward : Vector3;
 private var screenMovementRight : Vector3;
 private var healthComp : Health;
 
+@HideInInspector
+public var disableRotation : boolean = false;
+
 function SetJoystickReset(b:boolean){
 	if (b)
 		joystickRight.listener = gameObject;
@@ -182,7 +185,8 @@ function Update () {
 	#if UNITY_IPHONE || UNITY_ANDROID
 	
 		// On mobiles, use the thumb stick and convert it into screen movement space
-		motor.facingDirection = joystickRight.position.x * screenMovementRight + joystickRight.position.y * screenMovementForward;
+		if (!disableRotation)
+			motor.facingDirection = joystickRight.position.x * screenMovementRight + joystickRight.position.y * screenMovementForward;
 				
 		cameraAdjustmentVector = motor.facingDirection;		
 		
@@ -202,7 +206,8 @@ function Update () {
 			// On consoles use the analog sticks
 			var axisX : float = Input.GetAxis("LookHorizontal");
 			var axisY : float = Input.GetAxis("LookVertical");
-			motor.facingDirection = axisX * screenMovementRight + axisY * screenMovementForward;
+			if (!disableRotation)
+				motor.facingDirection = axisX * screenMovementRight + axisY * screenMovementForward;
 	
 			cameraAdjustmentVector = motor.facingDirection;		
 		
@@ -226,10 +231,11 @@ function Update () {
 			cameraAdjustmentVector = posRel.x * screenMovementRight + posRel.y * screenMovementForward;
 			cameraAdjustmentVector.y = 0.0;	
 									
-			// The facing direction is the direction from the character to the cursor world position
-			motor.facingDirection = (cursorWorldPosition - character.position);
-			motor.facingDirection.y = 0;			
-			
+			if (!disableRotation){
+				// The facing direction is the direction from the character to the cursor world position
+				motor.facingDirection = (cursorWorldPosition - character.position);
+				motor.facingDirection.y = 0;			
+			}
 			// Draw the cursor nicely
 			HandleCursorAlignment (cursorWorldPosition);
 			

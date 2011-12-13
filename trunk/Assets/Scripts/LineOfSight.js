@@ -5,7 +5,7 @@ function CheckObserver(seer:Observer, viobj:Visibility):boolean{
 	if (seer.gameObject == viobj.gameObject) return false;//not counted!
 	if (!seer.enabled) return false;
 	//Debug.Log("get here 1");
-	if (seer.GetComponent.<Team>().team == viobj.GetComponent.<Team>().team){//only check allies vision
+	if (seer.team.team == viobj.GetComponent.<Team>().team){//only check allies vision
 		return false;
 	}
 	//Debug.DrawLine(transform.position, p.transform.position, Color.white, 3);
@@ -80,7 +80,7 @@ function Update () {
 		}else if (viobj.GetComponent.<Team>().team == myTeam){
 			visi = true;
 			for (var seer : Observer in wantEvents){
-				if (seer.GetComponent.<Team>().team != myTeam)
+				if (seer.team.team != myTeam)
 					CheckObserver(seer, viobj);
 			}
 		}else{

@@ -11,6 +11,8 @@ class FreeMovementMotor extends MovementMotor {
 	public var maxTurnSpeed: float = 7;
 	public static var threshold : float = 5;
 	
+	//public var disableRotation
+	
 	function FixedUpdate () {
 		// Handle the movement of the character
 		var targetVelocity : Vector3 = movementDirection * walkingSpeed;

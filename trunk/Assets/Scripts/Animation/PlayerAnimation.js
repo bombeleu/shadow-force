@@ -43,6 +43,7 @@ var idle : AnimationClip;
 var turn : AnimationClip;
 var shootAdditive : AnimationClip;
 var reload: AnimationClip;
+var lean: AnimationClip;
 var moveAnimations : MoveAnimation[];
 var footstepSignals : SignalSender;
 
@@ -106,6 +107,11 @@ function Awake () {
 		animationComponent[reload.name].wrapMode = WrapMode.Once;
 		animationComponent.CrossFade(reload.name);
 	}
+	
+	if (lean){
+		animationComponent[lean.name].layer = 2;
+		//animationComponent[lean.name].weight = 1;
+	}
 
 	//animationComponent.SyncLayer (4);
 	
@@ -146,11 +152,60 @@ function OnStopFire () {
 	firing = false;
 	//animationComponent[shootAdditive.name].enabled = true;
 	if (animationComponent[reload.name]){
-		Debug.Log('has reload animation');
+		//Debug.Log('has reload animation');
+		animationComponent[shootAdditive.name].enabled = false;
 		animationComponent[reload.name].enabled = true;
 		animationComponent[reload.name].time = 0;
 		animationComponent.CrossFade (reload.name);
 	}
+}
+
+public var motor: MovementMotor;
+public var controller: PlayerMoveController;
+public var visionMesh : Transform;
+
+private var leaning:boolean = false;
+
+function Lean(normal : Vector3){
+	if (leaning) return;
+	leaning = true;
+	Debug.Log("lean!");
+	
+	/*
+	rigid.rotation = Quaternion.LookRotation(normal, Vector3.up);
+	rigid.velocity = Vector3.zero;
+	rigid.angularVelocity = Vector3.zero;*/
+	
+	rigid.velocity = Vector3.zero;
+	motor.movementDirection = Vector3.zero;
+	motor.facingDirection = normal;
+	controller.disableRotation = true;
+	
+	visionMesh.localRotation = Quaternion.Euler(0, 180, 0);
+	visionMesh.localPosition = Vector3(3,0,0);
+	
+	if (animationComponent[reload.name]){
+		animationComponent[reload.name].enabled = false;
+	}
+	
+	animationComponent[lean.name].enabled = true;
+	animationComponent[lean.name].time = 0;
+	if (lean) animationComponent.CrossFade (lean.name);
+	/*yield WaitForSeconds(1.5);
+	ExitLean();*/
+}
+
+function ExitLean(){
+	if (!leaning) return;
+	leaning = false;
+	controller.disableRotation = false;
+
+	visionMesh.localPosition = Vector3.zero;
+	visionMesh.localRotation = Quaternion.identity;
+			
+	animationComponent.CrossFade (idle.name);
+	animationComponent[lean.name].enabled = false;
+	Debug.Log("lean stop");	
 }
 
 private var aveDist:Vector3 = Vector3.zero;
@@ -180,6 +235,7 @@ function FixedUpdate () {
 }
 
 function Update () {
+	if (leaning) return;
 	idleWeight = Mathf.Lerp (idleWeight, Mathf.InverseLerp (minWalkSpeed, maxIdleSpeed, speed), Time.deltaTime * 10);
 	animationComponent[idle.name].weight = /*firing?0:idleWeight*/idleWeight;
 	
@@ -220,6 +276,7 @@ function Update () {
 }
 
 function LateUpdate () {
+	if (leaning) return;
 	var idle : float = Mathf.InverseLerp (minWalkSpeed, maxIdleSpeed, speed);
 	
 	if (idle < 1) {

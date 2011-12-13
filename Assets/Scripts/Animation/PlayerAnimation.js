@@ -166,10 +166,10 @@ public var visionMesh : Transform;
 
 private var leaning:boolean = false;
 
-function Lean(normal : Vector3){
+function Lean(normal : Vector3, toRight: boolean){
 	if (leaning) return;
 	leaning = true;
-	Debug.Log("lean!");
+	Debug.Log("lean!"+toRight);
 	
 	/*
 	rigid.rotation = Quaternion.LookRotation(normal, Vector3.up);
@@ -182,7 +182,7 @@ function Lean(normal : Vector3){
 	controller.disableRotation = true;
 	
 	visionMesh.localRotation = Quaternion.Euler(0, 180, 0);
-	visionMesh.localPosition = Vector3(3,0,0);
+	visionMesh.localPosition = Vector3(toRight?2:-2, 0,0);
 	
 	if (animationComponent[reload.name]){
 		animationComponent[reload.name].enabled = false;

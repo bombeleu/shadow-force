@@ -205,13 +205,13 @@ function Update () {
 
 @RPC
 function startFireAnimation(){
-	Debug.Log('start fire!');
+	//Debug.Log('start fire!');
 	playerAnimation.OnStartFire();
 }
 
 @RPC
 function stopFireAnimation(){
-	Debug.Log('stop fire!');
+	//Debug.Log('stop fire!');
 	playerAnimation.OnStopFire();
 }
 

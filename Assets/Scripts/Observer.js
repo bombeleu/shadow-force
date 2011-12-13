@@ -6,9 +6,11 @@ public var wantEventTrigger : boolean = false;
 
 //private var enable: boolean = true;
 private var viMeshScript:VisionMeshScript;
+public var team:Team;
 
 function Awake(){
 	viMeshScript = gameObject.GetComponentInChildren(VisionMeshScript);
+	if (team==null) team = GetComponent(Team);//TODO: remove this when done refactoring
 }
 
 function Start(){

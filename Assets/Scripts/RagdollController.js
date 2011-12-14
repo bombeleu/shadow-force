@@ -3,6 +3,7 @@
 public var ragDoll : GameObject;
 public var rootRagDoll : GameObject;
 public var animationObject : GameObject;
+public var weaponHoldPoint : Transform;
 public var debug : boolean;
 
 public var activated : boolean = false;
@@ -24,7 +25,6 @@ private function RecursiveIgnoreRagdollCollision(trans : Transform)
 		RecursiveIgnoreRagdollCollision (t);
 	}
 }
-
 
 function Update () 
 {
@@ -120,7 +120,17 @@ public function Die()
 	
 	// copy transforms
     CopyTransforms(animationObject.transform,ragDoll.transform);
-    activated = true;
+
+    // detach weapon
+    var weapons : Weapon[] = gameObject.GetComponentsInChildren.<Weapon>();
+    if (weaponHoldPoint)
+    {
+	    for (var wp : Weapon in weapons)
+	    {
+	    	Debug.Log(wp);
+	    	wp.transform.parent = weaponHoldPoint;
+	    }
+    }
 }
 
 public function DieByForce(force : Vector3)
@@ -130,7 +140,7 @@ public function DieByForce(force : Vector3)
 	Debug.Log(go);
 	
 	//ragDoll.Find("Bip01").rigidbody.AddForce(forceDir * force,ForceMode.Impulse);
-	rootRagDoll.rigidbody.AddForce(force,ForceMode.Impulse);
+	//rootRagDoll.rigidbody.AddForce(force,ForceMode.Impulse);
 }
 
 public function DieByExplosion(explosionPos : Vector3, explolsionRadius : Vector3)

@@ -28,8 +28,10 @@ function OnDestroy () {
 
 function Update () {
 	// Early out if there are no patrol points
-	if (patrolRoute == null || patrolRoute.patrolPoints.Count == 0)
+	if (patrolRoute == null || patrolRoute.patrolPoints.Count == 0){
+		motor.movementDirection = Vector3.zero;
 		return;
+	}
 	
 	// Find the vector towards the next patrol point.
 	var targetVector : Vector3 = patrolRoute.patrolPoints[nextPatrolPoint].position - character.position;

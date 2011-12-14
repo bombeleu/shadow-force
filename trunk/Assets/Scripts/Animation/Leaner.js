@@ -23,8 +23,8 @@ function check(collision : Collision){
     		var sign:float = localP.x*localP.z;
     		localP.x = Mathf.Abs(localP.x);
     		localP.z = Mathf.Abs(localP.z);
-    		var size : Vector3 = Vector3.Scale(box.size,box.transform.localScale) * 0.5 - 1.25*radius;
-    		var downSize : Vector3 = size - radius;
+    		var size : Vector3 = Vector3.Scale(box.size,box.transform.localScale) * 0.5 - 0.5*radius;
+    		var downSize : Vector3 = size - 1.5*radius;
     		/*Debug.Log(localP);
     		Debug.Log(size);*/
     		var x_axis:boolean = (localP.x > downSize.x && localP.x < size.x);

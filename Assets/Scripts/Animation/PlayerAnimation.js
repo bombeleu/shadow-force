@@ -198,10 +198,10 @@ function Lean(normal : Vector3, toRight: boolean){
 	
 	visionMesh.localRotation = Quaternion.Euler(0, 180, 0);
 	
-	/*
+	
 	if (animationComponent[reload.name]){
 		animationComponent[reload.name].enabled = false;
-	}*/
+	}
 	toggleMoveAnim(false);
 	
 	leanName = toRight?leanRight.name:leanLeft.name;
@@ -228,9 +228,14 @@ function ExitLean(){
 	visionMesh.localRotation = Quaternion.identity;
 			
 	toggleMoveAnim(true);
-	
-	animationComponent.CrossFade (idle.name);
 	animationComponent[leanName].enabled = false;
+	
+	//lowBody
+	animationComponent.CrossFade (idle.name);
+	//upperBody
+	animationComponent[reload.name].enabled = true;
+	animationComponent[reload.name].time = 0;
+	animationComponent.CrossFade (reload.name);
 	Debug.Log("lean stop");	
 }
 

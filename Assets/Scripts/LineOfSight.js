@@ -1,6 +1,8 @@
 #pragma strict
 @script RequireComponent (Team)
 
+public var layerMask: LayerMask;
+
 function CheckObserver(seer:Observer, viobj:Visibility):boolean{
 	if (seer.gameObject == viobj.gameObject) return false;//not counted!
 	if (!seer.enabled) return false;
@@ -9,30 +11,32 @@ function CheckObserver(seer:Observer, viobj:Visibility):boolean{
 		return false;
 	}
 	//Debug.DrawLine(transform.position, p.transform.position, Color.white, 3);
-	var sl = seer;
-	var local_visi : boolean = false;
-	if (sl){
-		var localPos :Vector3 = sl.transform.worldToLocalMatrix.MultiplyPoint(viobj.transform.position);
+	var local_visi : boolean = true;
+
+	//compute distance
+	var dir : Vector3 = viobj.transform.position - seer.transform.position;
+	if (dir.magnitude > seer.range) local_visi = false;
+	
+	if (local_visi){
+		//compute angle
+		var localPos :Vector3 = seer.transform.worldToLocalMatrix.MultiplyPoint(viobj.transform.position);
 		var angle : float;
 		var axis : Vector3;
 		Quaternion.FromToRotation(Vector3(0,0,1), localPos).ToAngleAxis(angle, axis);
 		//Debug.Log("angle "+angle);
 		local_visi = angle <= seer.angle/2;//45;
-	}
-	if (local_visi){
-		var hitInfo = RaycastHit ();
-		var dir : Vector3 = viobj.transform.position - seer.transform.position;
-		Physics.Raycast (seer.transform.position, dir, hitInfo/*, Mathf.Infinity, 1 << 8*/);
-		if (hitInfo.transform){
-			if (hitInfo.distance > seer.range)
+
+		if (local_visi){//check occluder
+			var hitInfo = RaycastHit ();
+			Physics.Raycast (seer.transform.position, dir, hitInfo, seer.range, layerMask.value);
+			if (hitInfo.transform){
+				/*var target : Visibility = hitInfo.transform.GetComponent.<Visibility> ();
+				local_visi = target == viobj;*///this code is used to check player occlusion
 				local_visi = false;
-			else{
-				var target : Visibility = hitInfo.transform.GetComponent.<Visibility> ();
-				//local_visi = target != null;
-				local_visi = target == viobj;
 			}
 		}
 	}
+	
 	if (seer.wantEventTrigger){
 		if (local_visi){
 			seer.SendMessage("OnDetectEnemy", viobj);

@@ -41,7 +41,7 @@ function OnNetworkLoadedLevel () {
 	
 	Camera.main.GetComponent(Team).team = t;
 	Team.ammo = 5;
-	setCamera(character);
+	//setCamera(character);
 }
 
 function OnPlayerDisconnected (player : NetworkPlayer) {
@@ -51,8 +51,8 @@ function OnPlayerDisconnected (player : NetworkPlayer) {
 
 
 function setCamera(character : Transform){
-	Camera.main.transform.position = character.position + Vector3(10,25,25);
+	Camera.main.transform.position = character.position + Vector3(10,60,25);
 	Camera.main.transform.LookAt(character);
-	if (Camera.main.GetComponent("HeightDepthOfField")!=null)
-		(Camera.main.GetComponent("HeightDepthOfField")as HeightDepthOfField).objectFocus = character;
+	if (Camera.main.GetComponent(HeightDepthOfField)!=null)
+		Camera.main.GetComponent(HeightDepthOfField).objectFocus = character;
 }

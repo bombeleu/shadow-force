@@ -104,6 +104,7 @@ class MainMenu extends ScreenGUI{
 	
 	function OnLevelWasLoaded (level : int) {
 		if (state == MenuState.SinglePlaying){
+			curStar = 0;
 			if (!Network.isServer){
 				Network.InitializeServer(32, ConnectionGUI.listenPort, !Network.HavePublicAddress());
 			}
@@ -118,9 +119,15 @@ class MainMenu extends ScreenGUI{
 	}
 	
 	function NextLevel(){
+		stars[curLevel] = curStar;
 		curLevel ++;
 		if (currentLevel < curLevel) currentLevel = curLevel;
 		SaveConfig();
 		Application.LoadLevel(levelList[curLevel]);
+	}
+	
+	private var curStar : int = 0;
+	function GainStar(){
+		curStar++;
 	}
 }

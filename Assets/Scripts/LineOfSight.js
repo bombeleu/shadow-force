@@ -15,7 +15,8 @@ function CheckObserver(seer:Observer, viobj:Visibility):boolean{
 
 	//compute distance
 	var dir : Vector3 = viobj.transform.position - seer.transform.position;
-	if (dir.magnitude > seer.range) local_visi = false;
+	var target_dist : float = dir.magnitude;
+	if (target_dist > seer.range) local_visi = false;
 	
 	if (local_visi){
 		//compute angle
@@ -29,7 +30,7 @@ function CheckObserver(seer:Observer, viobj:Visibility):boolean{
 		if (local_visi){//check occluder
 			var hitInfo = RaycastHit ();
 			Physics.Raycast (seer.transform.position, dir, hitInfo, seer.range, layerMask.value);
-			if (hitInfo.transform){
+			if (hitInfo.transform && hitInfo.distance < target_dist){
 				/*var target : Visibility = hitInfo.transform.GetComponent.<Visibility> ();
 				local_visi = target == viobj;*///this code is used to check player occlusion
 				local_visi = false;

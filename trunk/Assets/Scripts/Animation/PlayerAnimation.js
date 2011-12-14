@@ -43,7 +43,8 @@ var idle : AnimationClip;
 var turn : AnimationClip;
 var shootAdditive : AnimationClip;
 var reload: AnimationClip;
-var lean: AnimationClip;
+var leanRight: AnimationClip;
+var leanLeft: AnimationClip;
 var moveAnimations : MoveAnimation[];
 var footstepSignals : SignalSender;
 
@@ -108,9 +109,13 @@ function Awake () {
 		animationComponent.CrossFade(reload.name);
 	}
 	
-	if (lean){
-		animationComponent[lean.name].layer = 2;
-		//animationComponent[lean.name].weight = 1;
+	if (leanRight){
+		animationComponent[leanRight.name].layer = 2;
+		animationComponent[leanRight.name].weight = 1;
+	}
+	if (leanLeft){
+		animationComponent[leanLeft.name].layer = 2;
+		animationComponent[leanLeft.name].weight = 1;
 	}
 
 	//animationComponent.SyncLayer (4);
@@ -130,6 +135,15 @@ function RPCOnStopFire(){
 
 	networkView.RPC("OnStopFire", RPCMode.All, []);
 }*/
+
+function toggleMoveAnim(b:boolean){
+	for (var moveAnimation : MoveAnimation in moveAnimations) {
+		animationComponent[moveAnimation.clip.name].enabled = b;
+	}
+	animationComponent[idle.name].enabled = b;
+	animationComponent[turn.name].enabled = b;
+	animationComponent[shootAdditive.name].enabled = b;
+}
 
 private var firing : boolean = false;
 //@RPC
@@ -166,6 +180,7 @@ public var visionMesh : Transform;
 
 private var leaning:boolean = false;
 
+private var leanName : String;
 function Lean(normal : Vector3, toRight: boolean){
 	if (leaning) return;
 	leaning = true;
@@ -183,13 +198,19 @@ function Lean(normal : Vector3, toRight: boolean){
 	
 	visionMesh.localRotation = Quaternion.Euler(0, 180, 0);
 	
+	/*
 	if (animationComponent[reload.name]){
 		animationComponent[reload.name].enabled = false;
-	}
+	}*/
+	toggleMoveAnim(false);
 	
-	animationComponent[lean.name].enabled = true;
-	animationComponent[lean.name].time = 0;
-	if (lean) animationComponent.CrossFade (lean.name);
+	leanName = toRight?leanRight.name:leanLeft.name;
+	Debug.Log(leanName);
+	
+	animationComponent[leanName].enabled = true;
+	animationComponent[leanName].time = 0;
+	animationComponent.CrossFade (leanName);
+	
 	/*yield WaitForSeconds(1.5);
 	ExitLean();*/
 	
@@ -206,8 +227,10 @@ function ExitLean(){
 	visionMesh.localPosition = Vector3.zero;
 	visionMesh.localRotation = Quaternion.identity;
 			
+	toggleMoveAnim(true);
+	
 	animationComponent.CrossFade (idle.name);
-	animationComponent[lean.name].enabled = false;
+	animationComponent[leanName].enabled = false;
 	Debug.Log("lean stop");	
 }
 

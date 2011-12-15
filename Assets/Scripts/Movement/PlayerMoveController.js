@@ -61,8 +61,6 @@ function Awake () {
 	// Set main camera
 	mainCamera = Camera.main;
 	mainCameraTransform = mainCamera.transform;
-	mainCameraTransform.position = transform.position + cameraOffset;
-	mainCameraTransform.LookAt(transform);
 	
 	// Ensure we have character set
 	// Default to using the transform this component is on
@@ -109,6 +107,10 @@ function Awake () {
 function Start () {
 	//only control your own character!
 	if (!networkView.isMine) return;
+	
+	mainCameraTransform.position = transform.position + cameraOffset;
+	mainCameraTransform.LookAt(transform);	
+	
 	healthComp = GetComponent(Health);
 	
 	#if UNITY_IPHONE || UNITY_ANDROID

@@ -17,6 +17,9 @@ class MainMenu extends ScreenGUI{
 		for (var i:int = 0; i < levelList.Length; i++){
 			stars[i] = PlayerPrefs.GetInt("stars"+i, 0);
 		}
+		
+		useSensor = PlayerPrefs.GetInt("sensor",0)==1;
+		useAutoAim = PlayerPrefs.GetInt("autoAim",0)==1;
 	}
 	
 	function ResetData(){
@@ -37,7 +40,8 @@ class MainMenu extends ScreenGUI{
 		for (var i:int = 0; i < levelList.Length; i++){
 			PlayerPrefs.SetInt("stars"+i, stars[i]);
 		}
-		
+		PlayerPrefs.SetInt("sensor", useSensor?1:0);
+		PlayerPrefs.SetInt("autoAim", useAutoAim?1:0);
 		PlayerPrefs.Save();
 	}
 	
@@ -53,7 +57,11 @@ class MainMenu extends ScreenGUI{
 	public var levelList : String[];
 	public var curLevel : int = 0;
 	
+	public static var useSensor:boolean;
+	public static var useAutoAim:boolean;
+	
 	function DrawGUI () {
+		
 		if (state == MenuState.OuterMost){
 			GUILayout.BeginHorizontal();
 			if (GUILayout.Button("Single play")){
@@ -77,6 +85,14 @@ class MainMenu extends ScreenGUI{
 			if (GUILayout.Button("(doing)Scoreboard")){
 			}
 			if (GUILayout.Button("(doing)Weapon store")){
+			}
+			if (GUILayout.Button("sensor: "+(useSensor?"On":"Off"))){
+				useSensor = !useSensor;
+				SaveConfig();
+			}
+			if (GUILayout.Button("Auto Aim: "+(useAutoAim?"On":"Off"))){
+				useAutoAim = !useAutoAim;
+				SaveConfig();
 			}
 		}else if (state == MenuState.Single){
 			GUILayout.Label("Select an unlocked level");

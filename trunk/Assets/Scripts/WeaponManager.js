@@ -112,6 +112,7 @@ function Start(){
 
 public var playerAnimation : PlayerAnimation;
 
+private var weaponSwitchGUI:boolean;
 function Update () {
 	if (!networkView.isMine) return;//weapon manager only updates the local player, network update is done per weapon basis
 
@@ -149,14 +150,22 @@ function Update () {
 			weapon.gameObject.SendMessage("OnUpdateTarget", cursorWorldPosition);
 		}
 		var weaponSwitch:boolean;
-		#if UNITY_IPHONE || UNITY_ANDROID
-			if (Input.isGyroAvailable)
-				weaponSwitch = Input.gyro.userAcceleration.z < -0.5;
-			else
-				weaponSwitch = Input.acceleration.z <-0.9;
-		#else
-			weaponSwitch = Input.GetAxis("Fire2")>=1;
-		#endif
+		if (weaponSwitchGUI==false){
+			#if UNITY_IPHONE || UNITY_ANDROID
+				if (MainMenu.useSensor){
+					if (Input.isGyroAvailable){
+						weaponSwitch = Input.gyro.userAcceleration.z < -0.7;
+					}else{
+						weaponSwitch = Input.acceleration.z <-1.2;
+					}
+				}
+			#else
+				weaponSwitch = Input.GetAxis("Fire2")>=1;
+			#endif
+		}else{
+			weaponSwitch = true;
+			weaponSwitchGUI = false;
+		}
 		if (weaponSwitch && Time.time > lastWeaponSwitch + weapon.switchTime){
 			lastWeaponSwitch = Time.time;
 			RPCWeaponSwitch((curWeapon+1)%ws.length);//use networkView to control weapon sync
@@ -200,6 +209,19 @@ function Update () {
 			firing = false;
 			weapon.gameObject.SendMessage("OnStopFiring");
 		}
+	}
+}
+
+function OnGUI(){
+	if (!networkView.isMine || !controllable) return;
+	var btnRect : Rect;
+	btnRect.x = 0.4*Screen.width;
+	btnRect.width = 0.2*Screen.width;
+	btnRect.y = 0.9*Screen.height;
+	btnRect.height = 0.1*Screen.height;
+	
+	if (GUI.Button(btnRect, "switch")){
+		weaponSwitchGUI = true;
 	}
 }
 

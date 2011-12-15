@@ -114,6 +114,7 @@ class MainMenu extends ScreenGUI{
 				Network.Disconnect();
 				state = MenuState.OuterMost;
 				Application.LoadLevel("MainMenu");
+				DestroyObject(gameObject);
 			}
 		}
 	}

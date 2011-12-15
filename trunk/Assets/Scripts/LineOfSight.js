@@ -2,6 +2,7 @@
 @script RequireComponent (Team)
 
 public var layerMask: LayerMask;
+public var revealAll: boolean = false;
 
 function CheckObserver(seer:Observer, viobj:Visibility):boolean{
 	if (seer.gameObject == viobj.gameObject) return false;//not counted!
@@ -51,16 +52,28 @@ function CheckObserver(seer:Observer, viobj:Visibility):boolean{
 	return local_visi;
 }
 
-private var myTeam:int;
+public var myTeam:int;
 
 //public var visibleEnemies
 
+private var doneReveal:boolean = false;
 function Update () {
-	myTeam = GetComponent.<Team>().team;
+	//myTeam = GetComponent.<Team>().team;
 	//Debug.DrawLine(new Vector3(-5,0,13), new Vector3(-5,10,13), Color.white, 0);
 	//var players = GameObject.FindGameObjectsWithTag ("Player");
-	var players : Observer[] = GameObject.FindObjectsOfType(Observer) as Observer[];
 	var visiobjs : Visibility[]= GameObject.FindObjectsOfType(Visibility) as Visibility[];
+	if (revealAll){
+		if (!doneReveal){
+			for (var viobj in visiobjs){
+				viobj.SetVisible(true);
+			}
+			doneReveal = true;
+		}
+		return;
+	}else{
+		doneReveal = false;
+	}
+	var players : Observer[] = GameObject.FindObjectsOfType(Observer) as Observer[];
 	
 	var wantEvents : Array = new Array();
 	var wantNoEvents : Array = new Array();

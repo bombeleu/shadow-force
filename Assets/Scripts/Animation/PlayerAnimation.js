@@ -196,8 +196,6 @@ function Lean(normal : Vector3, toRight: boolean){
 	motor.facingDirection = normal;
 	controller.disableRotation = true;
 	
-	visionMesh.localRotation = Quaternion.Euler(0, 180, 0);
-	
 	
 	if (animationComponent[reload.name]){
 		animationComponent[reload.name].enabled = false;
@@ -215,8 +213,10 @@ function Lean(normal : Vector3, toRight: boolean){
 	ExitLean();*/
 	
 	yield WaitForSeconds(0.5);//give time for the vision to rotate
-	if (leaning)//only if still leaning!
+	if (leaning){//only if still leaning!
 		visionMesh.localPosition = Vector3((toRight?1:-1)*1.5, 0,0);
+		visionMesh.localRotation = Quaternion.Euler(0, 180, 0);
+	}
 }
 
 function ExitLean(){

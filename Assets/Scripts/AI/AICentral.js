@@ -1,4 +1,5 @@
-public var motor : FreeMovementMotor;
+#pragma strict
+public var motor : MovementMotor;
 
 public var dodger:DodgingAI;
 public var patroller:PatrolMoveController;
@@ -14,13 +15,13 @@ function Update () {
 function OnDetectEnemy(enemy:Visibility){
 	//Debug.Log('see ya!');
 	patrolling = false;
-	var targetV:Vector3 = (enemy.transform.position - transform.position).normalized;
-	motor.facingDirection = targetV;
+	//var targetV:Vector3 = (enemy.transform.position - transform.position).normalized;
+	//motor.facingDirection = targetV;
 	motor.movementDirection = Vector3.zero;//targetV;
-	GetComponent.<WeaponManager>().WeaponStartFire(enemy.transform.position);
+	//GetComponent(WeaponManager).WeaponStartFire(enemy.transform.position);
 }
 
 function OnLoseSightEnemy(enemy:Visibility){
 	patrolling = true;
-	GetComponent.<WeaponManager>().WeaponStopFire();
+	//GetComponent(WeaponManager).WeaponStopFire();
 }

@@ -29,7 +29,7 @@ function Start() {
 	// Change some animation values here and there
 	ChoseNewAnimationTargetCoroutine();
 	
-	raycast = GetComponent.<PerFrameRaycast> ();
+	raycast = GetComponent(PerFrameRaycast);
 }
 
 function ChoseNewAnimationTargetCoroutine () {
@@ -42,6 +42,8 @@ function ChoseNewAnimationTargetCoroutine () {
 }
 
 function Update () {
+	if (!raycast.weapon.owner) return;//TODO: this hack is for character/enemy dead
+
 	renderer.material.mainTextureOffset.x += Time.deltaTime * aniDir * scrollSpeed;
 	renderer.material.SetTextureOffset ("_NoiseTex", Vector2 (-Time.time * aniDir * scrollSpeed, 0.0));
 

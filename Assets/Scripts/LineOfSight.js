@@ -53,6 +53,8 @@ function CheckObserver(seer:Observer, viobj:Visibility):boolean{
 
 private var myTeam:int;
 
+//public var visibleEnemies
+
 function Update () {
 	myTeam = GetComponent.<Team>().team;
 	//Debug.DrawLine(new Vector3(-5,0,13), new Vector3(-5,10,13), Color.white, 0);

@@ -35,3 +35,24 @@ function OnSetVisible(visi:boolean){
 	}
 }
 */
+private var observers:Hashtable = new Hashtable();
+
+function AddObserver(observer:AutoShoot){
+	var key:Object = observer.gameObject.GetInstanceID();
+	if (!observers.ContainsKey(key)){
+		observers.Add(key, observer);
+	}
+}
+
+function RemoveObserver(observer:AutoShoot){
+	var key:Object = observer.gameObject.GetInstanceID();
+	if (observers.ContainsKey(key))
+		observers.Remove(key);
+}
+
+function OnDestroy(){
+	for (var i:Object in observers.Values){
+		Debug.Log("dead remove");
+		(i as AutoShoot).RemoveEnemy(this);
+	}
+}

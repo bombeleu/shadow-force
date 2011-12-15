@@ -48,10 +48,14 @@ function OnCollisionStay(collision : Collision) {
 	check(collision);
 }
 
+public var weaponManager:WeaponManager;
 function FixedUpdate(){
-	if (leaning)
+	if (leaning){
 		playerAnimation.Lean(leanNormal, leanRight);
-	else
+		weaponManager.Lean();
+	}else{
 		playerAnimation.ExitLean();
+		weaponManager.ExitLean();
+	}
 	leaning = false;
 }

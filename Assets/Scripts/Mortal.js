@@ -1,4 +1,6 @@
 #pragma strict
+@script RequireComponent (NetworkView)
+
 public var explosionPrefab : GameObject;
 
 function OnDead():void{

@@ -9,6 +9,7 @@ public var cooldown:float = 0.5;
 public var bulletPrefab: GameObject;
 public var spawnPoint : Transform;
 public var switchTime : float = 1;
+public var playerAutoShoot: boolean = false;
 
 @HideInInspector
 public var owner: Transform;

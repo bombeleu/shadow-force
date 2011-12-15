@@ -23,6 +23,7 @@ function GetDir () {
 private var dir:Vector3;
 function Update () {
 	//if (dir==null) GetDir();
+	if (!weapon.owner) return;//TODO: this hack is to prevent error when owner die
 	dir = weapon.owner.transform.forward;
 	dir.y=0;
 	// Cast a ray to find out the end point of the laser

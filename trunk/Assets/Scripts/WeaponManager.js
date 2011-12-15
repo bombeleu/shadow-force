@@ -31,6 +31,8 @@ function OnEnable(){
 			networkView.RPC("RPCSetWeaponViewID", RPCMode.AllBuffered, [i, Network.AllocateViewID()]);
 		//ws[0] = go.GetComponent.<Weapon>();
 	}
+	if (controllable)
+		autoShoot.enabled = ws[0].playerAutoShoot;
 	
 	//cursorPlaneHeight = -character.position.y;
 	//playerMovementPlane = new Plane (character.up, Vector3(character.position.x,0,character.position.z) + character.up * cursorPlaneHeight);
@@ -95,13 +97,38 @@ function OnSetVisible(visi:boolean){
 	ws[curWeapon].SetEnable(visi);
 }
 
+public var autoShoot:AutoShoot;
+private var autoShootAllow:boolean=true;
+private var leaning:boolean;
+function Lean(){
+	if (leaning) return;
+	leaning = true;
+	autoShoot.enabled = false;
+	WeaponStopFire();
+}
+
+function ExitLean(){
+	if (!leaning) return;
+	leaning = false;
+	autoShoot.enabled = autoShootAllow;
+}
+
 function WeaponStartFire(pos:Vector3){
+	//Debug.Log("Fire!!");
 	manualFire = true;
 	manualPos = pos;
+	//manualPos.y = transform.position.y;
+	if (controllable){
+		GetComponent(PlayerMoveController).disableRotation = true;
+	}
 }
 
 function WeaponStopFire(){
 	manualFire = false;
+	//Debug.Log("Stop fire");
+	if (controllable){
+		GetComponent(PlayerMoveController).disableRotation = false;
+	}
 }
 
 function Start(){
@@ -130,7 +157,7 @@ function Update () {
 	//wait for the character rotation to trigger the attack on Fire1 or Fire2 axis possitive
 	var angle:float;
 	oldIsFiring = isFiring;
-	if (!controllable){
+	if ((!controllable)||manualFire){
 		isFiring = manualFire;
 		if (manualFire) cursorWorldPosition = manualPos;
 	}else{
@@ -144,7 +171,7 @@ function Update () {
 			cursorWorldPosition = ScreenPointToWorldPointOnPlane (cursorScreenPosition, playerMovementPlane, Camera.main);
 	
 			var fireAlt:float = Input.GetAxis("Fire1");
-			isFiring = fireAlt>=1;
+			isFiring = (fireAlt>=1);
 		#endif
 		if (weapon.needPositionUpdate){
 			weapon.gameObject.SendMessage("OnUpdateTarget", cursorWorldPosition);
@@ -173,7 +200,8 @@ function Update () {
 	}
 	var fromV:Vector3 = transform.rotation * Vector3.forward;
 	var toV:Vector3 = cursorWorldPosition - transform.position;
-	toV.y = fromV.y;
+	fromV.y = 0;
+	toV.y = 0;
 	var quat: Quaternion = Quaternion.FromToRotation( fromV, toV);
 	var axis:Vector3;
 	quat.ToAngleAxis(angle, axis);
@@ -271,6 +299,10 @@ function RPCWeaponSwitch(newWeapon:int){
 	if (GetComponent.<Visibility>().GetVisible())
 		ws[newWeapon].SetEnable(true);
 	curWeapon = newWeapon;
+	autoShootAllow = ws[newWeapon].playerAutoShoot;
+	
+	if (controllable)
+		autoShoot.enabled = autoShootAllow;
 	
 	#if UNITY_IPHONE || UNITY_ANDROID
 		if (networkView.isMine){

@@ -104,7 +104,7 @@ function Lean(){
 	if (leaning) return;
 	leaning = true;
 	autoShoot.enabled = false;
-	WeaponStopFire();
+	manualFire = false;
 }
 
 function ExitLean(){

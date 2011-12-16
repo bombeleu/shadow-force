@@ -5,6 +5,8 @@ private var spawnPoint:Transform;
 private var raycast: PerFrameRaycast;
 private var bulletPrefab: GameObject;
 
+private var myTeam;
+
 function Awake(){
 	spawnPoint = GetComponent.<Weapon>().spawnPoint;
 	raycast = gameObject.GetComponentInChildren.<PerFrameRaycast>();
@@ -26,7 +28,7 @@ function OnLaunchBullet(){
 		flatten_normal.y = 0;
 		//Camera.main.GetComponent.<ConnectionGUI>().CreateStickyCam(Network.AllocateViewID(), pos, Quaternion.LookRotation(flatten_normal), Camera.main.GetComponent.<Team>().team);
 		ConnectionGUI.CreateTeamObject(bulletPrefab, Network.AllocateViewID(), pos, Quaternion.LookRotation(flatten_normal), 
-			Camera.main.GetComponent.<Team>().team);
+			LineOfSight.myTeam);
 	}
 }
 

@@ -38,7 +38,7 @@ class ConnectionGUI extends ScreenGUI{
 		}
 		
 		Physics.IgnoreLayerCollision(0, 11, true);//default vs playertrigger
-		Physics.IgnoreLayerCollision(8, 11, true);//player vs playertrigger
+		Physics.IgnoreLayerCollision(8, 22, true);//player vs smoke
 		Physics.IgnoreLayerCollision(19, 20, true);//projectile vs fence
 	}
 	

@@ -36,7 +36,7 @@ private var allBlockers : GameObject[];
 public static var Instance : BlockerManager;
 
 // Use this for initialization
-function Start () {
+function Awake () {//should be awake instead of Start, to use AddBlocker in Start of other scripts
 	CELL_SIZE = MAP_SIZE/NUM_TILES;
 	Debug.Log(CELL_SIZE + " ---- " + MAP_SIZE);
 	for (var i : int = 0 ; i < NUM_TILES; i++)

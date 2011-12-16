@@ -2,7 +2,7 @@
 @script RequireComponent (Collider)
 
 //private var blockerManager: BlockerManager;
-function Awake(){
+function Start(){
 	//blockerManager = GameObject.FindObjectOfType(BlockerManager);
 	BlockerManager.Instance.AddBlocker(gameObject);
 	//collider.enabled = false;

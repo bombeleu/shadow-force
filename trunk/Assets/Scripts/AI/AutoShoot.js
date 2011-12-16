@@ -58,9 +58,17 @@ function Update(){
 			tarPos = (i as Visibility).transform.position;
 			break;
 		}
-		var targetV:Vector3 = (tarPos - transform.position).normalized;
-		motor.facingDirection = targetV;
+		var targetV:Vector3 = tarPos - transform.position;
 		//motor.movementDirection = Vector3.zero;//targetV;
-		weaponManager.WeaponStartFire(tarPos);
+		var weapon:Weapon = weaponManager.GetCurrentWeapon();
+		var shoot:boolean = false;
+		if (weapon.hasRange){
+			if (targetV.magnitude <= weapon.range)
+				shoot = true;
+		}else shoot = true;
+		if (shoot){
+			motor.facingDirection = targetV.normalized;
+			weaponManager.WeaponStartFire(tarPos);
+		}
 	}
 }

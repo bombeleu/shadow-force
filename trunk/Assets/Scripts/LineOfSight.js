@@ -30,7 +30,7 @@ function CheckObserver(seer:Observer, viobj:Visibility):boolean{
 
 		if (local_visi){//check occluder
 			var hitInfo = RaycastHit ();
-			Physics.Raycast (seer.transform.position, dir, hitInfo, seer.range, layerMask.value);
+			Physics.Raycast (seer.transform.position, dir, hitInfo, seer.range, layerMask);
 			if (hitInfo.transform && hitInfo.distance < target_dist){
 				/*var target : Visibility = hitInfo.transform.GetComponent.<Visibility> ();
 				local_visi = target == viobj;*///this code is used to check player occlusion

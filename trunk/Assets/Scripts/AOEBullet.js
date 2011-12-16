@@ -1,31 +1,51 @@
 #pragma strict
 @script RequireComponent (Weapon)
+@script RequireComponent (ShotgunBullet)
 
 public var damage : float = 100.0;
+public var hitLayers: LayerMask;
+public var blockLayers: LayerMask;
 
 private var spawnPoint:Transform;
+private var wp:Weapon;
+private var shotgun:ShotgunBullet;
 
 function Awake(){
-	spawnPoint = GetComponent.<Weapon>().spawnPoint;
+	wp = GetComponent(Weapon);
+	spawnPoint = wp.spawnPoint;
+	shotgun = GetComponent(ShotgunBullet);
 }
 
 function OnLaunchBullet(){
-	var hitInfo : RaycastHit = gameObject.GetComponentInChildren.<PerFrameRaycast>().GetHitInfo();
-	
-	if (hitInfo.transform) {
-		// Get the health component of the target if any
-		var targetHealth : Health = hitInfo.transform.GetComponent.<Health> ();
-		if (targetHealth) {
-			// Apply damage
-			if (networkView.isMine){//only apply damage if this is MY character!
-				hitInfo.transform.networkView.RPC("OnDamage", RPCMode.All, 
-					[damage, -spawnPoint.forward]);
+	if (networkView.isMine){//check for instant damage
+		var cols:Collider[] = Physics.OverlapSphere(transform.position, wp.range, hitLayers);//not cast from gunpoint --> prevent through wall shooting
+		var myHealth:Health = wp.owner.GetComponent(Health);
+		for (var col:Collider in cols){
+			var targetHealth : Health = col.GetComponent(Health);
+			if (targetHealth && targetHealth!=myHealth) {
+				//check for angle
+				var forwardV:Vector3 = wp.owner.transform.forward;
+				var toV:Vector3 = col.transform.position - spawnPoint.position;
+				toV.y=0;
+				var angle:float = Quaternion.FromToRotation(forwardV, toV).eulerAngles.y;
+				if (angle>=270) angle = 360-angle;
+				//Debug.Log("shotgun angle: "+angle);
+				if (angle<shotgun.angle){
+					//check for occluder
+					//var hitInfo:RaycastHit;
+					if (!Physics.Raycast(transform.position, toV, wp.range, blockLayers)){
+						// Apply damage
+						col.networkView.RPC("OnDamage", RPCMode.All, 
+							[damage, -spawnPoint.forward]);
+					}
+					//Debug.Log(hitInfo.transform);
+					//Debug.Log(spawnPoint.position);
+				}
 			}
 		}
 	}
 	SendMessage("OnStopFiring");
 }
-
 
 function Update(){
 }

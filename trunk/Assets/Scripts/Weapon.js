@@ -10,6 +10,8 @@ public var bulletPrefab: GameObject;
 public var spawnPoint : Transform;
 public var switchTime : float = 1;
 public var playerAutoShoot: boolean = false;
+public var hasRange: boolean = false;
+public var range: float = 0;
 
 @HideInInspector
 public var owner: Transform;

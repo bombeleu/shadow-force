@@ -97,6 +97,10 @@ function OnSetVisible(visi:boolean){
 	ws[curWeapon].SetEnable(visi);
 }
 
+function GetCurrentWeapon():Weapon{
+	return ws[curWeapon];
+}
+
 public var autoShoot:AutoShoot;
 private var autoShootAllow:boolean=true;
 private var leaning:boolean;
@@ -198,7 +202,7 @@ function Update () {
 			RPCWeaponSwitch((curWeapon+1)%ws.length);//use networkView to control weapon sync
 		}
 	}
-	var fromV:Vector3 = transform.rotation * Vector3.forward;
+	var fromV:Vector3 = transform.forward;
 	var toV:Vector3 = cursorWorldPosition - transform.position;
 	fromV.y = 0;
 	toV.y = 0;

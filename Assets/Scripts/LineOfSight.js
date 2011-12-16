@@ -52,26 +52,18 @@ function CheckObserver(seer:Observer, viobj:Visibility):boolean{
 	return local_visi;
 }
 
-public var myTeam:int;
+public static var myTeam:int;
 
 //public var visibleEnemies
 
-private var doneReveal:boolean = false;
 function Update () {
 	//myTeam = GetComponent.<Team>().team;
-	//Debug.DrawLine(new Vector3(-5,0,13), new Vector3(-5,10,13), Color.white, 0);
-	//var players = GameObject.FindGameObjectsWithTag ("Player");
 	var visiobjs : Visibility[]= GameObject.FindObjectsOfType(Visibility) as Visibility[];
 	if (revealAll){
-		if (!doneReveal){
-			for (var viobj in visiobjs){
-				viobj.SetVisible(true);
-			}
-			doneReveal = true;
+		for (var viobj in visiobjs){
+			viobj.SetVisible(true);
 		}
 		return;
-	}else{
-		doneReveal = false;
 	}
 	var players : Observer[] = GameObject.FindObjectsOfType(Observer) as Observer[];
 	
@@ -83,12 +75,7 @@ function Update () {
 		else
 			wantNoEvents.Push(wantEvent);		
 	}
-	
-	/*Debug.Log(players.length);
-	Debug.Log(wantEvents.length);
-	Debug.Log(wantNoEvents.length);*/
-	
-	//Debug.Log(players.GetLength());
+
 	for (var viobj in visiobjs){
 		if (!viobj.enabled) continue;
 		//var p = viobj.gameObject;
@@ -121,16 +108,5 @@ function Update () {
 		}
 		//if (!visi) Debug.Log('hidden', viobj);
 		viobj.SetVisible(visi);
-		/*
-		var rr = p.GetComponentsInChildren(Renderer);
-		for (var r:Renderer in rr){
-			r.enabled = visi;
-		}
-		var ll= p.GetComponentsInChildren(Light);
-		for (var l:Light in ll){
-			l.enabled = visi;
-		}//*/
-		//p.active = visi;
-		//Debug.Log("see "+visi, gameObject);
 	}
 }

@@ -54,6 +54,7 @@ function Update(){
 	}else{
 		firing = true;
 		var tarPos:Vector3;
+		tarPos.y = transform.position.y;
 		for (var i:Object in enemies.Values){
 			tarPos = (i as Visibility).transform.position;
 			break;

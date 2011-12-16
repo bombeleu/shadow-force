@@ -9,7 +9,7 @@ var activeCachedObjects : Hashtable;
 
 class ObjectCache {
 	var prefab : GameObject;
-	var cacheSize : int = 10;
+	var cacheSize : int = 40;
 	
 	private var objects : GameObject[];
 	private var cacheIndex : int = 0;

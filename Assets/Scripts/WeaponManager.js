@@ -121,7 +121,7 @@ function WeaponStartFire(pos:Vector3){
 	//Debug.Log("Fire!!");
 	manualFire = true;
 	manualPos = pos;
-	//manualPos.y = transform.position.y;
+	manualPos.y = transform.position.y;
 	if (controllable){
 		GetComponent(PlayerMoveController).disableRotation = true;
 	}

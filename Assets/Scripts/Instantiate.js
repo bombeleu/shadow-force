@@ -55,7 +55,7 @@ function OnGUI(){
 		var na:String = ConnectionGUI.na;
 		character.networkView.RPC("SetName", RPCMode.AllBuffered, na);
 				
-		GetComponent(LineOfSight).myTeam = te;
+		LineOfSight.myTeam = te;
 		//setCamera(character);	
 	}
 }

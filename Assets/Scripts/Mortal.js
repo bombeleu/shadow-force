@@ -3,12 +3,7 @@
 
 public var explosionPrefab : GameObject;
 
-function OnDead():void{
-	networkView.RPC("_OnDead", RPCMode.All);
-}
-
-@RPC
-function _OnDead():void{
+function OnDead():void{//this func is already called form an RPC, no need to do RPC
 	DestroyObject(gameObject);
 	Instantiate(explosionPrefab, transform.position, transform.rotation);
 }

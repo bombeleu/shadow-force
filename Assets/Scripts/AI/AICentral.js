@@ -15,6 +15,7 @@ function Update () {
 function OnDetectEnemy(enemy:Visibility){
 	//Debug.Log('see ya!');
 	patrolling = false;
+	patroller.enabled = false;
 	//var targetV:Vector3 = (enemy.transform.position - transform.position).normalized;
 	//motor.facingDirection = targetV;
 	motor.movementDirection = Vector3.zero;//targetV;

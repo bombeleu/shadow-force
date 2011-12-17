@@ -4,6 +4,7 @@ public var ragDoll : GameObject;
 public var rootRagDoll : GameObject;
 public var animationObject : GameObject;
 public var weaponHoldPoint : Transform;
+public var attachedObjects : GameObject[];
 public var debug : boolean;
 
 public var activated : boolean = false;
@@ -19,6 +20,7 @@ private function RecursiveIgnoreRagdollCollision(trans : Transform)
 	{
 		Physics.IgnoreCollision(trans.collider,gameObject.collider);
 		//Debug.Log(trans.collider);
+		trans.rigidbody.velocity = Vector3.zero;
 	}
 	for(var t : Transform in trans)
 	{
@@ -37,7 +39,7 @@ function Update ()
 		} else if (Input.GetKeyDown(KeyCode.H)) {
 			DieByForce(Vector3.back * 500.0);
 		} else if (Input.GetKeyDown(KeyCode.J)) {
-			//DieByExplosion(transform.position + Vector3(1,0,0));
+			DieByExplosion(1000f,transform.position + Vector3(3,0,0),20f);
 		} else if (Input.GetKeyDown(KeyCode.P)) {
 			var temp : VisibleBucket = GetComponent(VisibleBucket);
 			Debug.Log(temp);
@@ -71,6 +73,12 @@ public function ResetAnimation()
 	
 	// enable visiont mesh
 	gameObject.GetComponentInChildren.<VisionMeshScript>().TurnOn();
+	
+	// adjust blob
+	for (var go : GameObject in attachedObjects)
+	{
+		go.transform.parent = gameObject.transform;
+	}   
 }
 
 private function CopyTransforms(src : Transform, dest : Transform)
@@ -117,6 +125,7 @@ public function Die()
 	ragDoll.GetComponentInChildren.<SkinnedMeshRenderer>().enabled = true;
 	
 	RecursiveIgnoreRagdollCollision(ragDoll.transform);
+	gameObject.rigidbody.Sleep();
 	
 	// copy transforms
     CopyTransforms(animationObject.transform,ragDoll.transform);
@@ -131,20 +140,32 @@ public function Die()
 	    	wp.transform.parent = weaponHoldPoint;
 	    }
     }
+    // adjust blob
+	for (var go : GameObject in attachedObjects)
+	{
+		go.transform.parent = rootRagDoll.transform;
+	}    
+    
+   	//DestroyObject(animationObject);
+    //ragDoll.transform.parent = null;
+    
+    //Instantiate(ragDoll,ragDoll.transform.position, ragDoll.transform.rotation);
+    //Destroy(gameObject);
 }
 
-public function DieByForce(force : Vector3)
+public function DieByForce(force : Vector3) // absolute direction
 {
 	Die();
-	var go : GameObject = ragDoll.Find("Bip01");
-	Debug.Log(go);
 	
-	//ragDoll.Find("Bip01").rigidbody.AddForce(forceDir * force,ForceMode.Impulse);
-	//rootRagDoll.rigidbody.AddForce(force,ForceMode.Impulse);
+	rootRagDoll.rigidbody.AddForce(force,ForceMode.Impulse);
+	
+	// use this for relative force
+	//rootRagDoll.rigidbody.AddRelativeForce(force,ForceMode.Impulse);
 }
 
-public function DieByExplosion(explosionPos : Vector3, explolsionRadius : Vector3)
+public function DieByExplosion(force : float, explosionPos : Vector3, explosionRadius : float)
 {
 	Die();
-	//rootRagDoll.rigidbody.AddExplosionForce(forceDir*force,explosionPos,explosioRadius,2.0,ForceMode.Impulse);
+	//rootRagDoll.rigidbody.AddExplosionForce(
+	rootRagDoll.rigidbody.AddExplosionForce(force,explosionPos,explosionRadius,10.0,ForceMode.Impulse);
 }

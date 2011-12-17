@@ -79,7 +79,7 @@ function OnCollisionEnter(collision : Collision) {
 	if (targetHealth) {
 		if (targetHealth.networkView.isMine){//only apply damage if it hits MY character!
 			targetHealth.transform.networkView.RPC("OnDamage", RPCMode.All, 
-				[damageAmount, -transform.forward]);
+				[damageAmount, -transform.forward*5]);
 		}
 		Explode();
 		return;

@@ -36,7 +36,7 @@ function OnLaunchBullet(){
 					if (!Physics.Raycast(transform.position, toV, wp.range, blockLayers)){
 						// Apply damage
 						col.networkView.RPC("OnDamage", RPCMode.All, 
-							[damage, -spawnPoint.forward]);
+							[damage, -wp.owner.transform.forward*7]);
 					}
 					//Debug.Log(hitInfo.transform);
 					//Debug.Log(spawnPoint.position);

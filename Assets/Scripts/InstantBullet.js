@@ -7,9 +7,10 @@ private var interval:float;
 
 private var lastFireTime : float = -1;
 private var spawnPoint:Transform;
-
+private var weapon:Weapon;
 function Awake(){
-	spawnPoint = GetComponent.<Weapon>().spawnPoint;
+	weapon = GetComponent(Weapon);
+	spawnPoint = weapon.spawnPoint;
 	frequency = Network.sendRate;
 	interval = 1/frequency;
 }
@@ -26,7 +27,7 @@ function OnLaunchBullet(){
 				// Apply damage
 				if (networkView.isMine){//only apply damage if this is MY character!
 					hitInfo.transform.networkView.RPC("OnDamage", RPCMode.All, 
-						[damagePerSecond / frequency, -spawnPoint.forward]);
+						[damagePerSecond / frequency, -weapon.owner.transform.forward*2]);
 				}
 			}
 		}

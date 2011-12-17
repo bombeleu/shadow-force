@@ -155,12 +155,17 @@ public function Die()
 
 public function DieByForce(force : Vector3) // absolute direction
 {
+	Debug.Log("die force"+force);
 	Die();
 	
 	rootRagDoll.rigidbody.AddForce(force,ForceMode.Impulse);
 	
 	// use this for relative force
 	//rootRagDoll.rigidbody.AddRelativeForce(force,ForceMode.Impulse);
+}
+
+public function DieSignal():void{
+	DieByForce(GetComponent(Health).damageForce*100);
 }
 
 public function DieByExplosion(force : float, explosionPos : Vector3, explosionRadius : float)

@@ -44,6 +44,9 @@ function Awake () {
 	}
 }
 
+@HideInInspector
+public var damageForce:Vector3;
+
 @RPC
 function OnDamage (amount : float, fromDirection : Vector3) {
 	// Take no damage if invincible, dead, or if the damage is zero
@@ -53,6 +56,8 @@ function OnDamage (amount : float, fromDirection : Vector3) {
 		return;
 	if (amount <= 0)
 		return;
+	
+	damageForce = -fromDirection;
 	
 	// Decrease health by damage and send damage signals
 	

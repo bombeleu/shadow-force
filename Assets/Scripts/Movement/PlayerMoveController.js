@@ -197,10 +197,12 @@ function Update () {
 		var wm:WeaponManager = GetComponent.<WeaponManager>();
 		//Debug.Log(wm);
 		//Debug.Log(joystickRight.position.sqrMagnitude);
-		if (joystickRight.position.sqrMagnitude > 4){
-			wm.OnStartFire();
-		}else{
-			wm.OnStopFire();
+		if (!MainMenu.useAutoAim){
+			if (joystickRight.position.sqrMagnitude > 4){
+				wm.OnStartFire();
+			}else{
+				wm.OnStopFire();
+			}
 		}
 		wm.OnUpdateTarget(joystickRight.position);	
 	#else

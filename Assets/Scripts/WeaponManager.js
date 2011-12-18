@@ -89,6 +89,7 @@ private var oldIsFiring: boolean = false;
 private var joystickPos:Vector3;
 
 private var manualFire:boolean = false;
+private var hasPos:boolean;
 private var manualPos:Vector3;
 
 function OnSetVisible(visi:boolean){
@@ -120,6 +121,7 @@ function ExitLean(){
 function WeaponStartFire(pos:Vector3){
 	//Debug.Log("Fire!!");
 	manualFire = true;
+	hasPos = true;
 	manualPos = pos;
 	manualPos.y = transform.position.y;
 	if (controllable){
@@ -163,7 +165,7 @@ function Update () {
 	oldIsFiring = isFiring;
 	if ((!controllable)||manualFire){
 		isFiring = manualFire;
-		if (manualFire) cursorWorldPosition = manualPos;
+		if (manualFire && hasPos) cursorWorldPosition = manualPos;
 	}else{
 		#if UNITY_IPHONE || UNITY_ANDROID
 			//angle = 0;//TODO: compute angle base on the different between angle and joystick
@@ -244,6 +246,7 @@ function Update () {
 	}
 }
 
+private var buttonFire:boolean = false;
 function OnGUI(){
 	if (!networkView.isMine || !controllable) return;
 	var btnRect : Rect;
@@ -254,6 +257,24 @@ function OnGUI(){
 	
 	if (GUI.Button(btnRect, "switch")){
 		weaponSwitchGUI = true;
+	}
+	
+	if (MainMenu.useAutoAim && (!ws[curWeapon].playerAutoShoot)){
+		btnRect.x = Screen.width - Screen.height*0.1;
+		btnRect.width = 0.1*Screen.height;
+		btnRect.y = 0.9*Screen.height;
+		btnRect.height = 0.1*Screen.height;
+		
+		if (GUI.Button(btnRect, "shoot!")){
+			manualFire = true;
+			hasPos = false;
+			buttonFire = true;
+		}else{
+			if (buttonFire){
+				manualFire = false;
+				buttonFire = false;
+			}
+		}
 	}
 }
 

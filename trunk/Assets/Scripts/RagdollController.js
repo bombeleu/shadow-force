@@ -150,6 +150,7 @@ public function Die()
     //destroy the object, will recreate at respawn
     ragDoll.transform.parent = null;
     DestroyObject(gameObject);
+    ragDoll.SendMessage("OnRestart", SendMessageOptions.DontRequireReceiver);//so that player can restart
     
    	//DestroyObject(animationObject);
     //ragDoll.transform.parent = null;

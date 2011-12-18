@@ -151,6 +151,9 @@ public function Die()
     
     //Instantiate(ragDoll,ragDoll.transform.position, ragDoll.transform.rotation);
     //Destroy(gameObject);
+    
+    // disable player control
+    GetComponent(PlayerMoveController).enabled = false;
 }
 
 public function DieByForce(force : Vector3) // absolute direction

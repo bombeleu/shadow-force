@@ -45,6 +45,10 @@ class SelectWeaponGUI extends ScreenGUI{
 		if (GUILayout.Button("Turret"))
 		{
 			ChooseWeapon(5);
+		}
+		if (GUILayout.Button("SmokeGrenade"))
+		{
+			ChooseWeapon(6);
 		}	
 	}
 	function ChooseWeapon(weaponID : int)

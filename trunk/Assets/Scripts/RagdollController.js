@@ -170,6 +170,7 @@ public function DieByForce(force : Vector3) // absolute direction
 public function DieSignal():void{
 	DieByForce(GetComponent(Health).damageForce*100);
 	GetComponent(PlayerMoveController).enabled = false;//TODO:re-enable on respawn!
+	GetComponent(MovementMotor).movementDirection = Vector3.zero;
 }
 
 public function DieByExplosion(force : float, explosionPos : Vector3, explosionRadius : float)

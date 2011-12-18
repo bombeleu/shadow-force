@@ -42,3 +42,17 @@ function SetEnable(b:boolean){
 		}
 	}
 }
+
+public function SetDead(){
+	setDeadRecursive(transform);
+}
+
+private function setDeadRecursive(t:Transform){
+	var coms:Component[] = t.GetComponents(Component);
+	for (var com:Component in coms){
+		if (com as Renderer !=null) Destroy(com);
+	}
+	for (var child:Transform in t){
+		setDeadRecursive(child);
+	}
+}

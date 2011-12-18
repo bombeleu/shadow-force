@@ -137,6 +137,7 @@ public function Die()
 	    for (var wp : Weapon in weapons)
 	    {
 	    	Debug.Log(wp);
+	    	wp.SetDead();
 	    	wp.transform.parent = weaponHoldPoint;
 	    }
     }
@@ -146,6 +147,10 @@ public function Die()
 		go.transform.parent = rootRagDoll.transform;
 	}    
     
+    //destroy the object, will recreate at respawn
+    ragDoll.transform.parent = null;
+    DestroyObject(gameObject);
+    
    	//DestroyObject(animationObject);
     //ragDoll.transform.parent = null;
     
@@ -153,7 +158,7 @@ public function Die()
     //Destroy(gameObject);
     
     // disable player control
-    GetComponent(PlayerMoveController).enabled = false;
+    //GetComponent(PlayerMoveController).enabled = false;
 }
 
 public function DieByForce(force : Vector3) // absolute direction
@@ -168,9 +173,17 @@ public function DieByForce(force : Vector3) // absolute direction
 }
 
 public function DieSignal():void{
+	/*if (GetComponent(PlayerMoveController))
+		GetComponent(PlayerMoveController).enabled = false;//TODO:re-enable on respawn!
+	if (GetComponent(AICentral))
+		GetComponent(AICentral).enabled = false;
+	if (GetComponent(AutoShoot))
+		GetComponent(AutoShoot).enabled = false;
+
+	GetComponent(MovementMotor).movementDirection = Vector3.zero;*/
+	
 	DieByForce(GetComponent(Health).damageForce*100);
-	GetComponent(PlayerMoveController).enabled = false;//TODO:re-enable on respawn!
-	GetComponent(MovementMotor).movementDirection = Vector3.zero;
+
 }
 
 public function DieByExplosion(force : float, explosionPos : Vector3, explosionRadius : float)

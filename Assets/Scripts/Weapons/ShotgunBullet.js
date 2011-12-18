@@ -2,7 +2,7 @@
 @script RequireComponent (Weapon)
 @script RequireComponent (NetworkView)
 
-public var muzzleFlashFront : GameObject;
+public var fireEffect : Transform;
 public var raycast: PerFrameRaycast;
 public var numBullets : int  = 5;
 public var angle : float = 15;
@@ -19,7 +19,6 @@ function Awake(){
 	spawnPoint = wp.spawnPoint;
 	bulletPrefab = wp.bulletPrefab;
 	
-	muzzleFlashFront.active = false;
 }
 
 function Start(){
@@ -33,8 +32,7 @@ function OnLaunchBullet(){
 @RPC
 function EnableFiring(){
 	firing = true;
-	muzzleFlashFront.active = true;
-
+	Instantiate(fireEffect,spawnPoint.position,Quaternion.identity);
 	for (var i : int = 0 ; i < numBullets; i++)
 	{
 		var go : GameObject = Spawner.Spawn (bulletPrefab, spawnPoint.position, wp.owner.transform.rotation) as GameObject;
@@ -55,5 +53,4 @@ function OnStopFiring(){
 @RPC
 function DisableFiring(){
 	firing = false;
-	muzzleFlashFront.active = false;
 }

@@ -6,6 +6,7 @@ public var timeTillDie : float = 0.5;
 private var _triggered : boolean = false;
 private var _impactPosition : Vector3;
 
+/*
 function Update () {
 	if (_triggered)
 	{
@@ -16,10 +17,15 @@ function Update () {
 			Spawner.Destroy (gameObject);
 		}
 	}
-}
+}*/
 
 function OnCollisionEnter(collision : Collision) {
-	Spawner.Spawn (explosionPrefab, transform.position, Quaternion.identity/*transform.rotation*/);
-	_impactPosition = transform.position;
-	_triggered = true;
+	/*	
+	if (!_triggered){
+		Spawner.Spawn (explosionPrefab, transform.position, Quaternion.identity);
+		_impactPosition = transform.position;
+		_triggered = true;
+	}*/
+	Instantiate (explosionPrefab, transform.position, Quaternion.identity);
+	DestroyObject(gameObject);
 }

@@ -130,7 +130,8 @@ public function Die()
 	// copy transforms
     CopyTransforms(animationObject.transform,ragDoll.transform);
 
-    // detach weapon
+    // detach weapon	//TODO: enable it after fix Weapon.SetDead
+    /*
     var weapons : Weapon[] = gameObject.GetComponentsInChildren.<Weapon>();
     if (weaponHoldPoint)
     {
@@ -140,7 +141,7 @@ public function Die()
 	    	wp.SetDead();
 	    	wp.transform.parent = weaponHoldPoint;
 	    }
-    }
+    }*/
     // adjust blob
 	for (var go : GameObject in attachedObjects)
 	{

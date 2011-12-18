@@ -224,7 +224,7 @@ function Update () {
 			altFireTimer = Time.time;
 			if (weapon.needPosition){
 				weapon.gameObject.SendMessage("OnLaunchBullet", cursorWorldPosition);
-				isFiring = false;
+				//isFiring = false;
 			}else{
 				weapon.gameObject.SendMessage("OnLaunchBullet");
 			}

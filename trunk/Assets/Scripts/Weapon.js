@@ -48,9 +48,10 @@ public function SetDead(){
 }
 
 private function setDeadRecursive(t:Transform){
+	if (t.GetComponent(TrajectoryRenderer)) Destroy(t.GetComponent(TrajectoryRenderer));//TODO: rewrite
 	var coms:Component[] = t.GetComponents(Component);
 	for (var com:Component in coms){
-		if (com as Renderer !=null) Destroy(com);
+		if (((com as Renderer) !=null)&&((com as Transform) !=null)) Destroy(com);
 	}
 	for (var child:Transform in t){
 		setDeadRecursive(child);

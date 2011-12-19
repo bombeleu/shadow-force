@@ -1,11 +1,4 @@
-/*
-In unity 3.2 access to the Ellipsoid Range is not available.
 
-So if you use this script, please change the Ellipsoid Range by hand. 
-If you dont change the variable the FX might not look there best. 
-
-Thank you!
-*/
 
 var particleEmitters : ParticleEmitter[];
 var scale : float= 1;
@@ -36,9 +29,15 @@ private var scaleBackUp : Vector3[];
 
 @SerializeField
 @HideInInspector
-private var firstUpdate = true;
+public var firstUpdate = true;
+
+
+function Start() {
+	firstUpdate = true;
+}
 
 function UpdateScale () {   
+	
     var length = particleEmitters.length;
     
     if(firstUpdate == true){
@@ -49,9 +48,9 @@ function UpdateScale () {
    	rndvelocity = new Vector3[length];
     scaleBackUp = new Vector3[length];
     }
-      
-   
-    for (i = 0; i < particleEmitters.length; i++) { 
+  
+    
+    for (var i : int = 0; i < particleEmitters.length; i++) { 
     	if(firstUpdate == true){
            	minsize[i] = particleEmitters[i].minSize;
         	maxsize[i] = particleEmitters[i].maxSize;

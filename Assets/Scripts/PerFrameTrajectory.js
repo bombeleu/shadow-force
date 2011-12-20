@@ -1,7 +1,7 @@
 #pragma strict
 @script RequireComponent (Weapon)
 
-public var wallHeight:float = 4;
+public var heightOffset:float = 0.5;
 public var travelTime:float = 1.5;
 public var raycast:PerFrameRaycast;
 
@@ -31,12 +31,44 @@ function Compute(){
 	var g:float = Physics.gravity.magnitude;
 	
 	var hitInfo : RaycastHit = raycast.GetHitInfo();
-	var h : float = wallHeight;
+	var h : float;// = wallHeight;
 	
 	var k : float;
-	if (hitInfo.transform)
-		k = hitInfo.distance>d?1:(d / hitInfo.distance);
-	else
+	if (hitInfo.transform){
+		if (hitInfo.distance > d){//no obstacle on the way
+			k = 1;
+		}else{//has obstacle
+			k = d / hitInfo.distance;
+			if (hitInfo.collider as BoxCollider != null){//obstacle is a box
+				var box:BoxCollider = hitInfo.collider as BoxCollider;
+				h = box.transform.position.y + box.extents.y * box.transform.localScale.y - hitInfo.point.y //TODO: use correct scale
+					+ heightOffset;
+				/*if (k < 2){ //obstacle on the falling part of the parabol, use the other edge instead
+					var localP:Vector3 = box.transform.worldToLocalMatrix.MultiplyPoint(hitInfo.point);
+					localP.Scale(box.transform.localScale);//TODO: use correct scale
+					k = d / (hitInfo.distance + localP.magnitude * 2);
+					if (k < 1) k = 1;
+					Debug.Log(localP+"_"+localP.magnitude+"_"+box.transform.localScale);
+				}*/
+				//Debug.Log("trajectory height: "+h);
+			}else if (hitInfo.collider as CapsuleCollider != null){
+				var cap:CapsuleCollider = hitInfo.collider as CapsuleCollider;
+				h = cap.transform.position.y + cap.height*0.5 * cap.transform.localScale.y - hitInfo.point.y //TODO: use correct scale
+					+ heightOffset;
+				if (k < 2){ //obstacle on the falling part of the parabol, use the other edge instead
+					var maxScale:float = hitInfo.transform.localScale.x;
+					if (maxScale < hitInfo.transform.localScale.z)
+						maxScale = hitInfo.transform.localScale.z;//TODO: use correct scale
+					k = d / (hitInfo.distance + cap.radius * maxScale * 2);
+					if (k < 1) k = 1;
+				}
+				//Debug.Log("trajectory height capsule: "+h);
+			}else{
+				h = 5;
+				Debug.Log("trajectory: this collider type is not supported!");
+			}
+		}
+	}else
 		k = 1;
 
 	var v_x:float;

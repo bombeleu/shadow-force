@@ -1,5 +1,5 @@
 fileFormatVersion: 1
-guid: 62ce0fae5f3000e42b76fc592b7930f6
+guid: 01c076476afe04100adbd59a58e337eb
 TextureImporter:
   importerVersion: 2
   maxTextureSize: 64
@@ -15,7 +15,7 @@ TextureImporter:
     border: 0
     filter: 0
     fadeout: 0
-    fadeoutStart: 1
+    fadeoutStart: 2
     fadeoutEnd: 3
   bumpmap:
     generation: 0

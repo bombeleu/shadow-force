@@ -79,6 +79,16 @@ public function ResetAnimation()
 	{
 		go.transform.parent = gameObject.transform;
 	}   
+	
+	var weapons : Weapon[] = gameObject.GetComponentsInChildren.<Weapon>();
+    if (weaponHoldPoint)
+    {
+	    for (var wp : Weapon in weapons)
+	    {
+	    	wp.SetDead();
+	    	wp.transform.parent = gameObject.transform;
+	    }
+    }
 }
 
 private function CopyTransforms(src : Transform, dest : Transform)

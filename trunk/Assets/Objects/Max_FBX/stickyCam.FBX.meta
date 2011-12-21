@@ -1,0 +1,89 @@
+fileFormatVersion: 1
+guid: 63ac1f5012fd5c145acc0f5ffb124503
+ModelImporter:
+  importerVersion: 7
+  meshes:
+    scaleFactor: 0.01
+    useFileUnits: 1
+    meshCompression: 0
+    generateColliders: 0
+    swapUVs: 0
+  tangentSpace:
+    normalImportMode: 0
+    tangentImportMode: 1
+    smoothingAngle: 60
+    splitTangents: 1
+  materials:
+    generation: 1
+  animations:
+    generation: 3
+    bakeAnimations: 0
+    animationCompression: 1
+    animationWrapMode: 0
+    splitAnimations: 1
+    clips:
+      idle:
+        firstFrame: 0
+        lastFrame: 5
+        loop: 0
+        wrapMode: 0
+      deploy:
+        firstFrame: 6
+        lastFrame: 16
+        loop: 0
+        wrapMode: 0
+  nodeInfo:
+    IK Chain03:
+    - 100000
+    - 400000
+    IK Chain02:
+    - 100002
+    - 400002
+    Bone10:
+    - 100004
+    - 400004
+    - 13700000
+    Bone08:
+    - 100006
+    - 400006
+    Bone07:
+    - 100008
+    - 400008
+    Bone06:
+    - 100010
+    - 400010
+    Bone05:
+    - 100012
+    - 400012
+    Bone04:
+    - 100014
+    - 400014
+    Spindle01:
+    - 100016
+    - 400016
+    Bone03:
+    - 100018
+    - 400018
+    IK Chain01:
+    - 100020
+    - 400020
+    //RootNode:
+    - 100022
+    - 400022
+    - 11100000
+    Bone02:
+    - 100024
+    - 400024
+    Bone01:
+    - 100026
+    - 400026
+    Bone09:
+    - 100028
+    - 400028
+AssetImporter:
+  importerVersion: 1
+  fileIDToRecycleName:
+    4300000: Spindle01
+    7400000: Take 001 //// stickyCam
+    7400002: idle //// stickyCam
+    7400004: deploy //// stickyCam

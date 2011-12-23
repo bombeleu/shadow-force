@@ -23,6 +23,10 @@ private var damageEffectCenterYOffset : float;
 
 private var colliderRadiusHeuristic : float = 1.0;
 
+public var healthBgTexture : Texture;
+public var healthFgTexture : Texture;
+public var healthBarWidth : int = 50;
+private var visibiltyComp : Visibility;
 
 function Awake () {
 	enabled = false;
@@ -42,6 +46,7 @@ function Awake () {
 		scorchMark = GameObject.Instantiate(scorchMarkPrefab, Vector3.zero, Quaternion.identity);
 		scorchMark.active = false;
 	}
+	visibiltyComp = gameObject.GetComponent(Visibility);
 }
 
 @HideInInspector
@@ -140,4 +145,15 @@ function Regenerate () {
 			yield WaitForSeconds (1.0f);
 		}
 	}
+}
+
+function OnGUI()
+{
+	if (!healthBgTexture || !healthFgTexture) return ;
+	if (!visibiltyComp.GetVisible()) return;
+	var screenPos : Vector2 = Camera.main.WorldToScreenPoint(gameObject.transform.position );
+	// draw background
+	
+	GUI.DrawTexture(new Rect(screenPos.x,Screen.height - screenPos.y-25,healthBarWidth,10),healthBgTexture);
+	GUI.DrawTexture(new Rect(screenPos.x,Screen.height - screenPos.y-25,health/maxHealth * healthBarWidth,10),healthFgTexture);
 }

@@ -1,5 +1,5 @@
 #pragma strict
-@script RequireComponent (SphereCollider)
+@script RequireComponent (Collider)
 
 @HideInInspector
 public var velVector:Vector3;
@@ -16,11 +16,16 @@ static public var dodgerRadius : float = 1.5;//buffer size
 public var bounce:boolean = false;
 
 function Initialize(){
-	var sphereC = collider as SphereCollider;
+	var capsule = collider as CapsuleCollider;
 	var evadeTime : float = (affectRadius + dodgerRadius) / slowestDodgerVel;
-	sphereC.radius = evadeTime * velocity;
-	sphereC.isTrigger = true;
+	capsule.height = evadeTime * velocity;
+	capsule.radius = affectRadius;
+	capsule.isTrigger = true;
 
+	transform.localRotation = Quaternion.Euler(90, 0, 0);
+	transform.localPosition = Vector3(0, 0, capsule.height*0.5);
+	//Debug.Log("capsule init");
+	
 	checkDistance = evadeTime * velocity;
 }
 
@@ -48,12 +53,12 @@ function OnTriggerStay (other : Collider) : void{
 		dir.y = 0;
 		var velN : Vector3 = velVector.normalized;
 		var dotN:float = Vector3.Dot(dir, velN);
-		if (dotN<0) return;
+		//if (dotN<0) return;
 		var offset:Vector3 = dir - velN*dotN;
 		var offsetM:float = offset.magnitude;
 		var affectDist:float = affectRadius + dodgerRadius + 0.5;
-		if (offsetM < affectDist){
-			ai.OnEvadeZone(offset.normalized*(affectDist-offsetM));
-		}
+		//if (offsetM < affectDist){
+		ai.OnEvadeZone(offset.normalized*(affectDist-offsetM));
+		//}
 	}
 }

@@ -47,7 +47,7 @@ function Update(){
 */
 
 function OnTriggerStay (other : Collider) : void{
-	var ai : DodgingAI = other.GetComponent.<DodgingAI>();
+	var ai : DodgingAI = other.GetComponent(DodgingAI);
 	if (ai){
 		var dir:Vector3 = other.transform.position - transform.position;
 		dir.y = 0;
@@ -60,5 +60,11 @@ function OnTriggerStay (other : Collider) : void{
 		//if (offsetM < affectDist){
 		ai.OnEvadeZone(offset.normalized*(affectDist-offsetM));
 		//}
+	}
+	var blocker : BlockingAI = other.GetComponent(BlockingAI);
+	if (blocker){
+		var bdir:Vector3 = transform.up;
+		bdir.y = 0;
+		blocker.OnBlockZone(-bdir);
 	}
 }

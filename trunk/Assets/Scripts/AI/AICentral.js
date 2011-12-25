@@ -49,23 +49,29 @@ class AICentral extends DetectionAI{
 					motor.movementDirection = Vector3.zero;
 					talkAI.Say(TalkType.Shoot);
 				}else{
-					if (chaseAI && navigator.SetDestination(tarPos)){
-						//Debug.Log("find path");
-						lastTarget = tarPos;
-						chasing = true;
-						talkAI.Say(TalkType.Chase);
+					if (chaseAI){
+						if (navigator.SetDestination(tarPos)){
+							//Debug.Log("find path");
+							lastTarget = tarPos;
+							chasing = true;
+							talkAI.Say(TalkType.Chase);
+						}
+					}else{
+						talkAI.Say(TalkType.NotChase);
 					}
 				}
 			}else{
 				StopShoot();
-				if (shootingTarget!=null && chaseAI){
-					var tarP:Vector3 = shootingTarget.transform.position;
-					tarP.y = transform.position.y;
-				 	if (navigator.SetDestination(tarP)){
-						lastTarget = tarP;
-						chasing = true;
-						talkAI.Say(TalkType.Chase);
-					}
+				if (shootingTarget!=null){
+					if (chaseAI){
+						var tarP:Vector3 = shootingTarget.transform.position;
+						tarP.y = transform.position.y;
+					 	if (navigator.SetDestination(tarP)){
+							lastTarget = tarP;
+							chasing = true;
+							talkAI.Say(TalkType.Chase);
+						}
+					}else talkAI.Say(TalkType.NotChase);
 				}
 				motor.facingDirection = Vector3.zero;
 				if (!chasing) canPatrol = true;
@@ -93,6 +99,7 @@ class AICentral extends DetectionAI{
 					talkAI.Say(TalkType.Patrol);
 			}else{
 				motor.movementDirection = Vector3.zero;
+				talkAI.Say(TalkType.None);
 			}
 		}
 		//direction control

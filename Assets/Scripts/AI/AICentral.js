@@ -5,6 +5,7 @@ class AICentral extends DetectionAI{
 	
 	public var dodger:DodgingAI;
 	public var patroller:PatrolMoveController;
+	public var blocker:BlockingAI;
 	public var talkAI:TalkAI;
 	
 	public var chaseAI:boolean = false;
@@ -103,6 +104,10 @@ class AICentral extends DetectionAI{
 			}
 		}
 		//direction control
+		if (blocker && blocker.IsActive()){
+			motor.facingDirection = blocker.GetVector().normalized;
+			talkAI.Say(TalkType.Block);
+		}
 	}
 	
 	function RemoveEnemy(enemy:Visibility){

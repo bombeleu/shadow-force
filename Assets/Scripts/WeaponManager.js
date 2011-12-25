@@ -36,9 +36,17 @@ function OnEnable(){
 	}
 	if (hasShield){
 		var shield:Transform = Instantiate(shieldPrefab, Vector3.zero, Quaternion.identity);
+		Physics.IgnoreCollision(shield.collider, collider, true);
 		shield.parent = transform;
-		shield.localPosition = Vector3(0,0,1.4);
+		shield.localPosition = Vector3(0,0,0.8);//equal to radius, so that weapon can shoot out!
 		shield.localRotation = Quaternion.Euler(0, 180, 0);
+		var blocker:BlockingAI = gameObject.AddComponent(BlockingAI);
+		var dodger:DodgingAI = GetComponent(DodgingAI);
+		if (dodger) Destroy(dodger);
+		var ai:AICentral = GetComponent(AICentral);
+		if (ai){
+			ai.blocker = blocker;
+		}
 	}
 	if (controllable)
 		autoShoot.enabled = ws[0].playerAutoShoot;

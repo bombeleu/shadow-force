@@ -3,6 +3,7 @@
 //public var motor : FreeMovementMotor;
 
 private var escapeV : Vector3;
+private var finalV:Vector3;
 private var isActive:boolean = false;
 private var _isActive:boolean = false;
 
@@ -15,16 +16,19 @@ function OnEvadeZone(escapeDir:Vector3):void{
 	isActive = true;
 }
 
-function LateUpdate(){
+function FixedUpdate(){
+	//result is 1 frame late
+	finalV = escapeV;
+	_isActive = isActive;
+
 	escapeV = Vector3.zero;
-	//_isActive = isActive;
 	isActive = false;
 }
 
 function IsActive():boolean{
-	return isActive;
+	return _isActive;
 }
 
 function GetVector():Vector3{
-	return escapeV;
+	return finalV;
 }

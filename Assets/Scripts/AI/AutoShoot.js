@@ -4,6 +4,7 @@
 class AutoShoot extends DetectionAI{
 	public var weaponManager:WeaponManager;
 	public var motor : MovementMotor;
+	public var glassLayers:LayerMask;
 	
 	private var firing:boolean = false;
 	function Update(){
@@ -29,6 +30,10 @@ class AutoShoot extends DetectionAI{
 				if (targetV.magnitude <= weapon.range)
 					shoot = true;
 			}else shoot = true;
+			if (shoot && (!weapon.needPosition)){//check for glass
+				if (Physics.Raycast(transform.position, targetV, targetV.magnitude, glassLayers))
+					shoot = false;
+			}
 			if (shoot){
 				motor.facingDirection = targetV.normalized;
 				weaponManager.WeaponStartFire(tarPos);

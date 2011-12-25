@@ -5,6 +5,7 @@ class AICentral extends DetectionAI{
 	
 	public var dodger:DodgingAI;
 	public var patroller:PatrolMoveController;
+	public var talkAI:TalkAI;
 	
 	public var chaseAI:boolean = false;
 	public var shootAI:boolean = false;
@@ -23,16 +24,19 @@ class AICentral extends DetectionAI{
 	
 	private var chasing:boolean = false;
 	private var lastTarget:Vector3;
+	private var shootingTarget:Visibility;
 	function Update () {
 		//movement control
 		var canPatrol:boolean = false;
 		if (dodger && dodger.IsActive()){
 			motor.movementDirection = dodger.GetVector().normalized;
+			talkAI.Say(TalkType.Dodge);
 		}else if (shootAI){
 			if (enemies.Count>0){
 				var tarPos:Vector3;
-				for (var i:Object in enemies.Values){
-					tarPos = (i as Visibility).transform.position;
+				var target:Object;
+				for (target in enemies.Values){
+					tarPos = (target as Visibility).transform.position;
 					break;
 				}
 				tarPos.y = transform.position.y;
@@ -40,17 +44,30 @@ class AICentral extends DetectionAI{
 				motor.facingDirection = dir.normalized;
 				if (IsShootable(tarPos)){
 					chasing = false;
+					shootingTarget = target as Visibility;
 					Shoot(tarPos);
 					motor.movementDirection = Vector3.zero;
+					talkAI.Say(TalkType.Shoot);
 				}else{
-					if ((chaseAI) && navigator.SetDestination(tarPos)){
+					if (chaseAI && navigator.SetDestination(tarPos)){
 						//Debug.Log("find path");
 						lastTarget = tarPos;
 						chasing = true;
+						talkAI.Say(TalkType.Chase);
 					}
 				}
 			}else{
 				StopShoot();
+				if (shootingTarget!=null && chaseAI){
+					var tarP:Vector3 = shootingTarget.transform.position;
+					tarP.y = transform.position.y;
+				 	if (navigator.SetDestination(tarP)){
+						lastTarget = tarP;
+						chasing = true;
+						talkAI.Say(TalkType.Chase);
+					}
+				}
+				motor.facingDirection = Vector3.zero;
 				if (!chasing) canPatrol = true;
 			}
 			if (chasing){
@@ -69,6 +86,11 @@ class AICentral extends DetectionAI{
 		if (canPatrol){
 			if (patroller){
 				motor.movementDirection = patroller.GetVector().normalized;
+				
+				if (motor.movementDirection == Vector3.zero)
+					talkAI.Say(TalkType.None);
+				else 
+					talkAI.Say(TalkType.Patrol);
 			}else{
 				motor.movementDirection = Vector3.zero;
 			}
@@ -76,10 +98,19 @@ class AICentral extends DetectionAI{
 		//direction control
 	}
 	
+	function RemoveEnemy(enemy:Visibility){
+		super.RemoveEnemy(enemy);
+		if (enemy == shootingTarget){
+			chasing = false;
+			talkAI.Say(TalkType.Kill);
+		}
+	}
+	
 	public var weaponManager:WeaponManager;
 	
 	private var firing:boolean = false;
 	
+	public var glassLayers:LayerMask;
 	private function IsShootable(tarPos:Vector3):boolean{
 		tarPos.y = transform.position.y;
 		var targetV:Vector3 = tarPos - transform.position;
@@ -89,6 +120,10 @@ class AICentral extends DetectionAI{
 			if (targetV.magnitude <= weapon.range)
 				shoot = true;
 		}else shoot = true;
+		if (shoot && (!weapon.needPosition)){//check for glass
+			if (Physics.Raycast(transform.position, targetV, targetV.magnitude, glassLayers))
+				shoot = false;
+		}
 		return shoot;
 	}
 	

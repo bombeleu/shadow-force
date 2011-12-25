@@ -55,7 +55,13 @@ function OnCollisionEnter(collision : Collision) {
 	if (state!=State.Flying) return;
 	startTime = Time.time;
 	state = State.Initializing;
-	rigidbody.isKinematic = true;
+	
+	Destroy(rigidbody);
+	/*
+	rigidbody.velocity = Vector3.zero;
+	rigidbody.angularVelocity = Vector3.zero;
+	rigidbody.isKinematic = true;*/
+	
 	animationComponent.Play(initAnimation.name);
 	var normal:Vector3 = Vector3.zero;
 	for (var contact : ContactPoint in collision.contacts)
@@ -64,8 +70,12 @@ function OnCollisionEnter(collision : Collision) {
 	facingVec = normal;
 	facingVec.y = 0;
 	
-	if (!collision.collider.gameObject.isStatic)//stick to enemy!
+	if (!collision.collider.gameObject.isStatic){//stick to enemy!
 		transform.parent = collision.collider.transform;
+		/*var scale:Vector3 = transform.parent.transform.lossyScale;
+		Debug.Log("attach"+scale);
+		transform.localScale = Vector3(1/scale.x, 1/scale.y, 1/scale.z);*/
+	}
 	
 	/*
     // Debug-draw all contact points and normals

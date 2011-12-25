@@ -11,6 +11,9 @@ public var controllable:boolean = true;
 
 //public var weapons: MonoScript[];
 public var weapons: Weapon[];
+public var hasShield:boolean = false;
+public var shieldPrefab:Transform;
+
 private var curWeapon: int = 0;
 private var ws: Weapon[];
 
@@ -30,6 +33,12 @@ function OnEnable(){
 		if (networkView.isMine && ws[i].networkView)
 			networkView.RPC("RPCSetWeaponViewID", RPCMode.AllBuffered, [i, Network.AllocateViewID()]);
 		//ws[0] = go.GetComponent.<Weapon>();
+	}
+	if (hasShield){
+		var shield:Transform = Instantiate(shieldPrefab, Vector3.zero, Quaternion.identity);
+		shield.parent = transform;
+		shield.localPosition = Vector3(0,0,1.4);
+		shield.localRotation = Quaternion.Euler(0, 180, 0);
 	}
 	if (controllable)
 		autoShoot.enabled = ws[0].playerAutoShoot;

@@ -25,7 +25,7 @@ function OnLaunchBullet(){
 			if (targetHealth && targetHealth!=myHealth) {
 				//check for angle
 				var forwardV:Vector3 = wp.owner.transform.forward;
-				var toV:Vector3 = col.transform.position - wp.owner.transform.position;
+				var toV:Vector3 = col.transform.position - transform.position;
 				toV.y=0;
 				var angle:float = Quaternion.FromToRotation(forwardV, toV).eulerAngles.y;
 				if (angle>=270) angle = 360-angle;

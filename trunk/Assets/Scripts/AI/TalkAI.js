@@ -10,15 +10,18 @@ public enum TalkType{
 	NotChase,
 	Shoot,
 	Dodge,
+	Block,
 	Kill
 }
 private var saying:boolean = false;
 private var lastSentence:TalkType = TalkType.None;
 private var startTime:float = -1;
 function Say(sentence:TalkType){
-	if (lastSentence == sentence || 
+	if ( (sentence != TalkType.Kill) &&
+		(lastSentence == sentence || 
 		sentence == TalkType.Patrol || sentence == TalkType.Shoot ||
-		sentence == TalkType.None){
+		sentence == TalkType.None || 
+		lastSentence == TalkType.Block || lastSentence == TalkType.Chase)){
 		if (saying) return;
 	}
 	var str:String;
@@ -37,6 +40,9 @@ function Say(sentence:TalkType){
 			break;
 		case TalkType.Dodge:
 			str = RandomStr(["Not that easy!", "Miss!", "Over here"]);
+			break;
+		case TalkType.Block:
+			str = RandomStr(["Cant kill me", "So soft", "No damage!"]);
 			break;
 		case TalkType.Kill:
 			str = RandomStr(["Oh ye!", "Phew!", "Easy!", "Dead?"]);

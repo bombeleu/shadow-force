@@ -55,8 +55,7 @@ function Update () {
 		if (enemies.Count==0) break;
 		var found:boolean = false;
 		var fkey:Object;
-		var i:Object;
-		for (var i in enemies.Keys){
+		for (var i:Object in enemies.Keys){
 			if (i!=null && enemies[i]==null){
 				found = true;
 				fkey = i;

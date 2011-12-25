@@ -37,14 +37,14 @@ function OnSetVisible(visi:boolean){
 */
 private var observers:Hashtable = new Hashtable();
 
-function AddObserver(observer:AutoShoot){
+function AddObserver(observer:DetectionAI){
 	var key:Object = observer.gameObject.GetInstanceID();
 	if (!observers.ContainsKey(key)){
 		observers.Add(key, observer);
 	}
 }
 
-function RemoveObserver(observer:AutoShoot){
+function RemoveObserver(observer:DetectionAI){
 	var key:Object = observer.gameObject.GetInstanceID();
 	if (observers.ContainsKey(key))
 		observers.Remove(key);
@@ -53,6 +53,6 @@ function RemoveObserver(observer:AutoShoot){
 function OnDestroy(){
 	for (var i:Object in observers.Values){
 		Debug.Log("dead remove");
-		(i as AutoShoot).RemoveEnemy(this);
+		(i as DetectionAI).RemoveEnemy(this);
 	}
 }

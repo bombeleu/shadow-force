@@ -6,6 +6,7 @@ public var text:TextMesh;
 public enum TalkType{
 	None,
 	Patrol,
+	PatrolNotChase,
 	Chase,
 	NotChase,
 	Shoot,
@@ -28,25 +29,28 @@ function Say(sentence:TalkType){
 	var str:String;
 	switch (sentence){
 		case TalkType.Patrol:
-			str = RandomStr(["Cardio's good", "For my 6pak", "Few more rounds"]);
+			str = RandomStr(["Cardio's good", "For my 6pak", "Few more rounds", "Hunting enemy"]);
+			break;
+		case TalkType.PatrolNotChase:
+			str = RandomStr(["Wont leave position", "No trepassing", "Defend here"]);
 			break;
 		case TalkType.Chase:
-			str = RandomStr(["Stop coward!", "Catch ya", "Wait there"]);
+			str = RandomStr(["Stop coward!", "See ya", "Wait there", "Think u can run?"]);
 			break;
 		case TalkType.NotChase:
-			str = RandomStr(["Better stay", "A trap?", "Come here!"]);
+			str = RandomStr(["Better stay", "Lure me out?", "Come here!"]);
 			break;
 		case TalkType.Shoot:
-			str = RandomStr(["Die!", "Shooting time", "Ya better run"]);
+			str = RandomStr(["Die!", "Training time!", "Ya better run"]);
 			break;
 		case TalkType.Dodge:
-			str = RandomStr(["Not that easy!", "Miss!", "Over here"]);
+			str = RandomStr(["Open your eye!", "Miss!", "Know aiming?"]);
 			break;
 		case TalkType.Block:
-			str = RandomStr(["Cant kill me", "So soft", "No damage!"]);
+			str = RandomStr(["Cant kill me", "Tickle me?", "No damage!"]);
 			break;
 		case TalkType.Kill:
-			str = RandomStr(["Oh ye!", "Phew!", "Easy!", "Dead?"]);
+			str = RandomStr(["Oh ye!", "Done!", "Easy!", "Dead?"]);
 			break;
 		case TalkType.None:
 			str = RandomStr(["Boring", "Zzz..", "Why am I here"]);

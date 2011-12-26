@@ -26,14 +26,21 @@ class AICentral extends DetectionAI{
 	private var chasing:boolean = false;
 	private var lastTarget:Vector3;
 	private var shootingTarget:Visibility;
+	private var saidNotChase:boolean = false;
+	private var dodging:boolean = false;
 	function Update () {
 		//movement control
 		var canPatrol:boolean = false;
 		if (dodger && dodger.IsActive()){
 			motor.movementDirection = dodger.GetVector().normalized;
-			talkAI.Say(TalkType.Dodge);
+			dodging = true;
 		}else if (shootAI){
+			if (dodging){//done dodging, can check here because all dodgers have shooting
+				dodging = false;
+				talkAI.Say(TalkType.Dodge);
+			}
 			if (enemies.Count>0){
+				saidNotChase = false;
 				var tarPos:Vector3;
 				var target:Object;
 				for (target in enemies.Values){
@@ -72,7 +79,12 @@ class AICentral extends DetectionAI{
 							chasing = true;
 							talkAI.Say(TalkType.Chase);
 						}
-					}else talkAI.Say(TalkType.NotChase);
+					}else{ 
+						if (!saidNotChase){
+							talkAI.Say(TalkType.NotChase);
+							saidNotChase = true;
+						}
+					}
 				}
 				motor.facingDirection = Vector3.zero;
 				if (!chasing) canPatrol = true;
@@ -93,11 +105,12 @@ class AICentral extends DetectionAI{
 		if (canPatrol){
 			if (patroller){
 				motor.movementDirection = patroller.GetVector().normalized;
-				
-				if (motor.movementDirection == Vector3.zero)
-					talkAI.Say(TalkType.None);
-				else 
-					talkAI.Say(TalkType.Patrol);
+				if (chaseAI){
+					if (motor.movementDirection == Vector3.zero)
+						talkAI.Say(TalkType.None);
+					else 
+						talkAI.Say(TalkType.Patrol);
+				}else talkAI.Say(TalkType.PatrolNotChase);
 			}else{
 				motor.movementDirection = Vector3.zero;
 				talkAI.Say(TalkType.None);

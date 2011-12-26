@@ -45,7 +45,9 @@ class ConnectionGUI extends ScreenGUI{
 		Physics.IgnoreLayerCollision(23, 22, true);//shield vs smoke
 		//Physics.IgnoreLayerCollision(8, 23, true);//player vs shield
 		Physics.IgnoreLayerCollision(8, 24, true);//player vs ragdoll --> prevent climbing!
+		Physics.IgnoreLayerCollision(23, 24, true);//shield vs ragdoll --> prevent climbing!
 		Physics.IgnoreLayerCollision(19, 24, true);//projectile vs ragdoll
+		Physics.IgnoreLayerCollision(22, 24, true);//smoke vs ragdoll
 	}
 	
 	function DrawGUI () {

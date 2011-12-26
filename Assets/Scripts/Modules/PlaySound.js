@@ -1,7 +1,7 @@
 #pragma strict
 
 var audioSource : AudioSource;
-var sound : AudioClip;
+var sounds : AudioClip[];
 
 function Awake () {
 	if (!audioSource && audio)
@@ -9,7 +9,8 @@ function Awake () {
 }
 
 function OnSignal () {
-	if (sound)
-		audioSource.clip = sound;
+	if (sounds){
+		audioSource.clip = sounds[Mathf.FloorToInt(Random.value * sounds.Length)];
+	}
 	audioSource.Play ();
 }

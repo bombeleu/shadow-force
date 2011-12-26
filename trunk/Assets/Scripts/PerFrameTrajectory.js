@@ -3,7 +3,8 @@
 
 public var heightOffset:float = 0.5;
 public var travelTime:float = 1.5;
-public var raycast:PerFrameRaycast;
+//public var raycast:PerFrameRaycast;
+public var blockLayers:LayerMask;
 
 private var spawnPoint:Transform;
 private var outVelo: Vector3;
@@ -21,16 +22,10 @@ function OnUpdateTarget(p:Vector3){
 	Compute();
 }
 
-function Compute(){
-	//compute!
-	var oriPos:Vector3 = Vector3(pos.x,pos.y,pos.z);
-	var h0:float = spawnPoint.position.y - pos.y;
-	var direct:Vector3 = Vector3(pos.x,spawnPoint.position.y,pos.z) - spawnPoint.position;
-	//pos.y = spawnPoint.position.y;
-	var d:float = direct.magnitude;
-	var g:float = Physics.gravity.magnitude;
-	
-	var hitInfo : RaycastHit = raycast.GetHitInfo();
+//z of the vector is the duration!
+private function ComputeVelo(d:float, g:float, targetY:float, hitInfo:RaycastHit):Vector3{
+	targetY = spawnPoint.position.y;
+	var h0:float = spawnPoint.position.y - targetY;
 	var h : float;// = wallHeight;
 	
 	var k : float;
@@ -41,27 +36,13 @@ function Compute(){
 			k = d / hitInfo.distance;
 			if (hitInfo.collider as BoxCollider != null){//obstacle is a box
 				var box:BoxCollider = hitInfo.collider as BoxCollider;
-				h = box.transform.position.y + box.extents.y * box.transform.localScale.y - hitInfo.point.y //TODO: use correct scale
+				h = box.transform.position.y + box.extents.y * box.transform.lossyScale.y - targetY 
 					+ heightOffset;
-				/*if (k < 2){ //obstacle on the falling part of the parabol, use the other edge instead
-					var localP:Vector3 = box.transform.worldToLocalMatrix.MultiplyPoint(hitInfo.point);
-					localP.Scale(box.transform.localScale);//TODO: use correct scale
-					k = d / (hitInfo.distance + localP.magnitude * 2);
-					if (k < 1) k = 1;
-					Debug.Log(localP+"_"+localP.magnitude+"_"+box.transform.localScale);
-				}*/
 				//Debug.Log("trajectory height: "+h);
 			}else if (hitInfo.collider as CapsuleCollider != null){
 				var cap:CapsuleCollider = hitInfo.collider as CapsuleCollider;
-				h = cap.transform.position.y + cap.height*0.5 * cap.transform.localScale.y - hitInfo.point.y //TODO: use correct scale
+				h = cap.transform.position.y + cap.height*0.5 * cap.transform.lossyScale.y - targetY 
 					+ heightOffset;
-				if (k < 2){ //obstacle on the falling part of the parabol, use the other edge instead
-					var maxScale:float = hitInfo.transform.localScale.x;
-					if (maxScale < hitInfo.transform.localScale.z)
-						maxScale = hitInfo.transform.localScale.z;//TODO: use correct scale
-					k = d / (hitInfo.distance + cap.radius * maxScale * 2);
-					if (k < 1) k = 1;
-				}
 				//Debug.Log("trajectory height capsule: "+h);
 			}else{
 				h = 5;
@@ -73,12 +54,13 @@ function Compute(){
 
 	var v_x:float;
 	var v_y:float;
+	var duration:float;
 	if (k==1){
 		var t:float = travelTime;
 		v_x = d/t;
 		//v_y = 0.5*g*t;
 		v_y = (0.5*g*t*t-h0)/t;
-		outDuration = t;
+		duration = t;
 	}else{
 		/*var t0 = Mathf.Sqrt(h / (0.5*g*k - 0.5*g));
 		v_x = d/(k*t0);
@@ -86,15 +68,34 @@ function Compute(){
 		var t0 = Mathf.Sqrt( (h-(h-h0)/(k+1))/(0.5*g*((k*k+1)/(k+1)-1)) );
 		v_x = d/(k*t0);
 		v_y = (h-h0 + 0.5*g*t0*t0*(k*k+1))/(t0*(k+1));
-		outDuration = k*t0;
+		duration = k*t0;
 	}
-	/*if (hitInfo.transform)
-		Debug.Log("k: "+k+"-d: "+d+"-hit: "+hitInfo.distance);
-	Debug.Log(t0);*/
-	
+	return Vector3(v_x, v_y, duration);
+}
 
+function Compute(){
+	//compute!
+	var oriPos:Vector3 = Vector3(pos.x,pos.y,pos.z);
+	var tarPos:Vector3 = oriPos;
+	tarPos.y = spawnPoint.position.y;
+	var direct:Vector3 = tarPos - spawnPoint.position;
+	//pos.y = spawnPoint.position.y;
+	var d:float = direct.magnitude;
+	var g:float = Physics.gravity.magnitude;
+	
+	var hitInfo : RaycastHit;// = raycast.GetHitInfo();
+	Physics.Raycast(spawnPoint.position, direct, hitInfo, d, blockLayers);
+	var forwardRet = ComputeVelo(d, g, oriPos.y, hitInfo);
+	
+	Physics.Raycast(tarPos, -direct, hitInfo, d, blockLayers);
+	var backwardRet = ComputeVelo(d, g, oriPos.y, hitInfo);
+	
 	var dir:Vector3 = direct.normalized;
-	outVelo = Vector3(0,v_y,0) + Vector3(dir.x, 0, dir.z) * v_x;
+	var finalRet:Vector3 = ( forwardRet.y > backwardRet.y )?forwardRet:backwardRet;
+	outVelo = Vector3(0,finalRet.y,0) + Vector3(dir.x, 0, dir.z) * finalRet.x;
+	outDuration = finalRet.z;
+	
+	//Debug.Log(forwardRet + " " + backwardRet);
 }
 
 function GetComputedVelocity():Vector3{

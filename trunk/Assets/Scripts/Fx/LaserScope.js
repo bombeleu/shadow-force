@@ -1,6 +1,6 @@
 #pragma strict 
 
-@script RequireComponent (PerFrameRaycast)
+//@script RequireComponent (PerFrameRaycast)
 
 public var spawnPoint : Transform;
 
@@ -17,19 +17,21 @@ public var pointer : GameObject = null;
 public var reflect : boolean = false;
 
 private var lRenderer : LineRenderer;
+public var line2nd: LineRenderer;
 private var aniTime : float = 0.0;
 private var aniDir : float = 1.0;
 
-private var raycast : PerFrameRaycast;
+public var raycast : PerFrameRaycast;
 
 function Start() {
-	lRenderer = gameObject.GetComponent (LineRenderer) as LineRenderer;	
+	lRenderer = gameObject.GetComponent (LineRenderer);	
 	aniTime = 0.0;
 	
 	// Change some animation values here and there
 	ChoseNewAnimationTargetCoroutine();
 	
-	raycast = GetComponent(PerFrameRaycast);
+	//raycast = GetComponent(PerFrameRaycast);
+	//lRenderer.SetVertexCount(reflect?3:2);
 }
 
 function ChoseNewAnimationTargetCoroutine () {
@@ -54,7 +56,6 @@ function Update () {
 	lRenderer.SetPosition(0, spawnPoint.position);
 	
 	// Cast a ray to find out the end point of the laser
-	lRenderer.SetVertexCount(reflect?3:2);
 	var hitInfo : RaycastHit = raycast.GetHitInfo ();
 	if (hitInfo.transform) {
 		/*var firstPos : Vector3 = (hitInfo.distance * Vector3.forward);
@@ -76,7 +77,8 @@ function Update () {
 			dir.y = 0;
 			var secondHit:RaycastHit = RaycastHit();
 			Physics.Raycast(hitInfo.point, dir, secondHit);
-			lRenderer.SetPosition(2, secondHit.point);
+			line2nd.SetPosition(0, hitInfo.point);
+			if (secondHit.transform) line2nd.SetPosition(1, secondHit.point);
 			//dir -= norm * Vector3.Dot(dir, norm) * 2;
     		//dir.y = 0;
 		}
@@ -92,7 +94,8 @@ function Update () {
 		}
 	}
 	else {
-		lRenderer.SetVertexCount(2);
+		//lRenderer.SetVertexCount(2);
+		//if (reflect) lRenderer.SetPosition(2, spawnPoint.position);
 		if (pointer)
 			pointer.renderer.enabled = false;		
 		var maxDist : float = 200.0;

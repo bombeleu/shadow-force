@@ -21,7 +21,7 @@ function Say(sentence:TalkType){
 	if (text==null) return;//dead already
 	if ( (sentence != TalkType.Kill) &&
 		(lastSentence == sentence || 
-		sentence == TalkType.Patrol || sentence == TalkType.Shoot ||
+		sentence == TalkType.Patrol || sentence == TalkType.PatrolNotChase || sentence == TalkType.Shoot ||
 		sentence == TalkType.None || 
 		lastSentence == TalkType.Block || lastSentence == TalkType.Chase)){
 		if (saying) return;

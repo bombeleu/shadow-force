@@ -1,5 +1,5 @@
 #pragma strict
-
+#if !UNITY_FLASH
 class ConnectionGUI extends ScreenGUI{
 	var remoteIP = "127.0.0.1";
 	var remotePort = 25000;
@@ -66,40 +66,41 @@ class ConnectionGUI extends ScreenGUI{
 				MasterServer.RequestHostList("inno_ShadowForce");
 			}
 			GUILayout.EndHorizontal();
-			var data : HostData[] = MasterServer.PollHostList();
-			// Go through all the hosts in the host list
-			//Debug.Log("hostnum"+data.Length+Network.HavePublicAddress());
-			for (var element in data)
-			{
-				GUILayout.BeginHorizontal();	
-				var name = element.gameName + " " + element.connectedPlayers + " / " + element.playerLimit;
-				GUILayout.Label(name);	
-				GUILayout.Space(5);
-				var hostInfo : String;
-				hostInfo = "[";
-				for (var host in element.ip)
-					hostInfo = hostInfo + host + ":" + element.port + " ";
-				hostInfo = hostInfo + "]";
-				GUILayout.Label(hostInfo);	
-				GUILayout.Space(5);
-				GUILayout.Label(element.comment);
-				GUILayout.Space(5);
-				GUILayout.FlexibleSpace();
-				if (GUILayout.Button("Join BLUE"))
+			#if !UNITY_FLASH
+				var data : HostData[] = MasterServer.PollHostList();
+				// Go through all the hosts in the host list
+				//Debug.Log("hostnum"+data.Length+Network.HavePublicAddress());
+				for (var element in data)
 				{
-					// Connect to HostData struct, internally the correct method is used (GUID when using NAT).
-					teamNum = 1;
-					Network.Connect(element);			
+					GUILayout.BeginHorizontal();	
+					var name = element.gameName + " " + element.connectedPlayers + " / " + element.playerLimit;
+					GUILayout.Label(name);	
+					GUILayout.Space(5);
+					var hostInfo : String;
+					hostInfo = "[";
+					for (var host in element.ip)
+						hostInfo = hostInfo + host + ":" + element.port + " ";
+					hostInfo = hostInfo + "]";
+					GUILayout.Label(hostInfo);	
+					GUILayout.Space(5);
+					GUILayout.Label(element.comment);
+					GUILayout.Space(5);
+					GUILayout.FlexibleSpace();
+					if (GUILayout.Button("Join BLUE"))
+					{
+						// Connect to HostData struct, internally the correct method is used (GUID when using NAT).
+						teamNum = 1;
+						Network.Connect(element);			
+					}
+					if (GUILayout.Button("Join RED"))
+					{
+						// Connect to HostData struct, internally the correct method is used (GUID when using NAT).
+						teamNum = 2;
+						var err : NetworkConnectionError = Network.Connect(element);
+					}
+					GUILayout.EndHorizontal();
 				}
-				if (GUILayout.Button("Join RED"))
-				{
-					// Connect to HostData struct, internally the correct method is used (GUID when using NAT).
-					teamNum = 2;
-					var err : NetworkConnectionError = Network.Connect(element);
-				}
-				GUILayout.EndHorizontal();
-			}
-	
+			#endif	
 			GUILayout.BeginHorizontal();
 			if (GUILayout.Button ("Create game"))
 			{
@@ -258,7 +259,7 @@ class ConnectionGUI extends ScreenGUI{
 		var connection : ConnectionGUI = FindObjectOfType(ConnectionGUI) as ConnectionGUI;
 		Debug.Log(prefab);
 		var i:int = connection.GetComponent(ConnectionGUI).GetPrefabID(prefab);
-		connection.GetComponent(ConnectionGUI).networkView.RPC("_CreateTeamObject", RPCMode.AllBuffered, [i, viewID, pos, quat, team]); 
+		NetworkU.RPC(connection.GetComponent(ConnectionGUI), "_CreateTeamObject", NetRPCMode.AllBuffered, [i, viewID, pos, quat, team]); 
 	}
 	
 	function GetPrefabID(prefab:GameObject):int{
@@ -278,3 +279,4 @@ class ConnectionGUI extends ScreenGUI{
 		go.networkView.viewID = viewID;
 	}
 }
+#endif

@@ -91,7 +91,10 @@ function RPCFireMissile(){
 }
 
 //*
+#if !UNITY_FLASH
 @RPC
+#endif
+
 function FireMissile(pos : Vector3, quat : Quaternion){
 	var go : GameObject = Instantiate (missilePrefab, pos, quat);
 }//*/
@@ -115,7 +118,10 @@ function RPCOnStopFire(){
 	networkView.RPC("OnStopFire", RPCMode.All, []);
 }
 
+#if !UNITY_FLASH
 @RPC
+#endif
+
 function OnStartFire () {
 
 	if (Time.timeScale == 0)
@@ -129,7 +135,10 @@ function OnStartFire () {
 		audio.Play ();
 }
 
+#if !UNITY_FLASH
 @RPC
+#endif
+
 function OnStopFire () {
 	firing = false;
 	

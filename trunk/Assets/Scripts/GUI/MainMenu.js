@@ -77,11 +77,13 @@ class MainMenu extends ScreenGUI{
 			
 			if (GUILayout.Button("(doing)Co-op VS computer")){
 			}
-			if (GUILayout.Button("Online battle")){
-				//state = MenuState.Multi;
-				Application.LoadLevel(levelList[0]);
-				uiController.SetCurrentGUI(GetComponent(SelectWeaponGUI));
-			}
+			#if !UNITY_FLASH
+				if (GUILayout.Button("Online battle")){
+					//state = MenuState.Multi;
+					Application.LoadLevel(levelList[0]);
+					uiController.SetCurrentGUI(GetComponent(SelectWeaponGUI));
+				}
+			#endif
 			if (GUILayout.Button("(doing)Scoreboard")){
 			}
 			if (GUILayout.Button("(doing)Weapon store")){
@@ -122,9 +124,13 @@ class MainMenu extends ScreenGUI{
 	function OnLevelWasLoaded (level : int) {
 		if (state == MenuState.SinglePlaying){
 			curStar = 0;
-			if (!Network.isServer){
-				Network.InitializeServer(32, ConnectionGUI.listenPort, !Network.HavePublicAddress());
-			}
+			#if UNITY_FLASH
+				SendMessage("OnNetworkLoadedLevel",	SendMessageOptions.DontRequireReceiver);
+			#else
+				if (!Network.isServer){
+					Network.InitializeServer(32, ConnectionGUI.listenPort, !Network.HavePublicAddress());
+				}
+			#endif
 			/*else{
 				Debug.Log("Server already here");
 				SendMessage("OnNetworkLoadedLevel",	SendMessageOptions.DontRequireReceiver);

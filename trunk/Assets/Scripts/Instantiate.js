@@ -48,12 +48,12 @@ function OnGUI(){
 		cameraOffset = character.GetComponent(PlayerMoveController).cameraOffset;
 		endRotation = Quaternion.LookRotation(-cameraOffset,Vector3.up);
 	
-		character.GetComponent.<WeaponManager>().SetWeaponSelection();
+		character.GetComponent(WeaponManager).SetWeaponSelection();
 		
 		var te:int = conGUI.GetTeamNum();
-		character.networkView.RPC("SetTeam", RPCMode.AllBuffered, te);
+		NetworkU.RPC(character.GetComponent(Team), "SetTeam", NetRPCMode.AllBuffered, te);
 		var na:String = ConnectionGUI.na;
-		character.networkView.RPC("SetName", RPCMode.AllBuffered, na);
+		NetworkU.RPC(character.GetComponent(Team), "SetName", NetRPCMode.AllBuffered, na);
 				
 		LineOfSight.myTeam = te;
 		//setCamera(character);	

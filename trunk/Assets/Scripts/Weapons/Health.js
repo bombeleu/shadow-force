@@ -52,7 +52,10 @@ function Awake () {
 @HideInInspector
 public var damageForce:Vector3;
 
+#if !UNITY_FLASH
 @RPC
+#endif
+
 function OnDamage (amount : float, fromDirection : Vector3) {
 	// Take no damage if invincible, dead, or if the damage is zero
 	if(invincible)

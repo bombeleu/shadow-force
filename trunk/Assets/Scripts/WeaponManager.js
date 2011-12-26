@@ -1,4 +1,5 @@
 #pragma strict
+//import NetworkU;
 @script RequireComponent (NetworkView)
 
 //private var character : Transform;
@@ -31,7 +32,7 @@ function OnEnable(){
 		ws[i].SetEnable(false);
 
 		if (networkView.isMine && ws[i].networkView)
-			networkView.RPC("RPCSetWeaponViewID", RPCMode.AllBuffered, [i, Network.AllocateViewID()]);
+			NetworkU.RPC(this, "RPCSetWeaponViewID", NetRPCMode.AllBuffered, [i, Network.AllocateViewID()]);
 		//ws[0] = go.GetComponent.<Weapon>();
 	}
 	if (hasShield){
@@ -68,7 +69,10 @@ function SetWeaponSelection(){
 	networkView.RPC("_SetWeaponSelection", RPCMode.AllBuffered, params);
 }
 
+#if !UNITY_FLASH
 @RPC
+#endif
+
 function _SetWeaponSelection(weapon0:int, weapon1:int):void{
 	weapons = new Weapon[2];
 	weapons[0] = weaponGUI.availableWeapons[weapon0];
@@ -76,7 +80,10 @@ function _SetWeaponSelection(weapon0:int, weapon1:int):void{
 	this.enabled = true;
 }
 
+#if !UNITY_FLASH
 @RPC
+#endif
+
 function RPCSetWeaponViewID(weaponID:int, viewID:NetworkViewID){
 	//Debug.Log("RPC Set WeaponViewID " + weaponID + "..." + viewID);
 	ws[weaponID].networkView.viewID = viewID;
@@ -296,19 +303,28 @@ function OnGUI(){
 	}
 }
 
+#if !UNITY_FLASH
 @RPC
+#endif
+
 function startFireAnimation(){
 	//Debug.Log('start fire!');
 	playerAnimation.OnStartFire();
 }
 
+#if !UNITY_FLASH
 @RPC
+#endif
+
 function stopFireAnimation(){
 	//Debug.Log('stop fire!');
 	playerAnimation.OnStopFire();
 }
 
+#if !UNITY_FLASH
 @RPC
+#endif
+
 function onetimeFireAnimation(){
 	playerAnimation.OnStartFire();
 	yield WaitForSeconds(playerAnimation.shootingTime);
@@ -335,7 +351,10 @@ function OnSerializeNetworkView (stream : BitStream, info : NetworkMessageInfo) 
 	}
 }
 
+#if !UNITY_FLASH
 @RPC
+#endif
+
 function RPCWeaponSwitch(newWeapon:int){
 	Debug.Log("RPC Switch weapon " + newWeapon);
 	ws[curWeapon].SetEnable(false);
@@ -356,7 +375,10 @@ function RPCWeaponSwitch(newWeapon:int){
 		}
 	#endif
 }
+#if !UNITY_FLASH
 @RPC
+#endif
+
 function RPCWeaponInialize() {
 	Debug.Log("RPC Weapon Initalize");
 }

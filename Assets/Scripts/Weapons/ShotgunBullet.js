@@ -29,7 +29,10 @@ function OnLaunchBullet(){
 	networkView.RPC("EnableFiring", RPCMode.All);
 }
 
+#if !UNITY_FLASH
 @RPC
+#endif
+
 function EnableFiring(){
 	firing = true;
 	Instantiate(fireEffect,spawnPoint.position,Quaternion.identity);
@@ -50,7 +53,10 @@ function OnStopFiring(){
 	networkView.RPC("DisableFiring", RPCMode.All);
 }
 
+#if !UNITY_FLASH
 @RPC
+#endif
+
 function DisableFiring(){
 	firing = false;
 }

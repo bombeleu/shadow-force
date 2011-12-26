@@ -13,11 +13,11 @@ function Awake(){
 }
 
 function OnTriggerStay (other : Collider) : void{
-	var health : Health = other.GetComponent.<Health>();
+	var health : Health = other.GetComponent(Health);
 	if (health){
 		if (Time.time > lastFireTime + interval) {
 			if (health.networkView.isMine){//defender message
-				health.networkView.RPC("OnDamage", RPCMode.All, 
+				NetworkU.RPC(health, "OnDamage", NetRPCMode.All, 
 					[damagePerSecond / frequency, Vector3.zero]);
 			}
 			lastFireTime = Time.time;

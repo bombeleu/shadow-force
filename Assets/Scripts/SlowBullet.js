@@ -34,7 +34,10 @@ function OnLaunchBullet(){
 }
 
 /*
+#if !UNITY_FLASH
 @RPC
+#endif
+
 function RPCLaunchBullet(){
 	Instantiate (bulletPrefab, spawnPoint.position, spawnPoint.rotation);
 }*/

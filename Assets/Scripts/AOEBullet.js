@@ -35,7 +35,7 @@ function OnLaunchBullet(){
 					//var hitInfo:RaycastHit;
 					if (!Physics.Raycast(transform.position, toV, toV.magnitude, blockLayers)){
 						// Apply damage
-						col.networkView.RPC("OnDamage", RPCMode.All, 
+						NetworkU.RPC(col.GetComponent(Health), "OnDamage", NetRPCMode.All, 
 							[damage, -wp.owner.transform.forward*7]);
 					}
 					//Debug.Log(hitInfo.transform);

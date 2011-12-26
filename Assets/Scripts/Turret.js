@@ -36,7 +36,10 @@ function Start(){
 	}
 }
 
+#if !UNITY_FLASH
 @RPC
+#endif
+
 function SetWeaponNetworkViewID(id:NetworkViewID){
 	weapon.networkView.viewID = id;
 }

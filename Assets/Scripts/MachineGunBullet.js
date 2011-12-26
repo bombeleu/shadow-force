@@ -30,22 +30,31 @@ function Start(){
 }
 
 function OnLaunchBullet(){
-	networkView.RPC("EnableFiring", RPCMode.All);
+	if (firing) return;
+	firing = true;
+	NetworkU.RPC(this,"EnableFiring", NetRPCMode.All);
 }
 
+#if !UNITY_FLASH
 @RPC
+#endif
+
 function EnableFiring(){
-	firing = true;
 	muzzleFlashFront.active = true;
 }
 
 function OnStopFiring(){
-	networkView.RPC("DisableFiring", RPCMode.All);
+	if (!firing) return;
+	firing = false;
+	//networkView.RPC("DisableFiring", RPCMode.All);
+	NetworkU.RPC(this,"DisableFiring", NetRPCMode.All);
 }
 
+#if !UNITY_FLASH
 @RPC
+#endif
+
 function DisableFiring(){
-	firing = false;
 	muzzleFlashFront.active = false;
 }
 

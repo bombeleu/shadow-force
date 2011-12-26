@@ -30,7 +30,10 @@ function OnSignal () {
 	//ResetHealthOnAll ();
 }
 
+#if !UNITY_FLASH
 @RPC
+#endif
+
 function CreateDeathMark(pos : Vector3){
 	Instantiate(deathMark, pos, Quaternion.identity);
 }

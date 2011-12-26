@@ -123,18 +123,6 @@ function Awake () {
 	shootingTime = animationComponent[shootAdditive.name].length;
 	//animation[turn.name].enabled = true;
 }
-/*
-function RPCOnStartFire(){
-	if (!networkView.isMine) return;
-
-	networkView.RPC("OnStartFire", RPCMode.All, []);
-}
-
-function RPCOnStopFire(){
-	if (!networkView.isMine) return;
-
-	networkView.RPC("OnStopFire", RPCMode.All, []);
-}*/
 
 function toggleMoveAnim(b:boolean){
 	for (var moveAnimation : MoveAnimation in moveAnimations) {
@@ -146,7 +134,10 @@ function toggleMoveAnim(b:boolean){
 }
 
 private var firing : boolean = false;
+//#if !UNITY_FLASH
 //@RPC
+//#endif
+
 function OnStartFire () {
 	if (firing) return;
 	//if (Time.timeScale == 0) return;
@@ -160,7 +151,10 @@ function OnStartFire () {
 	//animationComponent.CrossFade (shootAdditive.name);
 }
 
+//#if !UNITY_FLASH
 //@RPC
+//#endif
+
 function OnStopFire () {
 	if (!firing) return;
 	firing = false;

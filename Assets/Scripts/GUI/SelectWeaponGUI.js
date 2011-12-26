@@ -67,7 +67,9 @@ class SelectWeaponGUI extends ScreenGUI{
 		if (nWeapons >= 2)
 		{
 			finished = true;
-			GetComponent(UIController).SetCurrentGUI(GetComponent(ConnectionGUI));
+			#if !UNITY_FLASH
+				GetComponent(UIController).SetCurrentGUI(GetComponent(ConnectionGUI));
+			#endif
 		}
 	}
 }

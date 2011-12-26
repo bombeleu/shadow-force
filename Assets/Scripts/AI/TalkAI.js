@@ -17,6 +17,7 @@ private var saying:boolean = false;
 private var lastSentence:TalkType = TalkType.None;
 private var startTime:float = -1;
 function Say(sentence:TalkType){
+	if (text==null) return;//dead already
 	if ( (sentence != TalkType.Kill) &&
 		(lastSentence == sentence || 
 		sentence == TalkType.Patrol || sentence == TalkType.Shoot ||

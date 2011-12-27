@@ -1,6 +1,8 @@
 #pragma strict
 @script RequireComponent (Rigidbody)
+#if !UNITY_FLASH
 @script RequireComponent (NetworkView)
+#endif
 
 private var startTime:float;
 private var sVelo:Vector3;
@@ -29,12 +31,14 @@ function OnCollisionEnter(collision : Collision) {
     rigidbody.useGravity = true;
 }
 
+#if !UNITY_FLASH
 function OnSerializeNetworkView (stream : BitStream, info : NetworkMessageInfo) {
 	stream.Serialize(sVelo);
 	if (stream.isReading){
 		rigidbody.velocity = sVelo;
 	}
 }
+#endif
 
 function SetVelocity(velo:Vector3){
 	sVelo = velo;

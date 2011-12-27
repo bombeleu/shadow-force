@@ -253,7 +253,13 @@ class ConnectionGUI extends ScreenGUI{
 	//private static var objectPrefab : GameObject;
 	public var prefabs: GameObject[];
 	
-	static function CreateTeamObject(prefab:GameObject, viewID:NetworkViewID, pos:Vector3, quat: Quaternion, team:int):void
+	static function CreateTeamObject(prefab:GameObject, 
+		#if UNITY_FLASH
+		viewID:int, 
+		#else
+		viewID:NetworkViewID, 
+		#endif
+		pos:Vector3, quat: Quaternion, team:int):void
 	{
 	// this is bad, very bad
 		var connection : ConnectionGUI = FindObjectOfType(ConnectionGUI) as ConnectionGUI;
@@ -271,12 +277,20 @@ class ConnectionGUI extends ScreenGUI{
 	}
 	
 	@RPC
-	function _CreateTeamObject(prefabID:int, viewID:NetworkViewID, pos:Vector3, quat: Quaternion, team:int):void
+	function _CreateTeamObject(prefabID:int, 
+		#if UNITY_FLASH
+		viewID:int, 
+		#else
+		viewID:NetworkViewID, 
+		#endif
+		pos:Vector3, quat: Quaternion, team:int):void
 	{
 		//Debug.Log(prefabID);
 		var go:GameObject = Instantiate(prefabs[prefabID], pos, quat);
 		go.GetComponent.<Team>().SetTeam(team);
-		go.networkView.viewID = viewID;
+		#if !UNITY_FLASH
+			go.networkView.viewID = viewID;
+		#endif
 	}
 }
 #endif

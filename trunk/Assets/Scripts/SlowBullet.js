@@ -1,6 +1,5 @@
 #pragma strict
 @script RequireComponent (Weapon)
-//@script RequireComponent (NetworkView)
 
 public var createTeamObject:boolean = false;
 public var ownerRadius:float = 0.95;
@@ -26,10 +25,10 @@ function OnLaunchBullet(){
 		return;
 	
 	if (createTeamObject){
-		ConnectionGUI.CreateTeamObject(bulletPrefab, Network.AllocateViewID(), spawnPos, weapon.owner.transform.rotation, 
+		ConnectionGUI.CreateTeamObject(bulletPrefab, NetworkU.AllocateID(), spawnPos, weapon.owner.transform.rotation, 
 			LineOfSight.myTeam);
 	}else
-		Network.Instantiate(bulletPrefab, spawnPos, weapon.owner.transform.rotation, 0);
+		NetworkU.Instantiate(bulletPrefab, spawnPos, weapon.owner.transform.rotation);
 }
 
 /*

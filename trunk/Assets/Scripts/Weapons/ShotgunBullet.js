@@ -1,6 +1,8 @@
 #pragma strict
 @script RequireComponent (Weapon)
+#if !UNITY_FLASH
 @script RequireComponent (NetworkView)
+#endif
 
 public var fireEffect : Transform;
 public var raycast: PerFrameRaycast;

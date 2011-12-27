@@ -1,5 +1,7 @@
 #pragma strict
+#if !UNITY_FLASH
 @script RequireComponent (NetworkView)
+#endif
 
 public var explosionPrefab : GameObject;
 

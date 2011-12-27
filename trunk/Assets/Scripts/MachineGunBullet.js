@@ -1,7 +1,9 @@
 #pragma strict
 @script RequireComponent (Weapon)
 @script RequireComponent (InstantBullet)
+#if !UNITY_FLASH
 @script RequireComponent (NetworkView)
+#endif
 
 public var frequency : float = 10;
 public var muzzleFlashFront : GameObject;

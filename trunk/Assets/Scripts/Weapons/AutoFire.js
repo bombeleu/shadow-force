@@ -86,7 +86,6 @@ function RPCFireMissile(){
 	if (!NetworkU.IsMine(this)) return;
 	if (Team.ammo<=0) return;
 	NetworkU.RPC(this, "FireMissile", NetRPCMode.All, [spawnPoint.position, spawnPoint.rotation]);
-	//var go : GameObject = Network.Instantiate(missilePrefab, spawnPoint.position, spawnPoint.rotation, 0) as GameObject;
 	Team.ammo--;
 }
 
@@ -99,13 +98,6 @@ function FireMissile(pos : Vector3, quat : Quaternion){
 }//*/
 
 function RPCOnStartFire(){
-	/*
-	var player : GameObject = myPlayer;
-	var controller : PlayerMoveController;
-	controller = player.GetComponent("PlayerMoveController");
-	//controller.character = character.transform;
-	if (controller.myPlayer != Network.player.guid) return;
-	//*/
 	if (!NetworkU.IsMine(this)) return;
 	
 	NetworkU.RPC(this, "OnStartFire", NetRPCMode.All);

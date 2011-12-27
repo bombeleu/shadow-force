@@ -42,7 +42,7 @@ function OnGUI(){
 		Debug.Log("Instantiate here"+spawners.length);
 		spawn = spawners[ Mathf.Floor( (spawners.length-1) * Random.value)].transform;
 
-		character = Network.Instantiate(playerPrefab, spawn.position + Vector3(0,4,0), spawn.rotation, 0);
+		character = NetworkU.Instantiate(playerPrefab, spawn.position + Vector3(0,4,0), spawn.rotation);
 		character.GetComponent(PlayerMoveController).enabled = false;
 
 		cameraOffset = character.GetComponent(PlayerMoveController).cameraOffset;

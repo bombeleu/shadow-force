@@ -1,0 +1,4 @@
+"ID","Title","Content"
+1,"Welcome","This game is fun, hahaha"
+2,"Control","WASD to move, mouse to aim"
+3,"Action","Left click to shoot, rightclick to switch weapon"

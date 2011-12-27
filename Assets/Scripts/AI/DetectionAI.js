@@ -4,7 +4,16 @@ class DetectionAI extends MonoBehaviour{
 	protected var enemies:Hashtable = new Hashtable();
 	protected var observerValue : boolean;
 	
+	#if UNITY_FLASH
+	public static var uniqueKey:int = 0;
+	public var myKey:int;
+	#endif
+	
 	function Awake(){
+		#if UNITY_FLASH
+		myKey = uniqueKey++;
+		#endif
+	
 		observer = GetComponent(Observer);
 		observerValue = observer.wantEventTrigger;	
 	}
@@ -19,9 +28,9 @@ class DetectionAI extends MonoBehaviour{
 	
 	private function GetID(enemy:Visibility):Object{
 		#if UNITY_FLASH
-			return observer.gameObject.ToString();
+			return enemy.myKey;
 		#else
-			return observer.gameObject.GetInstanceID();
+			return enemy.gameObject.GetInstanceID();
 		#endif
 	}
 	
@@ -42,11 +51,7 @@ class DetectionAI extends MonoBehaviour{
 	}
 	
 	function RemoveEnemy(enemy:Visibility){
-		#if UNITY_FLASH
-		var key:Object = enemy.gameObject.ToString();
-		#else
-		var key:Object = enemy.gameObject.GetInstanceID();
-		#endif
+		var key:Object = GetID(enemy);
 		if (enemies.ContainsKey(key)){
 			enemies.Remove(key);
 		}

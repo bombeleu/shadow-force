@@ -19,7 +19,7 @@ private var _vision : VisionMeshScript ;
 private var _textMesh : TextMesh;
 
 function Awake(){
-	Debug.Log("Start");
+	//Debug.Log("Start");
 	var nMaterials : int = 0;
 	for (var obj:GameObject in visibleObjects){
 		nMaterials += obj.renderer.materials.Length;

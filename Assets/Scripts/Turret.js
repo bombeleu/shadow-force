@@ -1,7 +1,6 @@
 #pragma strict
 #if !UNITY_FLASH
 @script RequireComponent (NetworkView)
-#endif
 private var enemies:Hashtable;
 
 public var weapon:Weapon;
@@ -121,3 +120,4 @@ function Update () {
 		}		
 	}
 }
+#endif

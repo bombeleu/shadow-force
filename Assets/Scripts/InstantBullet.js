@@ -11,7 +11,7 @@ private var weapon:Weapon;
 function Awake(){
 	weapon = GetComponent(Weapon);
 	spawnPoint = weapon.spawnPoint;
-	frequency = Network.sendRate;
+	frequency = NetworkU.SendRate();
 	interval = 1/frequency;
 }
 

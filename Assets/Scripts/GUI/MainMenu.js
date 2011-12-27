@@ -9,6 +9,7 @@ class MainMenu extends ScreenGUI{
 	
 	private var uiController : UIController;
 	function Awake () {
+		instance = this;
 		uiController = GetComponent(UIController);
 		
 		currentLevel = PlayerPrefs.GetInt("curLevel",0);
@@ -20,6 +21,18 @@ class MainMenu extends ScreenGUI{
 		
 		useSensor = PlayerPrefs.GetInt("sensor",0)==1;
 		useAutoAim = PlayerPrefs.GetInt("autoAim",0)==1;
+		
+		Physics.IgnoreLayerCollision(0, 11, true);//default vs playertrigger
+		Physics.IgnoreLayerCollision(8, 22, true);//player vs smoke
+		Physics.IgnoreLayerCollision(19, 20, true);//projectile vs fence
+		Physics.IgnoreLayerCollision(19, 22, true);//projectile vs smoke
+		Physics.IgnoreLayerCollision(19, 19, true);//projectile vs projectile
+		Physics.IgnoreLayerCollision(23, 22, true);//shield vs smoke
+		//Physics.IgnoreLayerCollision(8, 23, true);//player vs shield
+		Physics.IgnoreLayerCollision(8, 24, true);//player vs ragdoll --> prevent climbing!
+		Physics.IgnoreLayerCollision(23, 24, true);//shield vs ragdoll --> prevent climbing!
+		Physics.IgnoreLayerCollision(19, 24, true);//projectile vs ragdoll
+		Physics.IgnoreLayerCollision(22, 24, true);//smoke vs ragdoll
 	}
 	
 	function ResetData(){
@@ -115,7 +128,6 @@ class MainMenu extends ScreenGUI{
 			}
 		}else if (state == MenuState.SinglePlaying){
 			if (GUILayout.Button("Exit")){
-				Network.Disconnect();
 				state = MenuState.OuterMost;
 				Application.LoadLevel("MainMenu");
 				DestroyObject(gameObject);
@@ -126,17 +138,8 @@ class MainMenu extends ScreenGUI{
 	function OnLevelWasLoaded (level : int) {
 		if (state == MenuState.SinglePlaying){
 			curStar = 0;
-			#if UNITY_FLASH
-				SendMessage("OnNetworkLoadedLevel",	SendMessageOptions.DontRequireReceiver);
-			#else
-				if (!Network.isServer){
-					Network.InitializeServer(32, ConnectionGUI.listenPort, !Network.HavePublicAddress());
-				}
-			#endif
-			/*else{
-				Debug.Log("Server already here");
-				SendMessage("OnNetworkLoadedLevel",	SendMessageOptions.DontRequireReceiver);
-			}*/
+			//SendMessage("OnNetworkLoadedLevel",	SendMessageOptions.DontRequireReceiver);
+			
 			state = MenuState.SinglePlaying;
 			//uiController.SetCurrentGUI(null);
 			//yield WaitForSeconds(0.5);
@@ -154,5 +157,49 @@ class MainMenu extends ScreenGUI{
 	private var curStar : int = 0;
 	function GainStar(){
 		curStar++;
+	}
+	
+	
+	//these function should be moved to another global file!
+	public var prefabs: GameObject[];
+	private static var instance: MainMenu;
+	
+	static function CreateTeamObject(prefab:GameObject, 
+		#if UNITY_FLASH
+		viewID:int, 
+		#else
+		viewID:NetworkViewID, 
+		#endif
+		pos:Vector3, quat: Quaternion, team:int):void
+	{
+		var i:int = instance.GetPrefabID(prefab);
+		NetworkU.RPC(instance, "_CreateTeamObject", NetRPCMode.AllBuffered, [i, viewID, pos, quat, team]); 
+	}
+	
+	function GetPrefabID(prefab:GameObject):int{
+		var i:int;
+		for (i=0; i<prefabs.length; i++){
+			if (prefab == prefabs[i]) break;
+		}
+		return i;	
+	}
+	
+	#if !UNITY_FLASH
+	@RPC
+	#endif
+	function _CreateTeamObject(prefabID:int, 
+		#if UNITY_FLASH
+		viewID:int, 
+		#else
+		viewID:NetworkViewID, 
+		#endif
+		pos:Vector3, quat: Quaternion, team:int):void
+	{
+		//Debug.Log(prefabID);
+		var go:GameObject = Instantiate(prefabs[prefabID], pos, quat);
+		go.GetComponent.<Team>().SetTeam(team);
+		#if !UNITY_FLASH
+			go.networkView.viewID = viewID;
+		#endif
 	}
 }

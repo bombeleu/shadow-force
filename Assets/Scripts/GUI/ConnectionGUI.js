@@ -36,18 +36,6 @@ class ConnectionGUI extends ScreenGUI{
 			na = "name" + Mathf.FloorToInt(Random.value*9);
 			MasterServer.RequestHostList("inno_ShadowForce");
 		}
-		
-		Physics.IgnoreLayerCollision(0, 11, true);//default vs playertrigger
-		Physics.IgnoreLayerCollision(8, 22, true);//player vs smoke
-		Physics.IgnoreLayerCollision(19, 20, true);//projectile vs fence
-		Physics.IgnoreLayerCollision(19, 22, true);//projectile vs smoke
-		Physics.IgnoreLayerCollision(19, 19, true);//projectile vs projectile
-		Physics.IgnoreLayerCollision(23, 22, true);//shield vs smoke
-		//Physics.IgnoreLayerCollision(8, 23, true);//player vs shield
-		Physics.IgnoreLayerCollision(8, 24, true);//player vs ragdoll --> prevent climbing!
-		Physics.IgnoreLayerCollision(23, 24, true);//shield vs ragdoll --> prevent climbing!
-		Physics.IgnoreLayerCollision(19, 24, true);//projectile vs ragdoll
-		Physics.IgnoreLayerCollision(22, 24, true);//smoke vs ragdoll
 	}
 	
 	function DrawGUI () {
@@ -245,52 +233,6 @@ class ConnectionGUI extends ScreenGUI{
 	            shouldEnableNatMessage = "NAT punchthrough not needed";
 	        testStatus = "Done testing";
 	    }
-	}
-	
-	
-	
-	//these function should be moved to another global file!
-	//private static var objectPrefab : GameObject;
-	public var prefabs: GameObject[];
-	
-	static function CreateTeamObject(prefab:GameObject, 
-		#if UNITY_FLASH
-		viewID:int, 
-		#else
-		viewID:NetworkViewID, 
-		#endif
-		pos:Vector3, quat: Quaternion, team:int):void
-	{
-	// this is bad, very bad
-		var connection : ConnectionGUI = FindObjectOfType(ConnectionGUI) as ConnectionGUI;
-		Debug.Log(prefab);
-		var i:int = connection.GetComponent(ConnectionGUI).GetPrefabID(prefab);
-		NetworkU.RPC(connection.GetComponent(ConnectionGUI), "_CreateTeamObject", NetRPCMode.AllBuffered, [i, viewID, pos, quat, team]); 
-	}
-	
-	function GetPrefabID(prefab:GameObject):int{
-		var i:int;
-		for (i=0; i<prefabs.length; i++){
-			if (prefab == prefabs[i]) break;
-		}
-		return i;	
-	}
-	
-	@RPC
-	function _CreateTeamObject(prefabID:int, 
-		#if UNITY_FLASH
-		viewID:int, 
-		#else
-		viewID:NetworkViewID, 
-		#endif
-		pos:Vector3, quat: Quaternion, team:int):void
-	{
-		//Debug.Log(prefabID);
-		var go:GameObject = Instantiate(prefabs[prefabID], pos, quat);
-		go.GetComponent.<Team>().SetTeam(team);
-		#if !UNITY_FLASH
-			go.networkView.viewID = viewID;
-		#endif
 	}
 }
 #endif

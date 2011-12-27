@@ -37,15 +37,23 @@ function OnSetVisible(visi:boolean){
 */
 private var observers:Hashtable = new Hashtable();
 
+private function GetID(observer:DetectionAI):Object{
+	#if UNITY_FLASH
+		return observer.gameObject.ToString();
+	#else
+		return observer.gameObject.GetInstanceID();
+	#endif
+}
+
 function AddObserver(observer:DetectionAI){
-	var key:Object = observer.gameObject.GetInstanceID();
+	var key:Object = GetID(observer);
 	if (!observers.ContainsKey(key)){
 		observers.Add(key, observer);
 	}
 }
 
 function RemoveObserver(observer:DetectionAI){
-	var key:Object = observer.gameObject.GetInstanceID();
+	var key:Object = GetID(observer);
 	if (observers.ContainsKey(key))
 		observers.Remove(key);
 }

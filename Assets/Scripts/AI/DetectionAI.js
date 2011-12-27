@@ -17,8 +17,16 @@ class DetectionAI extends MonoBehaviour{
 		observer.wantEventTrigger = observerValue;
 	}
 	
+	private function GetID(enemy:Visibility):Object{
+		#if UNITY_FLASH
+			return observer.gameObject.ToString();
+		#else
+			return observer.gameObject.GetInstanceID();
+		#endif
+	}
+	
 	function OnDetectEnemy(enemy:Visibility){
-		var key:Object = enemy.gameObject.GetInstanceID();
+		var key:Object = GetID(enemy);
 		if (!enemies.ContainsKey(key)){
 			enemies.Add(key, enemy);
 			enemy.AddObserver(this);
@@ -26,7 +34,7 @@ class DetectionAI extends MonoBehaviour{
 	}
 	
 	function OnLoseSightEnemy(enemy:Visibility){
-		var key:Object = enemy.gameObject.GetInstanceID();
+		var key:Object = GetID(enemy);
 		if (enemies.ContainsKey(key)){
 			enemies.Remove(key);
 			enemy.RemoveObserver(this);
@@ -34,7 +42,11 @@ class DetectionAI extends MonoBehaviour{
 	}
 	
 	function RemoveEnemy(enemy:Visibility){
+		#if UNITY_FLASH
+		var key:Object = enemy.gameObject.ToString();
+		#else
 		var key:Object = enemy.gameObject.GetInstanceID();
+		#endif
 		if (enemies.ContainsKey(key)){
 			enemies.Remove(key);
 		}

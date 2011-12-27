@@ -14,8 +14,13 @@ public enum FogType{
 public var visibilityType : VisibilityType;
 public var ghostType : FogType;
 
-function Update () {
+#if UNITY_FLASH
+public static var uniqueKey:int = 0;
+public var myKey:int;
+function Awake() {
+	myKey = uniqueKey++;
 }
+#endif
 
 private var isVisible:boolean = true;
 function SetVisible(visi:boolean){
@@ -39,7 +44,7 @@ private var observers:Hashtable = new Hashtable();
 
 private function GetID(observer:DetectionAI):Object{
 	#if UNITY_FLASH
-		return observer.gameObject.ToString();
+		return observer.myKey;
 	#else
 		return observer.gameObject.GetInstanceID();
 	#endif

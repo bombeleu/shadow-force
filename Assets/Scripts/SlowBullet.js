@@ -25,7 +25,6 @@ function OnLaunchBullet(){
 	if (Physics.OverlapSphere(spawnPos, bulletRadius, blockerLayers).Length>0)
 		return;
 	
-	//networkView.RPC("RPCLaunchBullet", RPCMode.All);//TODO: clone all current slow bullets to newly joined player
 	if (createTeamObject){
 		ConnectionGUI.CreateTeamObject(bulletPrefab, Network.AllocateViewID(), spawnPos, weapon.owner.transform.rotation, 
 			LineOfSight.myTeam);

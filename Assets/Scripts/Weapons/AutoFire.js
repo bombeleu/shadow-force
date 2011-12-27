@@ -49,8 +49,8 @@ function Update () {
 				var targetHealth : Health = hitInfo.transform.GetComponent.<Health> ();
 				if (targetHealth) {
 					// Apply damage
-					if (networkView.isMine){//only apply damage if this is MY character!
-						hitInfo.transform.networkView.RPC("OnDamage", RPCMode.All, 
+					if (NetworkU.IsMine(this)){//only apply damage if this is MY character!
+						NetworkU.RPC(targetHealth, "OnDamage", NetRPCMode.All, 
 							[damagePerSecond / frequency, -spawnPoint.forward]);
 					}
 					//targetHealth.OnDamage (damagePerSecond / frequency, -spawnPoint.forward);
@@ -83,9 +83,9 @@ function Update () {
 }
 
 function RPCFireMissile(){
-	if (!networkView.isMine) return;
+	if (!NetworkU.IsMine(this)) return;
 	if (Team.ammo<=0) return;
-	networkView.RPC("FireMissile", RPCMode.All, [spawnPoint.position, spawnPoint.rotation]);
+	NetworkU.RPC(this, "FireMissile", NetRPCMode.All, [spawnPoint.position, spawnPoint.rotation]);
 	//var go : GameObject = Network.Instantiate(missilePrefab, spawnPoint.position, spawnPoint.rotation, 0) as GameObject;
 	Team.ammo--;
 }
@@ -94,7 +94,6 @@ function RPCFireMissile(){
 #if !UNITY_FLASH
 @RPC
 #endif
-
 function FireMissile(pos : Vector3, quat : Quaternion){
 	var go : GameObject = Instantiate (missilePrefab, pos, quat);
 }//*/
@@ -107,15 +106,15 @@ function RPCOnStartFire(){
 	//controller.character = character.transform;
 	if (controller.myPlayer != Network.player.guid) return;
 	//*/
-	if (!networkView.isMine) return;
+	if (!NetworkU.IsMine(this)) return;
 	
-	networkView.RPC("OnStartFire", RPCMode.All, []);
+	NetworkU.RPC(this, "OnStartFire", NetRPCMode.All);
 }
 
 function RPCOnStopFire(){
-	if (!networkView.isMine) return;
+	if (!NetworkU.IsMine(this)) return;
 	
-	networkView.RPC("OnStopFire", RPCMode.All, []);
+	NetworkU.RPC(this, "OnStopFire", NetRPCMode.All);
 }
 
 #if !UNITY_FLASH

@@ -53,7 +53,7 @@ function SetJoystickReset(b:boolean){
 
 function Awake () {
 	//only control your own character!
-	if (!networkView.isMine) return;
+	if (!NetworkU.IsMine(this)) return;
 	
 	motor.movementDirection = Vector2.zero;
 	motor.facingDirection = Vector2.zero;
@@ -106,7 +106,7 @@ function Awake () {
 
 function Start () {
 	//only control your own character!
-	if (!networkView.isMine) return;
+	if (!NetworkU.IsMine(this)) return;
 	
 	mainCameraTransform.position = transform.position + cameraOffset;
 	mainCameraTransform.LookAt(transform);	
@@ -128,7 +128,7 @@ function Start () {
 
 function OnDisable () {
 	//only control your own character!
-	if (!networkView.isMine) return;
+	if (!NetworkU.IsMine(this)) return;
 	
 	if (joystickLeft) 
 		joystickLeft.enabled = false;
@@ -139,7 +139,7 @@ function OnDisable () {
 
 function OnEnable () {
 	//only control your own character!
-	if (!networkView.isMine) return;
+	if (!NetworkU.IsMine(this)) return;
 	
 	if (joystickLeft) 
 		joystickLeft.enabled = true;
@@ -150,7 +150,7 @@ function OnEnable () {
 
 function Update () {
 	//only control your own character!
-	if (!networkView.isMine) return;
+	if (!NetworkU.IsMine(this)) return;
 	//if (healthComp.dead) return;
 	
 	//if (myPlayer != Network.player.guid) return;

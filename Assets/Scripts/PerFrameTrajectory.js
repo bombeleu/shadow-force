@@ -106,6 +106,7 @@ function GetDuration():float{
 	return outDuration;
 }
 
+#if !UNITY_FLASH
 function OnSerializeNetworkView (stream : BitStream, info : NetworkMessageInfo) {
 	stream.Serialize(pos);
 	if (stream.isReading){
@@ -113,3 +114,4 @@ function OnSerializeNetworkView (stream : BitStream, info : NetworkMessageInfo) 
 		//Debug.Log(pos);
 	}
 }
+#endif

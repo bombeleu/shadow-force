@@ -1,6 +1,7 @@
 #pragma strict
-//import NetworkU;
+#if !UNITY_FLASH
 @script RequireComponent (NetworkView)
+#endif
 
 //private var character : Transform;
 public var cursorPlaneHeight : float = 0;
@@ -32,7 +33,7 @@ function OnEnable(){
 		ws[i].SetEnable(false);
 
 		if (NetworkU.IsMine(this)/* && ws[i].networkView*/)
-			NetworkU.RPC(this, "RPCSetWeaponViewID", NetRPCMode.AllBuffered, [i, Network.AllocateViewID()]);
+			NetworkU.RPC(this, "RPCSetWeaponViewID", NetRPCMode.AllBuffered, [i, NetworkU.AllocateID()]);
 		//ws[0] = go.GetComponent.<Weapon>();
 	}
 	if (hasShield){
@@ -79,13 +80,16 @@ function _SetWeaponSelection(weapon0:int, weapon1:int):void{
 	this.enabled = true;
 }
 
-#if !UNITY_FLASH
+#if UNITY_FLASH
+function RPCSetWeaponViewID(weaponID:int, viewID:int){//dummy func
+}
+#else
 @RPC
-#endif
 function RPCSetWeaponViewID(weaponID:int, viewID:NetworkViewID){
 	//Debug.Log("RPC Set WeaponViewID " + weaponID + "..." + viewID);
 	ws[weaponID].networkView.viewID = viewID;
 }
+#endif
 
 public static function PlaneRayIntersection (plane : Plane, ray : Ray) : Vector3 {
 	var dist : float;
@@ -271,7 +275,7 @@ function Update () {
 
 private var buttonFire:boolean = false;
 function OnGUI(){
-	if (!networkView.isMine || !controllable) return;
+	if (!NetworkU.IsMine(this) || !controllable) return;
 	var btnRect : Rect;
 	btnRect.x = 0.4*Screen.width;
 	btnRect.width = 0.2*Screen.width;
@@ -325,7 +329,7 @@ function onetimeFireAnimation(){
 	yield WaitForSeconds(playerAnimation.shootingTime);
 	playerAnimation.OnStopFire();
 }
-
+#if !UNITY_FLASH
 function OnSerializeNetworkView (stream : BitStream, info : NetworkMessageInfo) {
 	/*var horizontalInput : float = 0.0;
 	if (stream.isWriting) {
@@ -345,11 +349,11 @@ function OnSerializeNetworkView (stream : BitStream, info : NetworkMessageInfo) 
 		RPCWeaponSwitch(newWeapon);
 	}
 }
+#endif
 
 #if !UNITY_FLASH
 @RPC
 #endif
-
 function RPCWeaponSwitch(newWeapon:int){
 	Debug.Log("RPC Switch weapon " + newWeapon);
 	ws[curWeapon].SetEnable(false);
@@ -373,7 +377,6 @@ function RPCWeaponSwitch(newWeapon:int){
 #if !UNITY_FLASH
 @RPC
 #endif
-
 function RPCWeaponInialize() {
 	Debug.Log("RPC Weapon Initalize");
 }

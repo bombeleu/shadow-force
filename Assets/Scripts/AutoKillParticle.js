@@ -14,5 +14,4 @@ function Update () {
 		var emitter : ParticleEmitter = gameObject.GetComponent(ParticleEmitter) as ParticleEmitter;
 		emitter.emit = false;
 	} 
-		//Network.Destroy(networkView.viewID);
 }

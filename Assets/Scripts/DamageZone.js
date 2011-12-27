@@ -8,7 +8,7 @@ private var interval:float;
 private var lastFireTime : float = -1;
 
 function Awake(){
-	frequency = Network.sendRate;
+	frequency = NetworkU.SendRate();
 	interval = 1/frequency;
 }
 

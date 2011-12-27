@@ -1,6 +1,7 @@
 #pragma strict
+#if !UNITY_FLASH
 @script RequireComponent (NetworkView)
-
+#endif
 public static var ammo = 20;
 
 public var team: int = 0;
@@ -12,7 +13,7 @@ function Awake(){
 	SetTeam(team);
 }
 
-
+#if !UNITY_FLASH
 function OnSerializeNetworkView (stream : BitStream, info : NetworkMessageInfo) {
 	stream.Serialize(team);
 	if (stream.isWriting){
@@ -20,6 +21,7 @@ function OnSerializeNetworkView (stream : BitStream, info : NetworkMessageInfo) 
 		_SetTeam(team);
 	}
 }
+#endif
 
 #if !UNITY_FLASH
 @RPC

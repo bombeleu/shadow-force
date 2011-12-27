@@ -8,5 +8,4 @@ function Awake(){
 function Update () {
 	if (Time.time - timer > lifeTime)
 		Spawner.Destroy (gameObject);
-		//Network.Destroy(networkView.viewID);
 }

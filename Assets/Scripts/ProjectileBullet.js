@@ -2,7 +2,6 @@
 @script RequireComponent (Weapon)
 @script RequireComponent (PerFrameTrajectory)
 
-//@script RequireComponent (NetworkView)
 private var bulletPrefab: GameObject;
 private var spawnPoint:Transform;
 private var trajectory:PerFrameTrajectory;
@@ -16,8 +15,8 @@ function Awake(){
 function OnLaunchBullet(pos:Vector3){
 	trajectory.OnUpdateTarget(pos);
 	var velo:Vector3 = trajectory.GetComputedVelocity();
-	var go:GameObject = Network.Instantiate(bulletPrefab, spawnPoint.position, 
-		spawnPoint.rotation, 0);
+	var go:GameObject = NetworkU.Instantiate(bulletPrefab, spawnPoint.position, 
+		spawnPoint.rotation);
 	//go.rigidbody.velocity = velo;
 	go.SendMessage("SetVelocity",velo);
 	var dodger: GravityDodger = go.GetComponentInChildren.<GravityDodger>();
@@ -29,8 +28,6 @@ function OnLaunchBullet(pos:Vector3){
 	}
 	
 	//go.rigidbody.angularVelocity = Vector3(Random.value,Random.value,Random.value)*Random.value*4;
-	/*var go2:GameObject = Network.Instantiate(bulletPrefab, oriPos, 
-		spawnPoint.rotation, 0);*/
 }
 
 /*

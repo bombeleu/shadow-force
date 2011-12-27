@@ -1,6 +1,7 @@
 #pragma strict
+#if !UNITY_FLASH
 @script RequireComponent (NetworkView)
-
+#endif
 private var enemies:Hashtable;
 
 public var weapon:Weapon;
@@ -32,17 +33,19 @@ function OnLoseSightEnemy(enemy:Visibility){
 function Start(){
 	altFireTimer = Time.time;
 	if (NetworkU.IsMine(this)){
-		NetworkU.RPC(this, "SetWeaponNetworkViewID", NetRPCMode.AllBuffered, Network.AllocateViewID());
+		NetworkU.RPC(this, "SetWeaponNetworkViewID", NetRPCMode.AllBuffered, NetworkU.AllocateID());
 	}
 }
 
-#if !UNITY_FLASH
+#if UNITY_FLASH
+function SetWeaponNetworkViewID(id:int){//dummy func
+}
+#else
 @RPC
-#endif
-
 function SetWeaponNetworkViewID(id:NetworkViewID){
 	weapon.networkView.viewID = id;
 }
+#endif
 
 private var target:GameObject;
 private var altFireTimer:float;

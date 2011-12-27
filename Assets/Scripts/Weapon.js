@@ -1,5 +1,4 @@
 #pragma strict
-//@script RequireComponent (NetworkView)
 
 //component for 'weapon' prefab
 

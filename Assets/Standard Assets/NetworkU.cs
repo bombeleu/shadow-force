@@ -16,18 +16,18 @@ public class NetworkU: MonoBehaviour{
 	public static Object Instantiate(Transform prefab, Vector3 pos, Quaternion rot){
 		#if !UNITY_FLASH
 		if (UseNet)
-			return GameObject.Instantiate(prefab, pos, rot);
+			return Network.Instantiate(prefab, pos, rot, 0);
 		else
 		#endif
-			return Network.Instantiate(prefab, pos, rot, 0);
+			return GameObject.Instantiate(prefab, pos, rot);
 	}
 	public static void Destroy(Component comp){
 		#if !UNITY_FLASH
 		if (UseNet)
-			GameObject.Destroy(comp.gameObject);
+			Network.Destroy(comp.networkView.viewID);
 		else
 		#endif
-			Network.Destroy(comp.networkView.viewID);
+			GameObject.Destroy(comp.gameObject);
 	}
 	//use the component that contains the RPC function!
 	public static void RPC(Component comp, string func, NetRPCMode mode, params object[] paras){
@@ -51,6 +51,30 @@ public class NetworkU: MonoBehaviour{
 		{
 			return true;
 		}
+	}
+	#if UNITY_FLASH
+	public static int AllocateID(){
+		return 0;
+	}
+	#else
+	public static NetworkViewID AllocateID(){
+		if (UseNet){
+			return Network.AllocateViewID();
+		}else{
+			return NetworkViewID.unassigned;
+		}
+	}
+	#endif
+	public static float SendRate(){
+		#if !UNITY_FLASH
+		if (UseNet){
+			return Network.sendRate;
+		}
+		else
+		#endif
+		{
+			return 15;
+		}		
 	}
 }
 

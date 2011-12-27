@@ -13,12 +13,20 @@ class AICentral extends DetectionAI{
 	private var lastKnownPos:Vector3;
 	
 	//private var patrolling:boolean = true;
-	#if !UNITY_FLASH
-	public var navigator:NavMeshAgent;
+	#if UNITY_FLASH
+	private var navigator:Object;
+	#else
+	private var navigator:NavMeshAgent;
 	#endif
 	function Awake(){
 		super.Awake();
-		#if !UNITY_FLASH
+		#if UNITY_FLASH
+		navigator = GetComponent("NavMeshAgent");
+		if (navigator!=null){
+			NetworkU.InitNav(navigator);
+		}
+		#else
+		navigator = GetComponent(NavMeshAgent);
 		if (navigator){
 			navigator.updatePosition = false;
 			navigator.updateRotation = false;
@@ -61,13 +69,15 @@ class AICentral extends DetectionAI{
 					talkAI.Say(TalkType.Shoot);
 				}else{
 					if (chaseAI){
-						#if !UNITY_FLASH
-						navigator.destination = tarPos;//TODO: check path availibity
-						//Debug.Log("find path");
-						lastTarget = tarPos;
-						chasing = true;
-						talkAI.Say(TalkType.Chase);
+						#if UNITY_FLASH
+						if (NetworkU.NavSetDest(navigator,tarPos)){
+						#else
+						if (navigator.SetDestination(tarPos)){
 						#endif
+							lastTarget = tarPos;
+							chasing = true;
+							talkAI.Say(TalkType.Chase);
+						}
 					}else{
 						talkAI.Say(TalkType.NotChase);
 					}
@@ -78,12 +88,15 @@ class AICentral extends DetectionAI{
 					if (chaseAI){
 						var tarP:Vector3 = shootingTarget.transform.position;
 						tarP.y = transform.position.y;
-						#if !UNITY_FLASH
-						navigator.destination = tarP;//TODO: check path availibity
-						lastTarget = tarP;
-						chasing = true;
-						talkAI.Say(TalkType.Chase);
+						#if UNITY_FLASH
+						if (NetworkU.NavSetDest(navigator,tarP)){
+						#else
+						if (navigator.SetDestination(tarP)){
 						#endif
+							lastTarget = tarP;
+							chasing = true;
+							talkAI.Say(TalkType.Chase);
+						}
 					}else{ 
 						if (!saidNotChase){
 							talkAI.Say(TalkType.NotChase);
@@ -94,9 +107,14 @@ class AICentral extends DetectionAI{
 				motor.facingDirection = Vector3.zero;
 				if (!chasing) canPatrol = true;
 			}
-			#if !UNITY_FLASH
 			if (chasing){
-				var v:Vector3 = navigator.nextPosition - transform.position;
+				var v:Vector3 = 
+				#if UNITY_FLASH
+				NetworkU.NavNextPos(navigator)
+				#else
+				navigator.nextPosition 
+				#endif
+				- transform.position;
 				v.y = 0;
 				if ((lastTarget - transform.position).sqrMagnitude < 0.25){
 					chasing = false;
@@ -107,7 +125,6 @@ class AICentral extends DetectionAI{
 					motor.movementDirection = v.normalized;
 				}
 			}
-			#endif
 		}else canPatrol = true;
 		if (canPatrol){
 			if (patroller){

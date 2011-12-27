@@ -80,9 +80,24 @@ public class NetworkU: MonoBehaviour{
 	public static int GetID(GameObject obj){
 		return obj.GetInstanceID();
 	}*/
-	
+	#if UNITY_FLASH
 	public static object[,] CellArray (int a, int b) {
         return new object[a,b];
     }
+	
+	//private NavMeshAgent Agent;
+	public static void InitNav(Object nav){
+		nav.GetType().GetProperty("updatePosition").SetValue(nav, false, null);
+		nav.GetType().GetProperty("updateRotation").SetValue(nav, false, null);
+	}
+	
+	public static bool NavSetDest(Object nav, Vector3 dest){
+		return (bool)(nav.GetType().GetMethod("SetDestination").Invoke(nav, new object[]{dest}));
+	}
+	
+	public static Vector3 NavNextPos(Object nav){
+		return (Vector3)(nav.GetType().GetProperty("nextPosition").GetValue(nav, null));
+	}
+	#endif
 }
 

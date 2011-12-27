@@ -28,9 +28,13 @@ class Cell {
 public var NUM_TILES : int = 10;
 public var MAP_SIZE : int = 100; 
 
-private var CELL_SIZE :float ;
-//private var grid : Cell[,] = new Cell[NUM_TILES,NUM_TILES];
+private var CELL_SIZE :float;
+
+#if UNITY_FLASH
 private var grid : Object[,] = NetworkU.CellArray(NUM_TILES, NUM_TILES);
+#else
+private var grid : Cell[,] = new Cell[NUM_TILES,NUM_TILES];
+#endif
 
 private var allBlockers : GameObject[];
 

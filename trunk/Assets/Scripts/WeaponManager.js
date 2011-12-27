@@ -33,7 +33,7 @@ function OnEnable(){
 		ws[i].SetEnable(false);
 
 		if (NetworkU.IsMine(this)/* && ws[i].networkView*/)
-			NetworkU.RPC(this, "RPCSetWeaponViewID", NetRPCMode.AllBuffered, [i, NetworkU.AllocateID()]);
+			NetworkU.RPC(this, "RPCSetWeaponViewID", NetRPCMode.AllBuffered, i, NetworkU.AllocateID());
 		//ws[0] = go.GetComponent.<Weapon>();
 	}
 	if (hasShield){

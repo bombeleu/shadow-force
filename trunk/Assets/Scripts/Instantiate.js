@@ -1,5 +1,7 @@
 public var playerPrefab : Transform;
+#if !UNITY_FLASH
 public var conGUI:ConnectionGUI;
+#endif
 
 /*
 function OnLevelWasLoaded (level : int) {
@@ -15,7 +17,9 @@ function OnLevelWasLoaded (level : int) {
 
 private var loaded:boolean = false;
 function OnNetworkLoadedLevel () {
+	#if !UNITY_FLASH
 	if (ConnectionGUI.dedicatedServer && Network.isServer) return;
+	#endif
 	loaded = true;
 	GetComponent(LineOfSight).revealAll = true;
 }
@@ -50,9 +54,14 @@ function OnGUI(){
 	
 		character.GetComponent(WeaponManager).SetWeaponSelection();
 		
+		#if UNITY_FLASH
+		var te:int = 1;
+		var na:String = "hero";
+		#else
 		var te:int = conGUI.GetTeamNum();
-		NetworkU.RPC(character.GetComponent(Team), "SetTeam", NetRPCMode.AllBuffered, te);
 		var na:String = ConnectionGUI.na;
+		#endif
+		NetworkU.RPC(character.GetComponent(Team), "SetTeam", NetRPCMode.AllBuffered, te);		
 		NetworkU.RPC(character.GetComponent(Team), "SetName", NetRPCMode.AllBuffered, na);
 				
 		LineOfSight.myTeam = te;
@@ -82,12 +91,14 @@ function Update(){
 	}	
 }
 
+#if !UNITY_FLASH
 function OnPlayerDisconnected (player : NetworkPlayer) {
 	loaded = false;
 	ready = false;
 	Network.RemoveRPCs(player, 0);
 	Network.DestroyPlayerObjects(player);
 }
+#endif
 
 
 function setCamera(character : Transform){
@@ -96,3 +107,4 @@ function setCamera(character : Transform){
 	if (Camera.main.GetComponent(HeightDepthOfField)!=null)
 		Camera.main.GetComponent(HeightDepthOfField).objectFocus = character;
 }
+

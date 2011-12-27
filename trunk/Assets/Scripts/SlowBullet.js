@@ -25,17 +25,8 @@ function OnLaunchBullet(){
 		return;
 	
 	if (createTeamObject){
-		ConnectionGUI.CreateTeamObject(bulletPrefab, NetworkU.AllocateID(), spawnPos, weapon.owner.transform.rotation, 
+		MainMenu.CreateTeamObject(bulletPrefab, NetworkU.AllocateID(), spawnPos, weapon.owner.transform.rotation, 
 			LineOfSight.myTeam);
 	}else
 		NetworkU.Instantiate(bulletPrefab, spawnPos, weapon.owner.transform.rotation);
 }
-
-/*
-#if !UNITY_FLASH
-@RPC
-#endif
-
-function RPCLaunchBullet(){
-	Instantiate (bulletPrefab, spawnPoint.position, spawnPoint.rotation);
-}*/

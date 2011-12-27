@@ -5,7 +5,7 @@ class Cell {
 
 	function Initialize()
 	{
-		//Debug.Log("Initialize");
+		////Debug.Log("Initialize");
 	}
 	
 	function AddBlocker(obj : GameObject)
@@ -29,7 +29,8 @@ public var NUM_TILES : int = 10;
 public var MAP_SIZE : int = 100; 
 
 private var CELL_SIZE :float ;
-private var grid : Cell[,] = new Cell[NUM_TILES,NUM_TILES];
+//private var grid : Cell[,] = new Cell[NUM_TILES,NUM_TILES];
+private var grid : Object[,] = NetworkU.CellArray(NUM_TILES, NUM_TILES);
 
 private var allBlockers : GameObject[];
 
@@ -38,14 +39,14 @@ public static var Instance : BlockerManager;
 // Use this for initialization
 function Awake () {//should be awake instead of Start, to use AddBlocker in Start of other scripts
 	CELL_SIZE = MAP_SIZE/NUM_TILES;
-	Debug.Log(CELL_SIZE + " ---- " + MAP_SIZE);
+	//Debug.Log(CELL_SIZE + " ---- " + MAP_SIZE);
 	for (var i : int = 0 ; i < NUM_TILES; i++)
 	{
 		for (var j:int = 0; j < NUM_TILES; j++)
 		{
-			//Debug.Log(grid[i,j]);
+			////Debug.Log(grid[i,j]);
 			grid[i,j] = new Cell();
-			grid[i,j].Initialize();
+			(grid[i,j] as Cell).Initialize();
 		}
 	}
 	allBlockers  = GameObject.FindGameObjectsWithTag("Blocker");
@@ -55,7 +56,7 @@ function Awake () {//should be awake instead of Start, to use AddBlocker in Star
 		AddBlocker(blocker);
 	}
 	// initialize map
-	Debug.Log("Total: " + allBlockers.Length + " blockers");
+	//Debug.Log("Total: " + allBlockers.Length + " blockers");
 	
 	Instance = this;
 }
@@ -76,7 +77,7 @@ private function GetBlockerBoundaries(blocker : GameObject) : Vector4
 {
 	if (IsCube(blocker))
 	{
-		Debug.Log("Process Blocker Cube at " + blocker.transform.position);
+		//Debug.Log("Process Blocker Cube at " + blocker.transform.position);
 		// now it's a cube, how to check which cell this cube intersects
 		var mat : Matrix4x4 = blocker.transform.localToWorldMatrix;			
 		var size : float = 0.5;
@@ -90,7 +91,7 @@ private function GetBlockerBoundaries(blocker : GameObject) : Vector4
 		
 		var smallest : Vector2 = corner[0];
 		var largest : Vector2 = corner[0];
-		//Debug.Log(corner[0] + "|"+corner[1] + "|"+corner[2] + "|"+corner[3] );
+		////Debug.Log(corner[0] + "|"+corner[1] + "|"+corner[2] + "|"+corner[3] );
 		//find smallest x, smallest y, largestX, largestY
 		for (var i : int = 1 ; i < 4; i++)
 		{
@@ -102,14 +103,14 @@ private function GetBlockerBoundaries(blocker : GameObject) : Vector4
 		
 	} else if (IsCylinder(blocker))
 	{
-		Debug.Log("Process Blocker Cylinder at " + blocker.transform.position);
+		//Debug.Log("Process Blocker Cylinder at " + blocker.transform.position);
 		// now it's a cylinder, how to check which cell this cube intersects
 		var capsule : CapsuleCollider = blocker.GetComponent(CapsuleCollider) ;
 		
 		var center : Vector2 = Vector2(capsule.center.x + blocker.transform.position.x, capsule.center.z + blocker.transform.position.z);
 		var radius : float = capsule.radius * blocker.transform.localScale.x;
 		
-		Debug.Log("Center" + center + "|||"+ "radius:" + radius);
+		//Debug.Log("Center" + center + "|||"+ "radius:" + radius);
 		smallest = center - Vector2(radius,radius);
 		largest = center + Vector2(radius,radius);
 	
@@ -122,13 +123,13 @@ public function RemoveBlocker(blocker : GameObject)
 {
 	var boundary : Vector4 = GetBlockerBoundaries(blocker);
 	
-	//Debug.Log(smallest + "|||" + largest);
+	////Debug.Log(smallest + "|||" + largest);
 	for (var i : int = ToCell(boundary[0]) ; i <= ToCell(boundary[1]); i++)
 	{
 		for (var j : int = ToCell(boundary[2]) ; j <= ToCell(boundary[3]); j++)
 		{
-			grid[i,j].RemoveBlocker(blocker);
-			Debug.Log("Remove Cell:" + i +","+j);	
+			(grid[i,j] as Cell).RemoveBlocker(blocker);
+			//Debug.Log("Remove Cell:" + i +","+j);	
 		}
 	}
 }
@@ -138,14 +139,14 @@ public function AddBlocker(blocker : GameObject)
 	var boundary : Vector4 = GetBlockerBoundaries(blocker);
 	
 	// add to proper cells
-	//Debug.Log(smallest + "|||" + largest);
+	////Debug.Log(smallest + "|||" + largest);
 	for (var i : int = ToCell(boundary[0]) ; i <= ToCell(boundary[1]); i++)
 	{
 		for (var j : int = ToCell(boundary[2]) ; j <= ToCell(boundary[3]); j++)
 		{
-			Debug.Log("Add Cell:" + i +","+j);	
-			grid[i,j].AddBlocker(blocker);
 			//Debug.Log("Add Cell:" + i +","+j);	
+			(grid[i,j] as Cell).AddBlocker(blocker);
+			////Debug.Log("Add Cell:" + i +","+j);	
 		}
 	}
 }
@@ -170,14 +171,14 @@ public function GetObjsInTriangle(pt0:Vector3, pt1:Vector3,pt2:Vector3) : GameOb
 	largest.x = Mathf.Max(pt0.x,pt1.x,pt2.x);
 	largest.y = Mathf.Max(pt0.z,pt1.z,pt2.z);
 
-	//Debug.Log("Cell : " + ToCell(smallest.x) + "," + ToCell(largest.x) + "," + ToCell(smallest.y) + "," + ToCell(largest.y));		
+	////Debug.Log("Cell : " + ToCell(smallest.x) + "," + ToCell(largest.x) + "," + ToCell(smallest.y) + "," + ToCell(largest.y));		
 	for (var i : int = ToCell(smallest.x) ; i <= ToCell(largest.x); i++)
 	{
 		for (var j:int = ToCell(smallest.y) ; j <= ToCell(largest.y); j++)
 		{
-			//Debug.Log(blockerManager.grid[i,j]);
-			//Debug.Log(blockerManager.grid[i,j].GetList());
-			for (var go : GameObject in grid[i,j].GetList())
+			////Debug.Log(blockerManager.grid[i,j]);
+			////Debug.Log(blockerManager.grid[i,j].GetList());
+			for (var go : GameObject in (grid[i,j] as Cell).GetList())
 			{
 				if (!result.Contains(go)) result.Add(go);
 			}
@@ -186,7 +187,7 @@ public function GetObjsInTriangle(pt0:Vector3, pt1:Vector3,pt2:Vector3) : GameOb
 //		var test : GameObject[] = result.ToArray();
 //		for (i = 0 ; i < test.Length; i++)
 //		{
-//			Debug.Log(result[i].transform.position);
+//			//Debug.Log(result[i].transform.position);
 //		}
 	return result.ToArray();
 }

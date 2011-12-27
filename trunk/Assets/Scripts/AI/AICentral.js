@@ -1,5 +1,5 @@
 #pragma strict
-//@RequireComponent(NavMeshAgent)
+@RequireComponent(NavMeshAgent)
 class AICentral extends DetectionAI{
 	public var motor : MovementMotor;
 	
@@ -13,14 +13,17 @@ class AICentral extends DetectionAI{
 	private var lastKnownPos:Vector3;
 	
 	//private var patrolling:boolean = true;
+	#if !UNITY_FLASH
 	public var navigator:NavMeshAgent;
-	
+	#endif
 	function Awake(){
 		super.Awake();
+		#if !UNITY_FLASH
 		if (navigator){
 			navigator.updatePosition = false;
 			navigator.updateRotation = false;
 		}
+		#endif
 	}
 	
 	private var chasing:boolean = false;
@@ -58,12 +61,13 @@ class AICentral extends DetectionAI{
 					talkAI.Say(TalkType.Shoot);
 				}else{
 					if (chaseAI){
-						if (navigator.SetDestination(tarPos)){
-							//Debug.Log("find path");
-							lastTarget = tarPos;
-							chasing = true;
-							talkAI.Say(TalkType.Chase);
-						}
+						#if !UNITY_FLASH
+						navigator.destination = tarPos;//TODO: check path availibity
+						//Debug.Log("find path");
+						lastTarget = tarPos;
+						chasing = true;
+						talkAI.Say(TalkType.Chase);
+						#endif
 					}else{
 						talkAI.Say(TalkType.NotChase);
 					}
@@ -74,11 +78,12 @@ class AICentral extends DetectionAI{
 					if (chaseAI){
 						var tarP:Vector3 = shootingTarget.transform.position;
 						tarP.y = transform.position.y;
-					 	if (navigator.SetDestination(tarP)){
-							lastTarget = tarP;
-							chasing = true;
-							talkAI.Say(TalkType.Chase);
-						}
+						#if !UNITY_FLASH
+						navigator.destination = tarP;//TODO: check path availibity
+						lastTarget = tarP;
+						chasing = true;
+						talkAI.Say(TalkType.Chase);
+						#endif
 					}else{ 
 						if (!saidNotChase){
 							talkAI.Say(TalkType.NotChase);
@@ -89,6 +94,7 @@ class AICentral extends DetectionAI{
 				motor.facingDirection = Vector3.zero;
 				if (!chasing) canPatrol = true;
 			}
+			#if !UNITY_FLASH
 			if (chasing){
 				var v:Vector3 = navigator.nextPosition - transform.position;
 				v.y = 0;
@@ -101,6 +107,7 @@ class AICentral extends DetectionAI{
 					motor.movementDirection = v.normalized;
 				}
 			}
+			#endif
 		}else canPatrol = true;
 		if (canPatrol){
 			if (patroller){

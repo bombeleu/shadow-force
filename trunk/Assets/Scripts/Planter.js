@@ -29,7 +29,7 @@ function Update () {
 	if (Time.time - startTime > plantingTime){
 		var plantingPos:Vector3 = weapon.owner.transform.position;
 		plantingPos.y = 1.2;
-		ConnectionGUI.CreateTeamObject(plantingObject, NetworkU.AllocateID(), 
+		MainMenu.CreateTeamObject(plantingObject, NetworkU.AllocateID(), 
 			plantingPos, weapon.owner.transform.rotation, 
 			Camera.main.GetComponent.<Team>().team);
 		planted = false;

@@ -74,7 +74,15 @@ public class NetworkU: MonoBehaviour{
 		#endif
 		{
 			return 15;
-		}		
+		}
 	}
+	/*
+	public static int GetID(GameObject obj){
+		return obj.GetInstanceID();
+	}*/
+	
+	public static object[,] CellArray (int a, int b) {
+        return new object[a,b];
+    }
 }
 

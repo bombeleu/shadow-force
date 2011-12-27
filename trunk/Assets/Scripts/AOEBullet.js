@@ -17,7 +17,7 @@ function Awake(){
 }
 
 function OnLaunchBullet(){
-	if (networkView.isMine){//check for instant damage
+	if (NetworkU.IsMine(this)){//check for instant damage
 		var cols:Collider[] = Physics.OverlapSphere(transform.position, wp.range, hitLayers);//not cast from gunpoint --> prevent through wall shooting
 		var myHealth:Health = wp.owner.GetComponent(Health);
 		for (var col:Collider in cols){

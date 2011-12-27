@@ -77,8 +77,8 @@ public var bounceTime : int = 5;
 function OnCollisionEnter(collision : Collision) {
 	var targetHealth : Health = collision.transform.GetComponent.<Health> ();
 	if (targetHealth) {
-		if (targetHealth.networkView.isMine){//only apply damage if it hits MY character!
-			targetHealth.transform.networkView.RPC("OnDamage", RPCMode.All, 
+		if (NetworkU.IsMine(targetHealth)){//only apply damage if it hits MY character!
+			NetworkU.RPC(targetHealth, "OnDamage", NetRPCMode.All, 
 				[damageAmount, -transform.forward*5]);
 		}
 		Explode();

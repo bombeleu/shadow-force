@@ -25,7 +25,7 @@ function OnLaunchBullet(){
 			var targetHealth : Health = hitInfo.transform.GetComponent(Health);
 			if (targetHealth) {
 				// Apply damage
-				if (networkView.isMine){//only apply damage if this is MY character!
+				if (NetworkU.IsMine(this)){//only apply damage if this is MY character!
 					NetworkU.RPC(targetHealth, "OnDamage", NetRPCMode.All, 
 						[damagePerSecond / frequency, -weapon.owner.transform.forward*2]);
 				}

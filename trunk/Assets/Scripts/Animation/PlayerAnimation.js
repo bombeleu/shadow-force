@@ -240,7 +240,7 @@ function FixedUpdate () {
 	velocity = (tr.position - lastPosition) / Time.deltaTime;
 	localVelocity = tr.InverseTransformDirection (velocity);
 	localVelocity.y = 0;
-	if (rigid.networkView.isMine){
+	if (NetworkU.IsMine(rigid)){
 		speed = localVelocity.magnitude;
 		angle = HorizontalAngle (localVelocity);
 	}

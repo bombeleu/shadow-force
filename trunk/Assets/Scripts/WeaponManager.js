@@ -31,7 +31,7 @@ function OnEnable(){
 		ws[i].owner = transform;
 		ws[i].SetEnable(false);
 
-		if (networkView.isMine && ws[i].networkView)
+		if (NetworkU.IsMine(this)/* && ws[i].networkView*/)
 			NetworkU.RPC(this, "RPCSetWeaponViewID", NetRPCMode.AllBuffered, [i, Network.AllocateViewID()]);
 		//ws[0] = go.GetComponent.<Weapon>();
 	}
@@ -66,13 +66,12 @@ function SetWeaponSelection(){
 	var params:Object[] = new Object[2];
 	params[0] = weaponGUI.selectedWeapons[0];
 	params[1] = weaponGUI.selectedWeapons[1];
-	networkView.RPC("_SetWeaponSelection", RPCMode.AllBuffered, params);
+	NetworkU.RPC(this, "_SetWeaponSelection", NetRPCMode.AllBuffered, params);
 }
 
 #if !UNITY_FLASH
 @RPC
 #endif
-
 function _SetWeaponSelection(weapon0:int, weapon1:int):void{
 	weapons = new Weapon[2];
 	weapons[0] = weaponGUI.availableWeapons[weapon0];
@@ -83,7 +82,6 @@ function _SetWeaponSelection(weapon0:int, weapon1:int):void{
 #if !UNITY_FLASH
 @RPC
 #endif
-
 function RPCSetWeaponViewID(weaponID:int, viewID:NetworkViewID){
 	//Debug.Log("RPC Set WeaponViewID " + weaponID + "..." + viewID);
 	ws[weaponID].networkView.viewID = viewID;
@@ -171,7 +169,7 @@ public var playerAnimation : PlayerAnimation;
 
 private var weaponSwitchGUI:boolean;
 function Update () {
-	if (!networkView.isMine) return;//weapon manager only updates the local player, network update is done per weapon basis
+	if (!NetworkU.IsMine(this)) return;//weapon manager only updates the local player, network update is done per weapon basis
 
 	//return;
 	//this is only needed if the terrain is uneven!
@@ -252,11 +250,11 @@ function Update () {
 			}else{
 				weapon.gameObject.SendMessage("OnLaunchBullet");
 			}
-			networkView.RPC("onetimeFireAnimation", RPCMode.All);
+			NetworkU.RPC(this, "onetimeFireAnimation", NetRPCMode.All);
 		}
 	}else{//continuous firing
 		if (isFiring && (firing || angle<=3)){
-			if (!firing) networkView.RPC("startFireAnimation", RPCMode.All);
+			if (!firing) NetworkU.RPC(this, "startFireAnimation", NetRPCMode.All);
 			firing = true;
 			if (weapon.needPosition){
 				weapon.gameObject.SendMessage("OnLaunchBullet", cursorWorldPosition);
@@ -264,7 +262,7 @@ function Update () {
 				weapon.gameObject.SendMessage("OnLaunchBullet");
 			}
 		}else{
-			if (firing) networkView.RPC("stopFireAnimation", RPCMode.All);
+			if (firing) NetworkU.RPC(this, "stopFireAnimation", NetRPCMode.All);
 			firing = false;
 			weapon.gameObject.SendMessage("OnStopFiring");
 		}
@@ -306,7 +304,6 @@ function OnGUI(){
 #if !UNITY_FLASH
 @RPC
 #endif
-
 function startFireAnimation(){
 	//Debug.Log('start fire!');
 	playerAnimation.OnStartFire();
@@ -315,7 +312,6 @@ function startFireAnimation(){
 #if !UNITY_FLASH
 @RPC
 #endif
-
 function stopFireAnimation(){
 	//Debug.Log('stop fire!');
 	playerAnimation.OnStopFire();
@@ -324,7 +320,6 @@ function stopFireAnimation(){
 #if !UNITY_FLASH
 @RPC
 #endif
-
 function onetimeFireAnimation(){
 	playerAnimation.OnStartFire();
 	yield WaitForSeconds(playerAnimation.shootingTime);
@@ -367,7 +362,7 @@ function RPCWeaponSwitch(newWeapon:int){
 		autoShoot.enabled = autoShootAllow;
 	
 	#if UNITY_IPHONE || UNITY_ANDROID
-		if (networkView.isMine){
+		if (NetworkU.IsMine(this)){
 			if (ws[curWeapon].needPosition)
 				gameObject.SendMessage("SetJoystickReset",true);
 			else

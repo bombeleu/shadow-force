@@ -65,6 +65,7 @@ class MainMenu extends ScreenGUI{
 		if (state == MenuState.OuterMost){
 			GUILayout.BeginHorizontal();
 			if (GUILayout.Button("Single play")){
+				NetworkU.UseNet = false;
 				state = MenuState.Single;
 			}
 			if (GUILayout.Button("(debug)Reset data")){
@@ -79,6 +80,7 @@ class MainMenu extends ScreenGUI{
 			}
 			#if !UNITY_FLASH
 				if (GUILayout.Button("Online battle")){
+					NetworkU.UseNet = true;
 					//state = MenuState.Multi;
 					Application.LoadLevel(levelList[0]);
 					uiController.SetCurrentGUI(GetComponent(SelectWeaponGUI));

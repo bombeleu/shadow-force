@@ -13,14 +13,14 @@ function Awake(){
 function OnSignal () {
 	var spawners = GameObject.FindGameObjectsWithTag ("Respawn");
 	checkpoint = spawners[ Mathf.Floor( (spawners.length-1) * Random.value)].transform;
-	if (networkView.isMine){
+	if (NetworkU.IsMine(this)){
 		//Team.ammo = 20;
 		var myTeam = gameObject.GetComponent(Team).team;
 		
-		Camera.main.networkView.RPC("ReportDeath",RPCMode.AllBuffered, myTeam);
+		NetworkU.RPC(Camera.main.GetComponent(SpawnAtCheckpoint), "ReportDeath", NetRPCMode.AllBuffered, myTeam);
 		//if (myTeam == 1) Team.team1D++;
 		//if (myTeam == 2) Team.team2D++;
-		networkView.RPC("CreateDeathMark", RPCMode.All, transform.position);
+		NetworkU.RPC(this, "CreateDeathMark", NetRPCMode.All, transform.position);
 	}
 
 	transform.position = checkpoint.position + Vector3(0,4,0);

@@ -31,8 +31,8 @@ function OnLoseSightEnemy(enemy:Visibility){
 
 function Start(){
 	altFireTimer = Time.time;
-	if (networkView.isMine){
-		networkView.RPC("SetWeaponNetworkViewID", RPCMode.AllBuffered, Network.AllocateViewID());
+	if (NetworkU.IsMine(this)){
+		NetworkU.RPC(this, "SetWeaponNetworkViewID", NetRPCMode.AllBuffered, Network.AllocateViewID());
 	}
 }
 
@@ -52,7 +52,7 @@ private var curAngle:float = 0;
 function Update () {
 	//return;
 	//*
-	if (!networkView.isMine) return;
+	if (!NetworkU.IsMine(this)) return;
 	//remove dead
 	while (true){
 		if (enemies.Count==0) break;

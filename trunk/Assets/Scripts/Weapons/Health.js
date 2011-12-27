@@ -132,7 +132,7 @@ function OnEnable () {
 // Regenerate health
 
 function Regenerate () {
-	if (!networkView.isMine) return;	
+	if (!NetworkU.IsMine(this)) return;	
 	if (regenerateSpeed > 0.0f) {
 		while (enabled) {
 			if (Time.time > lastDamageTime + 3) {

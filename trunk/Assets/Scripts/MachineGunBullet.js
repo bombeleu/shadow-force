@@ -46,7 +46,6 @@ function EnableFiring(){
 function OnStopFiring(){
 	if (!firing) return;
 	firing = false;
-	//networkView.RPC("DisableFiring", RPCMode.All);
 	NetworkU.RPC(this,"DisableFiring", NetRPCMode.All);
 }
 
@@ -67,14 +66,6 @@ function Update(){
 		var hitInfo : RaycastHit = raycast.GetHitInfo();
 		bullet.dist = hitInfo.transform?hitInfo.distance:1000;
 		
-		/*if (networkView.isMine)
-			bullet.dist = GetComponent.<InstantBullet>().GetHitDistance();
-		else{
-			var hitInfo : RaycastHit = RaycastHit ();
-			Physics.Raycast (spawnPoint.position, spawnPoint.forward, hitInfo);
-			bullet.dist = hitInfo.transform?hitInfo.distance:1000;
-		}*/
-			
 		lastFireTime = Time.time;
 	}
 }

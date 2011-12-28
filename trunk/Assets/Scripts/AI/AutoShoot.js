@@ -8,13 +8,10 @@ class AutoShoot extends DetectionAI{
 	
 	private var firing:boolean = false;
 	function Update(){
+		var stopShoot:boolean = false;
 		if (enemies.Count==0){
-			if (firing){
-				weaponManager.WeaponStopFire();
-				firing = false;
-			}
+			stopShoot = true;
 		}else{
-			firing = true;
 			var tarPos:Vector3;
 			for (var i:Object in enemies.Values){
 				tarPos = (i as Visibility).transform.position;
@@ -35,9 +32,14 @@ class AutoShoot extends DetectionAI{
 					shoot = false;
 			}
 			if (shoot){
+				firing = true;
 				motor.facingDirection = targetV.normalized;
 				weaponManager.WeaponStartFire(tarPos);
-			}
+			}else stopShoot = true;
+		}
+		if (stopShoot && firing){
+			weaponManager.WeaponStopFire();
+			firing = false;
 		}
 	}
 }

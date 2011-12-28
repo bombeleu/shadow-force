@@ -4,6 +4,8 @@ private var hitInfo : RaycastHit;
 public var tr : Transform;
 public var layerMask: LayerMask = (1 <<0) | (1 << 8);//default + Player mask;
 
+public var hasRange:boolean = false;
+
 public var weapon : Weapon;
 //private var dir : Transform;
 
@@ -31,7 +33,7 @@ function Update () {
 	// Cast a ray to find out the end point of the laser
 	hitInfo = RaycastHit ();
 	//Physics.Raycast (tr.position, tr.forward, hitInfo);
-	Physics.Raycast (oriPos, dir, hitInfo, Mathf.Infinity, layerMask.value);
+	Physics.Raycast (oriPos, dir, hitInfo, hasRange?weapon.range:Mathf.Infinity, layerMask.value);
 }
 
 function GetHitInfo () : RaycastHit {

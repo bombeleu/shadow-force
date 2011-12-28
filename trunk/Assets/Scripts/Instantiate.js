@@ -61,13 +61,15 @@ function OnGUI(){
 		#if UNITY_FLASH
 		var te:int = 1;
 		var na:String = "hero";
+		character.GetComponent(Team).SetTeam(te);		
+		character.GetComponent(Team).SetName(na);
 		#else
 		var te:int = conGUI.GetTeamNum();
 		var na:String = ConnectionGUI.na;
-		#endif
 		NetworkU.RPC(character.GetComponent(Team), "SetTeam", NetRPCMode.AllBuffered, te);		
 		NetworkU.RPC(character.GetComponent(Team), "SetName", NetRPCMode.AllBuffered, na);
-				
+		#endif
+		
 		LineOfSight.myTeam = te;
 		//setCamera(character);	
 	}

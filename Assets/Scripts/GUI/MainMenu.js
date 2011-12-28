@@ -173,7 +173,11 @@ class MainMenu extends ScreenGUI{
 		pos:Vector3, quat: Quaternion, team:int):void
 	{
 		var i:int = instance.GetPrefabID(prefab);
+		#if UNITY_FLASH
+		instance._CreateTeamObject(i, viewID, pos, quat, team); 
+		#else
 		NetworkU.RPC(instance, "_CreateTeamObject", NetRPCMode.AllBuffered, [i, viewID, pos, quat, team]); 
+		#endif
 	}
 	
 	function GetPrefabID(prefab:GameObject):int{

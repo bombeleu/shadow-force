@@ -26,8 +26,12 @@ function OnLaunchBullet(){
 			if (targetHealth) {
 				// Apply damage
 				if (NetworkU.IsMine(this)){//only apply damage if this is MY character!
+					#if UNITY_FLASH
+					targetHealth.OnDamage(damagePerSecond / frequency, -weapon.owner.transform.forward*2);
+					#else
 					NetworkU.RPC(targetHealth, "OnDamage", NetRPCMode.All, 
 						[damagePerSecond / frequency, -weapon.owner.transform.forward*2]);
+					#endif
 				}
 			}
 		}

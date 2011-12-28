@@ -33,7 +33,11 @@ function OnEnable(){
 		ws[i].SetEnable(false);
 
 		if (NetworkU.IsMine(this)/* && ws[i].networkView*/)
+			#if UNITY_FLASH
+			RPCSetWeaponViewID(i, NetworkU.AllocateID());
+			#else
 			NetworkU.RPC(this, "RPCSetWeaponViewID", NetRPCMode.AllBuffered, i, NetworkU.AllocateID());
+			#endif
 		//ws[0] = go.GetComponent.<Weapon>();
 	}
 	if (hasShield){
@@ -67,7 +71,11 @@ function SetWeaponSelection(){
 	var params:Object[] = new Object[2];
 	params[0] = weaponGUI.selectedWeapons[0];
 	params[1] = weaponGUI.selectedWeapons[1];
+	#if UNITY_FLASH
+	_SetWeaponSelection(params[0], params[1]);
+	#else
 	NetworkU.RPC(this, "_SetWeaponSelection", NetRPCMode.AllBuffered, params);
+	#endif
 }
 
 #if !UNITY_FLASH
@@ -254,11 +262,21 @@ function Update () {
 			}else{
 				weapon.gameObject.SendMessage("OnLaunchBullet");
 			}
-			NetworkU.RPC(this, "onetimeFireAnimation", NetRPCMode.All);
+			#if UNITY_FLASH
+			onetimeFireAnimation();
+			#else
+			NetworkU.RPC(this, "onetimeFireAnimation", NetRPCMode.All);			
+			#endif
 		}
 	}else{//continuous firing
 		if (isFiring && (firing || angle<=3)){
-			if (!firing) NetworkU.RPC(this, "startFireAnimation", NetRPCMode.All);
+			if (!firing){ 
+				#if UNITY_FLASH
+				startFireAnimation();
+				#else
+				NetworkU.RPC(this, "startFireAnimation", NetRPCMode.All);
+				#endif
+			}
 			firing = true;
 			if (weapon.needPosition){
 				weapon.gameObject.SendMessage("OnLaunchBullet", cursorWorldPosition);
@@ -266,7 +284,13 @@ function Update () {
 				weapon.gameObject.SendMessage("OnLaunchBullet");
 			}
 		}else{
-			if (firing) NetworkU.RPC(this, "stopFireAnimation", NetRPCMode.All);
+			if (firing){
+				#if UNITY_FLASH
+				stopFireAnimation();
+				#else
+				NetworkU.RPC(this, "stopFireAnimation", NetRPCMode.All);
+				#endif
+			}
 			firing = false;
 			weapon.gameObject.SendMessage("OnStopFiring");
 		}

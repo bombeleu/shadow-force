@@ -32,7 +32,11 @@ function OnLoseSightEnemy(enemy:Visibility){
 function Start(){
 	altFireTimer = Time.time;
 	if (NetworkU.IsMine(this)){
+		#if UNITY_FLASH
+		SetWeaponNetworkViewID(NetworkU.AllocateID());
+		#else
 		NetworkU.RPC(this, "SetWeaponNetworkViewID", NetRPCMode.AllBuffered, NetworkU.AllocateID());
+		#endif
 	}
 }
 

@@ -35,8 +35,12 @@ function OnLaunchBullet(){
 					//var hitInfo:RaycastHit;
 					if (!Physics.Raycast(transform.position, toV, toV.magnitude, blockLayers)){
 						// Apply damage
+						#if UNITY_FLASH
+						col.GetComponent(Health).OnDamage(damage, -wp.owner.transform.forward*7);
+						#else
 						NetworkU.RPC(col.GetComponent(Health), "OnDamage", NetRPCMode.All, 
 							[damage, -wp.owner.transform.forward*7]);
+						#endif
 					}
 					//Debug.Log(hitInfo.transform);
 					//Debug.Log(spawnPoint.position);

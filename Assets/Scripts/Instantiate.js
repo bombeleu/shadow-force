@@ -1,6 +1,10 @@
+#pragma strict
 public var playerPrefab : Transform;
 #if !UNITY_FLASH
-public var conGUI:ConnectionGUI;
+private var conGUI:ConnectionGUI;
+function Awake(){
+	conGUI = GetComponent(ConnectionGUI);
+}
 #endif
 
 /*

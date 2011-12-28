@@ -7,13 +7,12 @@ public class PopupMessage
 	
 	public function Draw()
 	{
-		GUI.Window(0, new Rect(100,100,300,300),DoWindow,title);
+		GUI.Window(0, PopupManager.Instance.popupRect,DoWindow,title);
 	}
 	
 	function DoWindow(windowID : int)
 	{
-		GUI.Label (PopupManager.Instance.rect,content);
-	        
+		GUI.Label(PopupManager.Instance.rect,content);	        
 	}
 	
 	public function ParseFromString(line : String)
@@ -34,9 +33,10 @@ public class PopupMessage
 	}
 }
 
-public var msgList : List.<PopupMessage> = new List.<PopupMessage>();
+private var msgList : List.<PopupMessage> = new List.<PopupMessage>();
 private var msgPool : PopupMessage[];
 
+public var popupRect : Rect;
 public var rect : Rect;
 public var style : GUIStyle;
 

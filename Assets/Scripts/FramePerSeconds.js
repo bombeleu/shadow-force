@@ -18,6 +18,8 @@ function Start()
 
 function Update()
 {
+	if (Time.timeScale < 0.00001f || Time.deltaTime < 0.00001f) return;
+	
     timeleft -= Time.deltaTime;
     accum += Time.timeScale/Time.deltaTime;
     ++frames;

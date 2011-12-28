@@ -33,7 +33,7 @@ Shader "FateHunter/Vision" {
 			float dist = length(distV);
 			
 			if (dist > _Distance) return fixed4(0,0,0,0);
-			else return _VisionColor * (1.5-dist/_Distance);
+			else return _VisionColor * (0.3+(dist*dist)/(_Distance*_Distance));
 		}
 	
 	ENDCG

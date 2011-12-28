@@ -8,7 +8,7 @@ class FadingData {
 }
 
 public var visibleObjects:GameObject[];
-private var _dyVisibleObjects : List.<GameObject>;
+private var _dyVisibleObjects : List.<GameObject> = new List.<GameObject>();
 public var fadingTime : float = 1.0; // in seconds
 
 private var _alpha : float = 1.0;
@@ -37,8 +37,9 @@ function Initialize()
 	// save the original shader
 	// get corresponding replacement shader
 	var weapon : Weapon = GetComponentInChildren(Weapon);
-	
-	if (weapon != null) nMaterials += weapon.gameObject.renderer.materials.Length;
+	var weaponRenderer:Renderer;
+	if (weapon!=null) weaponRenderer = weapon.GetComponentInChildren(Renderer);
+	if (weapon != null) nMaterials += weaponRenderer.materials.Length;
 	
 	_fadingData = new FadingData[nMaterials];
 	for (var i : int ; i < nMaterials; i++)
@@ -54,11 +55,11 @@ function Initialize()
 		count += obj.renderer.materials.Length;
 	}
 	// fade weapon`
-	if (weapon != null) AddFadingData(count,weapon.gameObject);
+	if (weapon != null) AddFadingData(count, weaponRenderer.gameObject);
 
 	//fade team name
 	_textMesh = GetComponentInChildren(TextMesh);
-	_vision = GetComponentInChildren.<VisionMeshScript>();
+	_vision = GetComponentInChildren(VisionMeshScript);
 }
 
 public function RemoveVisibleObject(go : GameObject)

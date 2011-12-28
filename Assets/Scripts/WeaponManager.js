@@ -16,6 +16,8 @@ public var weapons: Weapon[];
 public var hasShield:boolean = false;
 public var shieldPrefab:Transform;
 
+public var visiBucket:VisibleBucket;
+
 private var curWeapon: int = 0;
 private var ws: Weapon[];
 
@@ -53,6 +55,7 @@ function OnEnable(){
 		if (ai){
 			ai.blocker = blocker;
 		}
+		visiBucket.AddVisibleObject(shield.GetComponentInChildren(Renderer).gameObject);
 	}
 	if (controllable)
 		autoShoot.enabled = ws[0].playerAutoShoot;

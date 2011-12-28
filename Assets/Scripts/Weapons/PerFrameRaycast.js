@@ -28,12 +28,16 @@ function Update () {
 	if (!weapon.owner) return;//TODO: this hack is to prevent error when owner die
 	dir = weapon.owner.transform.forward;
 	dir.y=0;
-	var oriPos:Vector3 = weapon.owner.transform.position + dir*0.7;//inside the body's capsule
+	var oriPos:Vector3 = GetOrigin();
 	oriPos.y = tr.position.y;//only take the height from spawnPoint
 	// Cast a ray to find out the end point of the laser
 	hitInfo = RaycastHit ();
 	//Physics.Raycast (tr.position, tr.forward, hitInfo);
 	Physics.Raycast (oriPos, dir, hitInfo, hasRange?weapon.range:Mathf.Infinity, layerMask.value);
+}
+
+function GetOrigin():Vector3{
+	return weapon.owner.transform.position + dir*0.7;//inside the body's capsule
 }
 
 function GetHitInfo () : RaycastHit {

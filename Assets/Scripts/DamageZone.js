@@ -26,9 +26,13 @@ function OnDisable(){
 function OnTriggerStay (other : Collider) : void{
 	var health : Health = other.GetComponent(Health);
 	if (health){
-		if (raycastCheck && raycast.GetHitInfo().transform){//blocked
-			Debug.Log(raycast.GetHitInfo().transform);
-			return;
+		if (raycastCheck){
+			var hit:RaycastHit = raycast.GetHitInfo();
+			if (hit.transform && 
+				hit.distance < (health.transform.position - raycast.GetOrigin()).magnitude){
+				//blocked, check like this because there could be more than 1 target in the AOE zone
+				return;
+			}
 		}
 		if (Time.time > lastFireTime + interval) {
 			if (NetworkU.IsMine(health)){//defender message

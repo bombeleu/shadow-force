@@ -17,8 +17,12 @@ function OnTriggerStay (other : Collider) : void{
 	if (health){
 		if (Time.time > lastFireTime + interval) {
 			if (NetworkU.IsMine(health)){//defender message
+				#if UNITY_FLASH
+				health.OnDamage(damagePerSecond / frequency, Vector3.zero);
+				#else
 				NetworkU.RPC(health, "OnDamage", NetRPCMode.All, 
 					[damagePerSecond / frequency, Vector3.zero]);
+				#endif
 			}
 			lastFireTime = Time.time;
 		}

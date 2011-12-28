@@ -78,8 +78,12 @@ function OnCollisionEnter(collision : Collision) {
 	var targetHealth : Health = collision.transform.GetComponent.<Health> ();
 	if (targetHealth) {
 		if (NetworkU.IsMine(targetHealth)){//only apply damage if it hits MY character!
+			#if UNITY_FLASH
+			targetHealth.OnDamage(damageAmount, -transform.forward*5);
+			#else
 			NetworkU.RPC(targetHealth, "OnDamage", NetRPCMode.All, 
 				[damageAmount, -transform.forward*5]);
+			#endif
 		}
 		Explode();
 		return;

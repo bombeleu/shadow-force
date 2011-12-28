@@ -469,12 +469,13 @@ private function LineIntersectLine(p0 : Vector2, p1 : Vector2,p2 : Vector2, p3 :
 	return (p0 + sI*u);  // compute S1 intersect point
 }
 // return the intersection point of a line segments (p1,p2) with the circle
+/*
 private function LineIntersectCircle(p1 : Vector2, p2 : Vector2, center : Vector2, r : float) : Vector2
 {
 	/*
 	http://mathworld.wolfram.com/Circle-LineIntersection.html
 	*/
-	var dx : float = p2.x - p1.x ;
+/*	var dx : float = p2.x - p1.x ;
 	var dy : float = p2.y - p1.y ;
 	var dr2 : float = dx*dx + dy*dy;
 	var det: float = (p1.x-center.x)*(p2.y-center.y) - (p1.y-center.y)*(p2.x-center.x);
@@ -486,7 +487,7 @@ private function LineIntersectCircle(p1 : Vector2, p2 : Vector2, center : Vector
 	var v2 : Vector2 = Vector2(det*dy-sgndy*dx*sqrtDelta,-det*dx-Mathf.Abs(dy)*sqrtDelta)/dr2 + center;
 	
 	return v1;
-}
+}*/
 
 private function Sign2(p1 : Vector2, p2 : Vector2) : float
 {

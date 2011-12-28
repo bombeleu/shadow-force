@@ -50,8 +50,12 @@ function Update () {
 				if (targetHealth) {
 					// Apply damage
 					if (NetworkU.IsMine(this)){//only apply damage if this is MY character!
+						#if UNITY_FLASH
+						targetHealth.OnDamage(damagePerSecond / frequency, -spawnPoint.forward);
+						#else
 						NetworkU.RPC(targetHealth, "OnDamage", NetRPCMode.All, 
 							[damagePerSecond / frequency, -spawnPoint.forward]);
+						#endif
 					}
 					//targetHealth.OnDamage (damagePerSecond / frequency, -spawnPoint.forward);
 				}
@@ -85,7 +89,11 @@ function Update () {
 function RPCFireMissile(){
 	if (!NetworkU.IsMine(this)) return;
 	if (Team.ammo<=0) return;
+	#if UNITY_FLASH
+	FireMissile(spawnPoint.position, spawnPoint.rotation);
+	#else
 	NetworkU.RPC(this, "FireMissile", NetRPCMode.All, [spawnPoint.position, spawnPoint.rotation]);
+	#endif
 	Team.ammo--;
 }
 
@@ -99,14 +107,20 @@ function FireMissile(pos : Vector3, quat : Quaternion){
 
 function RPCOnStartFire(){
 	if (!NetworkU.IsMine(this)) return;
-	
+	#if UNITY_FLASH
+	OnStartFire();
+	#else
 	NetworkU.RPC(this, "OnStartFire", NetRPCMode.All);
+	#endif
 }
 
 function RPCOnStopFire(){
 	if (!NetworkU.IsMine(this)) return;
-	
+	#if UNITY_FLASH
+	OnStopFire();
+	#else
 	NetworkU.RPC(this, "OnStopFire", NetRPCMode.All);
+	#endif
 }
 
 #if !UNITY_FLASH

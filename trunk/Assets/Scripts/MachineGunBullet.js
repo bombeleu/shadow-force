@@ -34,7 +34,11 @@ function Start(){
 function OnLaunchBullet(){
 	if (firing) return;
 	firing = true;
+	#if UNITY_FLASH
+	EnableFiring();
+	#else
 	NetworkU.RPC(this,"EnableFiring", NetRPCMode.All);
+	#endif
 }
 
 #if !UNITY_FLASH
@@ -48,7 +52,11 @@ function EnableFiring(){
 function OnStopFiring(){
 	if (!firing) return;
 	firing = false;
+	#if UNITY_FLASH
+	DisableFiring();
+	#else
 	NetworkU.RPC(this,"DisableFiring", NetRPCMode.All);
+	#endif
 }
 
 #if !UNITY_FLASH

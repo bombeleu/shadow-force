@@ -4,7 +4,7 @@
 
 using UnityEngine;
 using System.Collections;
-using System.Reflection;
+//using System.Reflection;
 
 public enum NetRPCMode{
 	All,
@@ -29,18 +29,18 @@ public class NetworkU: MonoBehaviour{
 		#endif
 			GameObject.Destroy(comp.gameObject);
 	}
+	#if !UNITY_FLASH
 	//use the component that contains the RPC function!
 	public static void RPC(Component comp, string func, NetRPCMode mode, params object[] paras){
-		#if !UNITY_FLASH
 		if (UseNet)
 			comp.networkView.RPC(func, mode==NetRPCMode.All?RPCMode.All:RPCMode.AllBuffered, paras);
 		else
-		#endif
 		{
 			comp.GetType().GetMethod(func).Invoke(comp, paras);
 			//gameObject.SendMessage(func, paras);
 		}
 	}
+	#endif
 	public static bool IsMine(Component comp){
 		#if !UNITY_FLASH
 		if (UseNet){
@@ -84,7 +84,7 @@ public class NetworkU: MonoBehaviour{
 	public static object[,] CellArray (int a, int b) {
         return new object[a,b];
     }
-	
+
 	//private NavMeshAgent Agent;
 	public static void InitNav(Object nav){
 		nav.GetType().GetProperty("updatePosition").SetValue(nav, false, null);
@@ -92,7 +92,9 @@ public class NetworkU: MonoBehaviour{
 	}
 	
 	public static bool NavSetDest(Object nav, Vector3 dest){
-		return (bool)(nav.GetType().GetMethod("SetDestination").Invoke(nav, new object[]{dest}));
+		//return (bool)(nav.GetType().GetMethod("SetDestination").Invoke(nav, new object[]{dest}));
+		nav.GetType().GetProperty("destination").SetValue(nav, dest, null);
+		return true;
 	}
 	
 	public static Vector3 NavNextPos(Object nav){

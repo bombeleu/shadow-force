@@ -16,11 +16,13 @@ function OnSignal () {
 	if (NetworkU.IsMine(this)){
 		//Team.ammo = 20;
 		var myTeam = gameObject.GetComponent(Team).team;
-		
+		#if UNITY_FLASH
+		//Camera.main.GetComponent(SpawnAtCheckpoint).ReportDeath(myTeam);//TODO:restore this
+		CreateDeathMark(transform.position);
+		#else
 		NetworkU.RPC(Camera.main.GetComponent(SpawnAtCheckpoint), "ReportDeath", NetRPCMode.AllBuffered, myTeam);
-		//if (myTeam == 1) Team.team1D++;
-		//if (myTeam == 2) Team.team2D++;
 		NetworkU.RPC(this, "CreateDeathMark", NetRPCMode.All, transform.position);
+		#endif
 	}
 
 	transform.position = checkpoint.position + Vector3(0,4,0);

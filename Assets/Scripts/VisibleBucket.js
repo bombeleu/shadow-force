@@ -1,3 +1,4 @@
+
 #pragma strict
 
 class FadingData {
@@ -7,6 +8,7 @@ class FadingData {
 }
 
 public var visibleObjects:GameObject[];
+private var _dyVisibleObjects : List.<GameObject>;
 public var fadingTime : float = 1.0; // in seconds
 
 private var _alpha : float = 1.0;
@@ -20,11 +22,18 @@ private var _textMesh : TextMesh;
 
 function Awake(){
 	//Debug.Log("Start");
+	Initialize();
+}
+
+function Initialize()
+{
 	var nMaterials : int = 0;
 	for (var obj:GameObject in visibleObjects){
 		nMaterials += obj.renderer.materials.Length;
 	}	
-	
+	for (var obj:GameObject in _dyVisibleObjects){
+		nMaterials += obj.renderer.materials.Length;
+	}
 	// save the original shader
 	// get corresponding replacement shader
 	var weapon : Weapon = GetComponentInChildren(Weapon);
@@ -34,23 +43,49 @@ function Awake(){
 	_fadingData = new FadingData[nMaterials];
 	for (var i : int ; i < nMaterials; i++)
 		_fadingData[i] = new FadingData(); // this is ridiculous !!!
-
 	
 	var count : int = 0 ;
 	for (var obj:GameObject in visibleObjects){
 		AddFadingData(count,obj);
 		count += obj.renderer.materials.Length;
 	}
-	// fade weapon
+	for (var obj:GameObject in _dyVisibleObjects){
+		AddFadingData(count,obj);
+		count += obj.renderer.materials.Length;
+	}
+	// fade weapon`
 	if (weapon != null) AddFadingData(count,weapon.gameObject);
 
-	
 	//fade team name
 	_textMesh = GetComponentInChildren(TextMesh);
 	_vision = GetComponentInChildren.<VisionMeshScript>();
 }
 
-private function AddFadingData(count : int, obj : GameObject) {
+public function RemoveVisibleObject(go : GameObject)
+{
+	_dyVisibleObjects.Remove(go);
+	Initialize();
+}
+
+public function AddVisibleObject(go : GameObject)
+{
+	// check for duplciation
+	for (var obj:GameObject in visibleObjects)
+	{
+		if (go == obj) 
+		{
+			Debug.Log("Duplication visible object");
+			return;
+		}
+	}
+	
+	_dyVisibleObjects.Add(go);
+	
+	Initialize();
+}
+
+private
+ function AddFadingData(count : int, obj : GameObject) {
 	for (var mat : Material in obj.renderer.materials) {
 		_fadingData[count].material = mat;
 		_fadingData[count].originalShader = mat.shader;

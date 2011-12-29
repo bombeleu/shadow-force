@@ -33,7 +33,11 @@ public class PopupMessage
 	}
 }
 
+#if UNITY_FLASH
+private var msgList : ArrayList = new ArrayList();
+#else
 private var msgList : List.<PopupMessage> = new List.<PopupMessage>();
+#endif
 private var msgPool : PopupMessage[];
 
 public var popupRect : Rect;
@@ -111,6 +115,9 @@ function Update () {
 function OnGUI()
 {
 	if (msgList.Count > 0)
+		#if UNITY_FLASH
+		(msgList[0] as PopupMessage).Draw();
+		#else
 		msgList[0].Draw();
-	
+		#endif
 }

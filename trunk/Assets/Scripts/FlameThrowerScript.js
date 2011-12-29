@@ -36,8 +36,7 @@ function SetFlameRange(range : float)
 }
 
 function SetFlameEnable(b:boolean):void{
-    // fixed warnings
-	//damZone.active = b;
+	damZone.gameObject.active = b;//this is needed to disable the collider
 	damZone.enabled = b;
 	
 	for (var p: ParticleEmitter in particleEffect.GetComponentsInChildren(ParticleEmitter)) {

@@ -86,7 +86,11 @@ function Update () {
 	_newVertices[1] = pt1;
 	_newVertices[2] = pt2;
 	
+	#if UNITY_FLASH
+	var blockers : Object[] ;
+	#else
 	var blockers : GameObject[] ;
+	#endif
 	//Debug.Log(BlockerManager.Instance);
 	blockers = BlockerManager.Instance.GetObjsInTriangle(transform.position, transform.localToWorldMatrix.MultiplyPoint(pt1),transform.localToWorldMatrix.MultiplyPoint(pt2));
 	//blockers = BlockerManager.GetAllBlockers();

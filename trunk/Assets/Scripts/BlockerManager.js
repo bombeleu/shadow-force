@@ -1,7 +1,10 @@
 #pragma strict
+#if !UNITY_FLASH
+import System.Collections.Generic;
+#endif
+
 class Cell {
-	
-	private var listObjs :List.<GameObject> = new List.<GameObject>();
+	private var listObjs:ArrayList = new ArrayList();
 
 	function Initialize()
 	{
@@ -18,7 +21,7 @@ class Cell {
 		listObjs.Remove(obj);
 	}
 	
-	function GetList() : List.<GameObject> 
+	function GetList() : ArrayList 
 	{
 		return listObjs;
 	}
@@ -163,9 +166,18 @@ private function ToCell(pos : float) : int
 	else return cell;
 }
 	 
-public function GetObjsInTriangle(pt0:Vector3, pt1:Vector3,pt2:Vector3) : GameObject[]
+public function GetObjsInTriangle(pt0:Vector3, pt1:Vector3,pt2:Vector3) : 
+	#if UNITY_FLASH
+	Object[]
+	#else
+	GameObject[]
+	#endif
 {
-	var result : List.<GameObject>  = new List.<GameObject>();
+	#if UNITY_FLASH
+	var result : ArrayList = new ArrayList();
+	#else
+	var result : List.<GameObject> = new List.<GameObject>();
+	#endif
 	
 	var smallest : Vector2;
 	var largest : Vector2;

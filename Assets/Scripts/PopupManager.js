@@ -78,10 +78,10 @@ function RemoveMessage()
 
 function Update () {
 	// test
-	if (Input.GetKeyUp(KeyCode.T))
-	{
-		AddPopupMessage(0);
-	}	
+//	if (Input.GetKeyUp(KeyCode.T))
+//	{
+//		AddPopupMessage(0);
+//	}	
 	
 	if (msgList.Count == 0) return; 
 	

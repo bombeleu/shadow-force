@@ -21,7 +21,7 @@ function SetFlameRange(range : float)
 {
 	// muscular mode activated.
 	
-	var scale = range / 16f;
+	var scale:float = range / 16f;
 	particleFire.minEnergy = 0.6f * scale;
 	particleFire.maxEnergy = 0.8f * scale;
 	var animator : ParticleAnimator = particleFire.gameObject.GetComponent(ParticleAnimator) as ParticleAnimator;

@@ -15,7 +15,8 @@ function Awake(){
 }
 
 function SetFlameEnable(b:boolean):void{
-	damZone.active = b;
+    // fixed warnings
+	//damZone.active = b;
 	damZone.enabled = b;
 	for (var p:ParticleEmitter in particles){
 		p.emit = b;

@@ -19,7 +19,7 @@ namespace ZeroAndOne.UnityEditor
         // For each script selected in the Project view, find and select
         // the game objects that use it in the Hierarchy view. Log a message
         // to the console with the details.
-        [MenuItem("ZeroAndOne/Find/Selected Script &#f")]
+        [MenuItem("Tools/Find/Selected Script &#f")]
         private static void FindScriptMenuItemHandler()
         {
             if ((Selection.objects == null) || (Selection.objects.Length == 0))

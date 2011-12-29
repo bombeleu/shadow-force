@@ -17,7 +17,7 @@ namespace ZeroAndOne.UnityEditor
     {
         // Search the scene looking for game object referencing script components
         // that no longer exist. Select the objects.
-        [MenuItem("ZeroAndOne/Find/Missing Scripts")]
+        [MenuItem("Tools/Find/Missing Scripts")]
         private static void FindMissingScriptsMenuItemHandler()
         {
             GameObject[] gameObjects = ObjectHelper.FindGameObjectsWithMissingScripts();

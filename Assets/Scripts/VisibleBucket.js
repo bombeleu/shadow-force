@@ -183,7 +183,7 @@ function Update() {
 	}
 	
 	for (var data : FadingData in _fadingData) {
-		Debug.Log(data.material);
+		//Debug.Log(data.material);
 		data.material.color.a = _alpha;
 	}
 

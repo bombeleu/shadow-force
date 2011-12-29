@@ -1,4 +1,4 @@
-
+#pragma strict
 public var frames : int = 2;
 private var _frames : int = 0;
 

@@ -1,4 +1,4 @@
-
+#pragma strict
 var explPrefab : GameObject;
 
 function OnTriggerEnter(other : Collider) {

@@ -9,6 +9,7 @@ class MainMenu extends ScreenGUI{
 	
 	private var uiController : UIController;
 	function Awake () {
+		Debug.Log("program starts!");
 		instance = this;
 		uiController = GetComponent(UIController);
 		
@@ -65,7 +66,7 @@ class MainMenu extends ScreenGUI{
 		Coop,
 		Multi
 	}
-	public var state : MenuState = MenuState.OuterMost;
+	public static var state : MenuState = MenuState.OuterMost;
 	
 	public var levelList : String[];
 	public var curLevel : int = 0;
@@ -118,6 +119,8 @@ class MainMenu extends ScreenGUI{
 				if (GUILayout.Button("Level " + levelList[i])){
 					state = MenuState.SinglePlaying;
 					curLevel = i;
+					Debug.Log("load level");
+					Debug.Log("level "+levelList[curLevel]);
 					Application.LoadLevel(levelList[curLevel]);
 				}
 				GUILayout.Label("stars earned: "+stars[i]);

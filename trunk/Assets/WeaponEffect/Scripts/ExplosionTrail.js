@@ -1,4 +1,4 @@
-
+#pragma strict
 private var _dir : Vector3;
 
 function OnEnable () 

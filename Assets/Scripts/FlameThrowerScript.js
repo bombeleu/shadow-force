@@ -46,6 +46,9 @@ function SetFlameEnable(b:boolean):void{
 
 function OnLaunchBullet(){
 	SetFlameEnable(true);
+	var range:float = damZone.raycast.GetHitInfo().transform?damZone.raycast.GetHitInfo().distance:weapon.range;
+	Debug.Log(range);
+	SetFlameRange(range);
 }
 
 function OnStopFiring(){

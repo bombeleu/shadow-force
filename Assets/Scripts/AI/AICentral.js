@@ -1,5 +1,6 @@
 #pragma strict
 @RequireComponent(NavMeshAgent)
+
 class AICentral extends DetectionAI{
 	public var motor : MovementMotor;
 	
@@ -13,25 +14,25 @@ class AICentral extends DetectionAI{
 	private var lastKnownPos:Vector3;
 	
 	//private var patrolling:boolean = true;
-	#if UNITY_FLASH
+	/*#if UNITY_FLASH
 	private var navigator:Object;
-	#else
+	#else*/
 	private var navigator:NavMeshAgent;
-	#endif
+	//#endif
 	function Awake(){
 		super.Awake();
-		#if UNITY_FLASH
+		/*#if UNITY_FLASH
 		navigator = GetComponent("NavMeshAgent");
 		if (navigator!=null){
 			NetworkU.InitNav(navigator);
 		}
-		#else
+		#else*/
 		navigator = GetComponent(NavMeshAgent);
 		if (navigator){
 			navigator.updatePosition = false;
 			navigator.updateRotation = false;
 		}
-		#endif
+		//#endif
 	}
 	
 	private var chasing:boolean = false;
@@ -69,11 +70,11 @@ class AICentral extends DetectionAI{
 					talkAI.Say(TalkType.Shoot);
 				}else{
 					if (chaseAI){
-						#if UNITY_FLASH
+						/*#if UNITY_FLASH
 						if (NetworkU.NavSetDest(navigator,tarPos)){
-						#else
+						#else*/
 						if (navigator.SetDestination(tarPos)){
-						#endif
+						//#endif
 							lastTarget = tarPos;
 							chasing = true;
 							talkAI.Say(TalkType.Chase);
@@ -88,11 +89,11 @@ class AICentral extends DetectionAI{
 					if (chaseAI){
 						var tarP:Vector3 = shootingTarget.transform.position;
 						tarP.y = transform.position.y;
-						#if UNITY_FLASH
+						/*#if UNITY_FLASH
 						if (NetworkU.NavSetDest(navigator,tarP)){
-						#else
+						#else*/
 						if (navigator.SetDestination(tarP)){
-						#endif
+						//#endif
 							lastTarget = tarP;
 							chasing = true;
 							talkAI.Say(TalkType.Chase);
@@ -109,11 +110,11 @@ class AICentral extends DetectionAI{
 			}
 			if (chasing){
 				var v:Vector3 = 
-				#if UNITY_FLASH
+				/*#if UNITY_FLASH
 				NetworkU.NavNextPos(navigator)
-				#else
+				#else*/
 				navigator.nextPosition 
-				#endif
+				//#endif
 				- transform.position;
 				v.y = 0;
 				if ((lastTarget - transform.position).sqrMagnitude < 0.25){

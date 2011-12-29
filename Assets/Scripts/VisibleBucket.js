@@ -8,7 +8,11 @@ class FadingData {
 }
 
 public var visibleObjects:GameObject[];
+#if UNITY_FLASH
+private var _dyVisibleObjects : ArrayList = new ArrayList();
+#else
 private var _dyVisibleObjects : List.<GameObject> = new List.<GameObject>();
+#endif
 public var fadingTime : float = 1.0; // in seconds
 
 private var _alpha : float = 1.0;

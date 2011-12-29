@@ -110,7 +110,6 @@ function OnPlayerDisconnected (player : NetworkPlayer) {
 function setCamera(character : Transform){
 	Camera.main.transform.position = character.position + Vector3(10,60,25);
 	Camera.main.transform.LookAt(character);
-	if (Camera.main.GetComponent(HeightDepthOfField)!=null)
-		Camera.main.GetComponent(HeightDepthOfField).objectFocus = character;
+	
 }
 

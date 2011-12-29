@@ -1,4 +1,4 @@
-
+#pragma strict
 public var autoDisableAfter : float = 2.0;
 
 function OnEnable() {					

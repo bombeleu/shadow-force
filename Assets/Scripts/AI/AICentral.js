@@ -1,5 +1,5 @@
 #pragma strict
-@RequireComponent(NavMeshAgent)
+//@RequireComponent(NavMeshAgent)
 
 class AICentral extends DetectionAI{
 	public var motor : MovementMotor;
@@ -17,7 +17,7 @@ class AICentral extends DetectionAI{
 	/*#if UNITY_FLASH
 	private var navigator:Object;
 	#else*/
-	private var navigator:NavMeshAgent;
+	//private var navigator:NavMeshAgent;
 	//#endif
 	function Awake(){
 		super.Awake();
@@ -27,11 +27,11 @@ class AICentral extends DetectionAI{
 			NetworkU.InitNav(navigator);
 		}
 		#else*/
-		navigator = GetComponent(NavMeshAgent);
+		/*navigator = GetComponent(NavMeshAgent);
 		if (navigator){
 			navigator.updatePosition = false;
 			navigator.updateRotation = false;
-		}
+		}*/
 		//#endif
 	}
 	
@@ -73,12 +73,12 @@ class AICentral extends DetectionAI{
 						/*#if UNITY_FLASH
 						if (NetworkU.NavSetDest(navigator,tarPos)){
 						#else*/
-						if (navigator.SetDestination(tarPos)){
+						//if (navigator.SetDestination(tarPos)){
 						//#endif
-							lastTarget = tarPos;
-							chasing = true;
-							talkAI.Say(TalkType.Chase);
-						}
+						//	lastTarget = tarPos;
+						//	chasing = true;
+						//	talkAI.Say(TalkType.Chase);
+						//}
 					}else{
 						talkAI.Say(TalkType.NotChase);
 					}
@@ -92,12 +92,12 @@ class AICentral extends DetectionAI{
 						/*#if UNITY_FLASH
 						if (NetworkU.NavSetDest(navigator,tarP)){
 						#else*/
-						if (navigator.SetDestination(tarP)){
+						//if (navigator.SetDestination(tarP)){
 						//#endif
-							lastTarget = tarP;
-							chasing = true;
-							talkAI.Say(TalkType.Chase);
-						}
+						//	lastTarget = tarP;
+						//	chasing = true;
+						//	talkAI.Say(TalkType.Chase);
+						//}
 					}else{ 
 						if (!saidNotChase){
 							talkAI.Say(TalkType.NotChase);
@@ -107,24 +107,6 @@ class AICentral extends DetectionAI{
 				}
 				motor.facingDirection = Vector3.zero;
 				if (!chasing) canPatrol = true;
-			}
-			if (chasing){
-				var v:Vector3 = 
-				/*#if UNITY_FLASH
-				NetworkU.NavNextPos(navigator)
-				#else*/
-				navigator.nextPosition 
-				//#endif
-				- transform.position;
-				v.y = 0;
-				if ((lastTarget - transform.position).sqrMagnitude < 0.25){
-					chasing = false;
-					motor.movementDirection = Vector3.zero;
-				}else{
-					//Debug.Log("chase!"+v+navigator.isPathStale+navigator.hasPath+navigator.pathStatus+navigator.remainingDistance);
-					//Debug.Log("chase"+v);
-					motor.movementDirection = v.normalized;
-				}
 			}
 		}else canPatrol = true;
 		if (canPatrol){

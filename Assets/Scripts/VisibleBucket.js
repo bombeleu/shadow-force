@@ -64,12 +64,14 @@ function Initialize()
 
 public function RemoveVisibleObject(go : GameObject)
 {
+	return;
 	_dyVisibleObjects.Remove(go);
 	Initialize();
 }
 
 public function AddVisibleObject(go : GameObject)
 {
+	return;
 	// check for duplciation
 	for (var obj:GameObject in visibleObjects)
 	{
@@ -177,6 +179,7 @@ function Update() {
 	}
 	
 	for (var data : FadingData in _fadingData) {
+		Debug.Log(data.material);
 		data.material.color.a = _alpha;
 	}
 

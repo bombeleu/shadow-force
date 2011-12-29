@@ -2,7 +2,7 @@
 @script RequireComponent(Weapon)
 
 public var damZone:DamageZone;
-public var particles:ParticleEmitter[];
+public var particleEffect : GameObject;
 
 private var weapon:Weapon;
 private var spawnPoint:Transform;
@@ -14,11 +14,17 @@ function Awake(){
 	SetFlameEnable(false);
 }
 
+function SetFlameRange()
+{
+
+}
+
 function SetFlameEnable(b:boolean):void{
     // fixed warnings
 	//damZone.active = b;
 	damZone.enabled = b;
-	for (var p:ParticleEmitter in particles){
+	
+	for (var p: ParticleEmitter in particleEffect.GetComponentsInChildren(ParticleEmitter)) {
 		p.emit = b;
 	}
 }

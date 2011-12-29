@@ -1,5 +1,7 @@
 #pragma strict
-#if !UNITY_FLASH
+#if UNITY_FLASH
+import System.Collections;
+#else
 import System.Collections.Generic;
 #endif
 
@@ -205,7 +207,15 @@ public function GetObjsInTriangle(pt0:Vector3, pt1:Vector3,pt2:Vector3) :
 //		{
 //			//Debug.Log(result[i].transform.position);
 //		}
+	#if UNITY_FLASH
+	var ret:Object[] = new Object[result.Count];
+	for (i=0;i<result.Count; i++){
+		ret[i] = result[i];
+	}
+	return ret;
+	#else
 	return result.ToArray();
+	#endif
 }
 
 public function GetAllBlockers() : GameObject[]

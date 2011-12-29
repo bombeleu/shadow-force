@@ -169,11 +169,7 @@ private function ToCell(pos : float) : int
 }
 	 
 public function GetObjsInTriangle(pt0:Vector3, pt1:Vector3,pt2:Vector3) : 
-	#if UNITY_FLASH
-	Object[]
-	#else
 	GameObject[]
-	#endif
 {
 	#if UNITY_FLASH
 	var result : ArrayList = new ArrayList();
@@ -208,7 +204,7 @@ public function GetObjsInTriangle(pt0:Vector3, pt1:Vector3,pt2:Vector3) :
 //			//Debug.Log(result[i].transform.position);
 //		}
 	#if UNITY_FLASH
-	var ret:Object[] = new Object[result.Count];
+	var ret:GameObject[] = new GameObject[result.Count];
 	for (i=0;i<result.Count; i++){
 		ret[i] = result[i];
 	}

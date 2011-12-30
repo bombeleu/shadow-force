@@ -43,6 +43,7 @@ private function CastRay () {
 }
 
 function GetOrigin():Vector3{
+	if (weapon.owner==null) return transform.position;
 	return weapon.owner.transform.position + dir*0.7;//inside the body's capsule
 }
 

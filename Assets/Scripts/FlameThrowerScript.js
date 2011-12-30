@@ -3,6 +3,7 @@
 
 public var damZone:DamageZone;
 public var particleEffect : GameObject;
+public var collisionPrefab : GameObject;
 public var particleFire : ParticleEmitter;
 public var particleSmoke : ParticleEmitter;
 public var particleGlow : ParticleRenderer;
@@ -36,6 +37,9 @@ function SetFlameRange(range : float)
 }
 
 function SetFlameEnable(b:boolean):void{
+	
+	if (b == damZone.enabled) return;
+	
 	damZone.gameObject.active = b;//this is needed to disable the collider
 	damZone.enabled = b;
 	
@@ -46,9 +50,17 @@ function SetFlameEnable(b:boolean):void{
 
 function OnLaunchBullet(){
 	SetFlameEnable(true);
-	var range:float = damZone.raycast.GetHitInfo().transform?damZone.raycast.GetHitInfo().distance:weapon.range;
-	Debug.Log(range);
+	var hit : RaycastHit  = damZone.raycast.GetHitInfo();
+	//var range:float = damZone.raycast.GetHitInfo().transform?damZone.raycast.GetHitInfo().distance:weapon.range;
+	var range : float = hit.transform ? hit.distance : weapon.range;
+	//Debug.Log(range);
 	SetFlameRange(range);
+	
+	if (collisionPrefab != null && hit.transform)
+	{
+		Debug.Log(hit.transform.position);
+		Spawner.Spawn (collisionPrefab, hit.transform.position, Quaternion.identity);
+	}
 }
 
 function OnStopFiring(){
@@ -60,15 +72,5 @@ function Update(){
 	forward.y = 0;
 	spawnPoint.rotation = Quaternion.LookRotation(Vector3.up, forward);
 	
-	if (Input.GetKey(KeyCode.Z))
-	{
-		SetFlameRange(32f);
-	} else if (Input.GetKey(KeyCode.X))
-	{
-		SetFlameRange(16f);
-	}else if (Input.GetKey(KeyCode.C))
-	{
-		SetFlameRange(8f);
-	}
 }
 

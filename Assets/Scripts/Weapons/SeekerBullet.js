@@ -104,6 +104,8 @@ function OnCollisionEnter(collision : Collision) {
     dir -= norm * Vector3.Dot(dir, norm) * 2;
     dir.y = 0;
     
+    Spawner.Spawn (explosionPrefab, transform.position, transform.rotation);
+    
     if (dodger){
 		//dodger.velocity = speed;
 		dodger.velVector = dir.normalized * speed;

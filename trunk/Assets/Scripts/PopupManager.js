@@ -21,7 +21,7 @@ public class PopupMessage
 	
 	public function ParseFromString(line : String)
 	{
-		Debug.Log(line);
+		//Debug.Log(line);
 		var row : String[] = line.Split(","[0]);
         for (var i : int= 0; i < row.Length; i++) 
         {
@@ -72,7 +72,7 @@ function Start () {
 		msgPool[i-1].ParseFromString(lines[i]);
 	}
 	
-	AddPopupMessage(0);
+	
 }
 
 public function AddPopupMessage(id : int)

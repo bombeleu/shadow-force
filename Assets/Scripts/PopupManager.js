@@ -7,7 +7,11 @@ public class PopupMessage
 	
 	public function Draw()
 	{
-		GUI.Window(0, PopupManager.Instance.popupRect,DoWindow,title);
+		Debug.Log("3");
+		//GUI.Window(0, PopupManager.Instance.popupRect,DoWindow,title);
+		GUI.Window(0,new Rect(0,0,100,100),DoWindow,"dfdfdfdf");
+		
+		Debug.Log("4");
 	}
 	
 	function DoWindow(windowID : int)
@@ -17,6 +21,7 @@ public class PopupMessage
 	
 	public function ParseFromString(line : String)
 	{
+		Debug.Log(line);
 		var row : String[] = line.Split(","[0]);
         for (var i : int= 0; i < row.Length; i++) 
         {
@@ -66,6 +71,8 @@ function Start () {
 		msgPool[i-1] = new PopupMessage();
 		msgPool[i-1].ParseFromString(lines[i]);
 	}
+	
+	AddPopupMessage(0);
 }
 
 public function AddPopupMessage(id : int)
@@ -82,10 +89,11 @@ function RemoveMessage()
 
 function Update () {
 	// test
-//	if (Input.GetKeyUp(KeyCode.T))
-//	{
-//		AddPopupMessage(0);
-//	}	
+	
+	if (Input.GetKeyUp(KeyCode.T))
+	{
+		AddPopupMessage(0);
+	}	
 	
 	if (msgList.Count == 0) return; 
 	
@@ -112,12 +120,19 @@ function Update () {
     }
 }
 
+function DoWindow0(windowID: int)
+{
+
+}
+
 function OnGUI()
 {
 	if (msgList.Count > 0)
+	{
 		#if UNITY_FLASH
-		(msgList[0] as PopupMessage).Draw();
+		//msgList[0] as PopupMessage).Draw();
 		#else
 		msgList[0].Draw();
 		#endif
+	}
 }

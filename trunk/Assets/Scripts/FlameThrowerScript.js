@@ -48,6 +48,8 @@ function SetFlameEnable(b:boolean):void{
 	}
 }
 
+private var interval:float = 1/5;
+private var lastFireTime:float = -1;
 function OnLaunchBullet(){
 	SetFlameEnable(true);
 	var hit : RaycastHit  = damZone.raycast.GetHitInfo();
@@ -55,11 +57,11 @@ function OnLaunchBullet(){
 	var range : float = hit.transform ? hit.distance : weapon.range;
 	//Debug.Log(range);
 	SetFlameRange(range);
-	
-	if (collisionPrefab != null && hit.transform)
+	if ((Time.time > lastFireTime + interval) && collisionPrefab != null && hit.transform)
 	{
+		lastFireTime = Time.time;
 		Debug.Log(hit.transform.position);
-		Spawner.Spawn (collisionPrefab, hit.transform.position, Quaternion.identity);
+		Instantiate (collisionPrefab, hit.point, Quaternion.identity);
 	}
 }
 

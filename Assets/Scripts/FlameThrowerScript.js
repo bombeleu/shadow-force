@@ -60,8 +60,8 @@ function OnLaunchBullet(){
 	if ((Time.time > lastFireTime + interval) && collisionPrefab != null && hit.transform)
 	{
 		lastFireTime = Time.time;
-		Debug.Log(hit.transform.position);
-		Instantiate (collisionPrefab, hit.point, Quaternion.identity);
+		//Debug.Log(hit.transform.position);
+		Instantiate (collisionPrefab, hit.point, Quaternion.LookRotation(hit.normal, Vector3.up));
 	}
 }
 

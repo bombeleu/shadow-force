@@ -49,8 +49,10 @@ function OnEnable(){
 		shield.localPosition = Vector3(0,0,0.8);//equal to radius, so that weapon can shoot out!
 		shield.localRotation = Quaternion.Euler(0, 180, 0);
 		var blocker:BlockingAI = gameObject.AddComponent(BlockingAI);
+		#if !UNITY_FLASH
 		var dodger:DodgingAI = GetComponent(DodgingAI);
 		if (dodger) Destroy(dodger);
+		#endif
 		var ai:AICentral = GetComponent(AICentral);
 		if (ai){
 			ai.blocker = blocker;

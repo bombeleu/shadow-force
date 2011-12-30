@@ -15,12 +15,18 @@ class MaterialImpactManager extends MonoBehaviour {
 	private static var defaultMat : MaterialImpact;
 	
 	function Awake () {
+		return;//TODO: enable this to get sound!
+		Debug.Log("mat 1");
 		defaultMat = materials[0];
 		
+		Debug.Log("mat 2");
 		dict = new System.Collections.Generic.Dictionary.<PhysicMaterial, MaterialImpact> ();
+		Debug.Log("mat 3");
+
 		for (var i : int = 0; i < materials.Length; i++) {
 			dict.Add (materials[i].physicMaterial, materials[i]);
 		}
+		Debug.Log("mat 4");
 	}
 	
 	static function GetPlayerFootstepSound (mat : PhysicMaterial) : AudioClip {

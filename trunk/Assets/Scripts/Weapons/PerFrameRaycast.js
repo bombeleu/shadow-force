@@ -22,8 +22,13 @@ function GetDir () {
 		}
 	}
 }*/
+private var casted:boolean = false;
+function LateUpdate(){
+	casted = false;
+}
+
 private var dir:Vector3;
-function Update () {
+private function CastRay () {
 	//if (dir==null) GetDir();
 	if (!weapon.owner) return;//TODO: this hack is to prevent error when owner die
 	dir = weapon.owner.transform.forward;
@@ -34,6 +39,7 @@ function Update () {
 	hitInfo = RaycastHit ();
 	//Physics.Raycast (tr.position, tr.forward, hitInfo);
 	Physics.Raycast (oriPos, dir, hitInfo, hasRange?weapon.range:Mathf.Infinity, layerMask.value);
+	casted = true;
 }
 
 function GetOrigin():Vector3{
@@ -41,6 +47,7 @@ function GetOrigin():Vector3{
 }
 
 function GetHitInfo () : RaycastHit {
+	if (!casted) CastRay();
 	return hitInfo;
 }
 

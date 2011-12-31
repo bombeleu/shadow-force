@@ -33,8 +33,8 @@ class PatrolRouteEditor extends Editor {
 				var ray:Ray = HandleUtility.GUIPointToWorldRay(e.mousePosition);
 				Physics.Raycast(ray.origin, ray.direction, hitInfo);
 				if (hitInfo.transform){
-					Debug.Log('hit!');
-					Debug.Log(hitInfo.point);
+					//Debug.Log('hit!');
+					//Debug.Log(hitInfo.point);
 					var po:GameObject = route.InsertPatrolPointAt (route.patrolPoints.Count);
 					po.transform.position = hitInfo.point;
 					//Selection.activeGameObject = po;

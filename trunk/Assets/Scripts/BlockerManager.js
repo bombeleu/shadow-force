@@ -1,7 +1,5 @@
 #pragma strict
-#if UNITY_FLASH
-import System.Collections;
-#else
+#if !UNITY_FLASH
 import System.Collections.Generic;
 #endif
 

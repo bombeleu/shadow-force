@@ -109,6 +109,14 @@ function OnDamage (amount : float, fromDirection : Vector3) {
 		health = 0;
 		dead = true;
 		dieSignals.SendSignals (this);
+		
+		#if UNITY_FLASH
+		if (GetComponent(PlayerMoveController)){
+			var ragdoll:RagdollController = GetComponent(RagdollController);
+			if (ragdoll) ragdoll.DieSignal();
+		}
+		#endif
+		
 		enabled = false;
 		
 		// scorch marks

@@ -3,10 +3,13 @@
 
 public var editorSupport:boolean = false;
 
+@HideInInspector
 public var visualPart:MeshFilter;
+@HideInInspector
 public var colliderPart:BoxCollider;//TODO: capsule?
 public var repeat:boolean = false;
 public var maxSizeRatio:float = 1.25;
+@HideInInspector
 public var customMode:boolean = false;
 
 public var visualPrefab:MeshFilter;

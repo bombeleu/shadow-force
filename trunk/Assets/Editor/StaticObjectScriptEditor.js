@@ -14,6 +14,7 @@ class StaticObjectScriptEditor extends Editor {
     	var go:StaticObjectScript = target as StaticObjectScript;
     	if (!firstTime){
     		//go.editorSupport = true;
+    		
     		go.Init();
     		firstTime = true;
     	}

@@ -10,18 +10,29 @@ public var maxSizeRatio:float = 1.25;
 public var customMode:boolean = false;
 
 public var visualPrefab:MeshFilter;
-private var curVisPrefab:MeshFilter;
+@HideInInspector
+public var curVisPrefab:MeshFilter;
 
 private var box:BoxCollider;
-private var meshExtents:Vector3;
-private var realScale:Vector3 = Vector3.one;
-private var visStartScale:Vector3;
-private var visStartCenter:Vector3;
-//private var visStartRotation:Quaternion;
-private var physStartExtents:Vector3;
 
-private var wallLen:float;
+@HideInInspector
+public var meshExtents:Vector3;
+
+private var realScale:Vector3 = Vector3.one;
+@HideInInspector
+public var visStartScale:Vector3;
+@HideInInspector
+public var visStartCenter:Vector3;
+//private var visStartRotation:Quaternion;
+@HideInInspector
+public var physStartExtents:Vector3;
+
+@HideInInspector
+public var wallLen:float;
+
 private var repeatedObjs:Array;
+@HideInInspector
+public var serializedRepObjs:GameObject[];//for saving purpose
 
 @HideInInspector
 public var startPos:Vector3;
@@ -30,19 +41,47 @@ public var endPos:Vector3;
 @HideInInspector
 public var sizeHandle:Vector3 = Vector3.one;
 
+private static var VIS_PART_NAME:String = "VisualPart";
+private static var PHYS_PART_NAME:String = "PhysicalPart";
+private static var REPEATED_PART_NAME:String = "RepeatedPart";
+
+/*
+private function transform.Find(name:String):GameObject{
+	for (var t:Transform in transform){
+		if (t.gameObject.name.Equals(name)) return t.gameObject;
+		Debug.Log("scane name: "+t.gameObject.name);
+	}
+	return null;
+}*/
+
 private function createVisual(){
+	/*
+	var visFind:Transform = transform.Find(VIS_PART_NAME);
+	if (visFind!=null)
+		visualPart = visFind.GetComponent(MeshFilter);*/
+		
+	var pos:Vector3 = Vector3.zero;
+	var scale:Vector3 = Vector3.one;
+	var quat:Quaternion = Quaternion.identity;
+		
 	if (visualPart!=null){
+		pos = visualPart.transform.localPosition;
+		scale = visualPart.transform.localScale;
+		quat = visualPart.transform.localRotation;
 		GameObject.DestroyImmediate(visualPart.gameObject);
 		if (repeatedObjs!=null){
 			clearRepeatedObjs();
 		}
 	}
-	curVisPrefab = visualPrefab;
-	visualPart = Instantiate(curVisPrefab, Vector3.zero, Quaternion.identity);
+
+	visualPart = Instantiate(visualPrefab, Vector3.zero, Quaternion.identity);
+	visualPart.name = VIS_PART_NAME;
 	visualPart.transform.parent = transform;
-	visualPart.transform.localPosition = Vector3.zero;
-	visualPart.transform.localRotation = Quaternion.identity;
-	visualPart.transform.localScale = Vector3.one;
+	visualPart.transform.localPosition = pos;
+	visualPart.transform.localRotation = quat;
+	visualPart.transform.localScale = scale;
+
+	curVisPrefab = visualPrefab;
 
 	//remove the default MeshCollider
 	var collider:Collider = visualPart.GetComponent(Collider);
@@ -62,11 +101,15 @@ private function initVisual(){
 	wallLen = meshExtents.x;
 }
 
-private function initPhysics(){
+
+private function initPhysics(){	
+	/*var physFind:Transform = transform.Find(PHYS_PART_NAME);
+	if (physFind!=null)
+		colliderPart = physFind.GetComponent(BoxCollider);*/
 	if ((!customMode) && (colliderPart==null)){
 		var go:GameObject = new GameObject();
 		go.AddComponent(BoxCollider);
-		go.name = "PhysicPart";
+		go.name = PHYS_PART_NAME;
 		colliderPart = go.GetComponent(BoxCollider);
 		colliderPart.transform.parent = transform;
 		colliderPart.transform.localRotation = Quaternion.identity;
@@ -74,17 +117,29 @@ private function initPhysics(){
 	colliderPart.transform.localPosition = visStartCenter;//readjust position
 	box = colliderPart as BoxCollider;
 	if (box){ 
-		if (customMode)
+		if (customMode)//exist PhysicalPart
 			physStartExtents = box.extents;
-		else
+		else{
 			physStartExtents = meshExtents;
+		}
 		
 	}
 }
 
-private var init:boolean = false;
+@HideInInspector
+public var repeatedContainer:GameObject;
+
+@HideInInspector
+public var init:boolean = false;
 function Init(){
+	if (serializedRepObjs!=null){
+		Debug.Log("load!");
+		repeatedObjs = new Array(serializedRepObjs);
+	}
+	//curVisPrefab = visualPrefab;//for saved scene
 	if (init) return;
+	Debug.Log("init!");
+	
 	
 	if ((!customMode) && visualPrefab){
 		createVisual();
@@ -94,8 +149,22 @@ function Init(){
 	initPhysics();
 
 	//box.extents = meshExtents;
-	repeatedObjs = new Array();	
+	if (repeatedObjs==null)
+		repeatedObjs = new Array();	
+	/*var repFind:Transform = transform.Find(REPEATED_PART_NAME);
+	if (repFind)
+		repeatedContainer = repFind.gameObject;
+	if (repeatedContainer!=null){
+		GameObject.DestroyImmediate(repeatedContainer);	
+	}*/
 	
+	repeatedContainer = new GameObject();
+	repeatedContainer.transform.parent = transform;
+	repeatedContainer.transform.localPosition = Vector3.zero;
+	repeatedContainer.transform.localRotation = Quaternion.identity;
+	repeatedContainer.transform.localScale = Vector3.one;
+	repeatedContainer.name = REPEATED_PART_NAME;
+		
 	//multiple time init
 	Reactivate();
 	Adjust();
@@ -115,7 +184,8 @@ function Reactivate(){
 	}
 }
 
-private var fLen:float;
+@HideInInspector
+public var fLen:float = 0;
 function Adjust(){
 	if (curVisPrefab != visualPrefab){//prefab change!
 		Debug.Log("prefab change");
@@ -142,16 +212,20 @@ function Adjust(){
 		var realLen:float = fLen / num;
 		visualPart.transform.localScale = Vector3.one;
 		visualPart.renderer.enabled = false;
+		var change:boolean = false;
 		while (repeatedObjs.Count < num){
 			var go:GameObject = Instantiate(visualPart.gameObject, Vector3.zero, Quaternion.identity);
 			go.renderer.enabled = true;
-			go.transform.parent = transform;
+			go.transform.parent = repeatedContainer.transform;
 			go.transform.localRotation = Quaternion.identity;//visStartRotation;
 			repeatedObjs.Push(go);
+			change = true;
 		}
 		while (repeatedObjs.Count > num){
 			GameObject.DestroyImmediate(repeatedObjs.Pop() as GameObject);
+			change = true;
 		}
+		if (change) serializedRepObjs = repeatedObjs.ToBuiltin(GameObject);
 		for (var i:int=0 ; i < repeatedObjs.Count; i++){
 			var wallElem:GameObject = (repeatedObjs[i] as GameObject);
 			wallElem.transform.localPosition = Vector3(realLen*i - fLen*0.5 + 0.5*realLen /*- visStartCenter.x*/, 0, 0);

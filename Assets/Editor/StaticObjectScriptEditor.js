@@ -29,6 +29,9 @@ class StaticObjectScriptEditor extends Editor {
     	//DrawDefaultInspector();
     	go.startPos = Handles.PositionHandle(go.startPos, Quaternion.identity);
     	go.endPos = Handles.PositionHandle(go.endPos, Quaternion.identity);
+    	
+    	var scalePos:Vector3 = (go.startPos+go.endPos)*0.5;
+    	go.sizeHandle = Handles.ScaleHandle(go.sizeHandle, scalePos, go.transform.rotation, HandleUtility.GetHandleSize(scalePos));
     	go.Adjust();
     }
 }

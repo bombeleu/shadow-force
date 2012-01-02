@@ -162,7 +162,7 @@ private function ToCell(pos : float) : int
 {
 	var cell : int = (pos/CELL_SIZE) + NUM_TILES/2;
 	if (cell < 0) return 0;
-	else if (cell >= NUM_TILES) return NUM_TILES;
+	else if (cell >= NUM_TILES) return NUM_TILES-1;
 	else return cell;
 }
 	 

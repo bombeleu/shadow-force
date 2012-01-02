@@ -24,7 +24,8 @@ function Start () {
 	{
 		DeactivateCheckPoint(cp);
 	}
-	ActivateCheckPoint(checkPoints[_currentCheckPoint]);
+	if (checkPoints.Length>0)
+		ActivateCheckPoint(checkPoints[_currentCheckPoint]);
 }
 
 function Update () {

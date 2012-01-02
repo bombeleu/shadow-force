@@ -31,7 +31,7 @@ function Update () {
 		plantingPos.y = 1.2;
 		MainMenu.CreateTeamObject(plantingObject, NetworkU.AllocateID(), 
 			plantingPos, weapon.owner.transform.rotation, 
-			Camera.main.GetComponent.<Team>().team);
+			LineOfSight.myTeam);
 		planted = false;
 		effect.enabled = false;
 		//DestroyObject(gameObject);

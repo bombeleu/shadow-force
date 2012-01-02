@@ -65,6 +65,9 @@ function Initialize()
 	//fade team name
 	_textMesh = GetComponentInChildren(TextMesh);
 	_vision = GetComponentInChildren(VisionMeshScript);
+	
+	// refresh state;
+	if (enabled) OnEnable();
 }
 
 public function RemoveVisibleObject(go : GameObject)
@@ -97,10 +100,10 @@ private function AddFadingData(count : int, obj : GameObject) {
 		var fd : FadingData = new FadingData();
 		fd.material = mat;
 		fd.originalShader = mat.shader;
-		
+		//Debug.Log(mat);
 		if (ren.GetType() == ParticleRenderer)
 		{
-			Debug.Log("Particle renderer spotted");
+			//Debug.Log(fd.material + "---" + ren);
 			fd.replacedShader = mat.shader;
 			fd.useTint = true;
 		} else
@@ -111,6 +114,7 @@ private function AddFadingData(count : int, obj : GameObject) {
 			}
 			fd.useTint = false;
 		}
+
 		_fadingData.Add(fd);
 		count++;
 	}
@@ -194,7 +198,7 @@ function Update() {
 	}
 	
 	for (var data : FadingData in _fadingData) {
-		//Debug.Log(data.material);
+		//Debug.Log(data.material + "---" + data.material.shader);
 		if (data.useTint)
 		{
 			data.material.GetColor("_TintColor").a = _alpha;

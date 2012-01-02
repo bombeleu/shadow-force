@@ -22,18 +22,6 @@ class MainMenu extends ScreenGUI{
 		
 		useSensor = PlayerPrefs.GetInt("sensor",0)==1;
 		useAutoAim = PlayerPrefs.GetInt("autoAim",0)==1;
-		
-		Physics.IgnoreLayerCollision(0, 11, true);//default vs playertrigger
-		Physics.IgnoreLayerCollision(8, 22, true);//player vs smoke
-		Physics.IgnoreLayerCollision(19, 20, true);//projectile vs fence
-		Physics.IgnoreLayerCollision(19, 22, true);//projectile vs smoke
-		Physics.IgnoreLayerCollision(19, 19, true);//projectile vs projectile
-		Physics.IgnoreLayerCollision(23, 22, true);//shield vs smoke
-		//Physics.IgnoreLayerCollision(8, 23, true);//player vs shield
-		Physics.IgnoreLayerCollision(8, 24, true);//player vs ragdoll --> prevent climbing!
-		Physics.IgnoreLayerCollision(23, 24, true);//shield vs ragdoll --> prevent climbing!
-		Physics.IgnoreLayerCollision(19, 24, true);//projectile vs ragdoll
-		Physics.IgnoreLayerCollision(22, 24, true);//smoke vs ragdoll
 	}
 	
 	function ResetData(){

@@ -1,5 +1,5 @@
 #pragma strict
-@script RequireComponent (UIController)
+//@script RequireComponent (UIController)
 
 class SelectWeaponGUI extends ScreenGUI{
 	public var availableWeapons: Weapon[];
@@ -20,6 +20,7 @@ class SelectWeaponGUI extends ScreenGUI{
 	}
 	
 	function DrawGUI() {
+		if (finished) return;
 		GUILayout.Label("Choose 2 weapons");
 	
 		if (GUILayout.Button("MachineGun"))

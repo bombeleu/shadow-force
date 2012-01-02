@@ -25,7 +25,7 @@ function OnLaunchBullet(){
 		return;
 	
 	if (createTeamObject){
-		MainMenu.CreateTeamObject(bulletPrefab, NetworkU.AllocateID(), spawnPos, weapon.owner.transform.rotation, 
+		NetInstantiate.CreateTeamObject(bulletPrefab, NetworkU.AllocateID(), spawnPos, weapon.owner.transform.rotation, 
 			LineOfSight.myTeam);
 	}else
 		NetworkU.Instantiate(bulletPrefab, spawnPos, weapon.owner.transform.rotation);

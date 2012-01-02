@@ -1,5 +1,5 @@
 #pragma strict
-@script ExecuteInEditMode()
+//@script ExecuteInEditMode()//won't run due to Time.time is not updated!
 
 public var rotating:boolean = true;
 public var scaling:boolean = true;

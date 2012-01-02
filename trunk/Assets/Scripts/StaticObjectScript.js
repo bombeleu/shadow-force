@@ -12,6 +12,8 @@ public var maxSizeRatio:float = 1.25;
 @HideInInspector
 public var customMode:boolean = false;
 
+public var hasCollider:boolean = true;
+
 public var visualPrefab:MeshFilter;
 @HideInInspector
 public var curVisPrefab:MeshFilter;
@@ -118,14 +120,11 @@ private function initPhysics(){
 		colliderPart.transform.localRotation = Quaternion.identity;
 	}
 	colliderPart.transform.localPosition = Vector3(0, visStartCenter.y*sizeHandle.y,1);//readjust position
-	box = colliderPart as BoxCollider;
-	if (box){ 
-		if (customMode)//exist PhysicalPart
-			physStartExtents = box.extents;
-		else{
-			physStartExtents = meshExtents;
-		}
-		
+	
+	if (customMode)//exist PhysicalPart
+		if (colliderPart) physStartExtents = colliderPart.extents;
+	else{
+		physStartExtents = meshExtents;
 	}
 }
 
@@ -187,6 +186,9 @@ function Reactivate(){
 @HideInInspector
 public var fLen:float = 0;
 function Adjust(){
+	if (colliderPart)
+		colliderPart.active = hasCollider;
+
 	if (curVisPrefab != visualPrefab){//prefab change!
 		Debug.Log("prefab change");
 		if (curVisPrefab == null) init = false;

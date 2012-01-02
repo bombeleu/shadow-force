@@ -80,6 +80,7 @@ private function createVisual(){
 	}
 
 	visualPart = Instantiate(visualPrefab, Vector3.zero, Quaternion.identity);
+	visualPart.gameObject.isStatic = true;
 	visualPart.name = VIS_PART_NAME;
 	visualPart.transform.parent = transform;
 	visualPart.transform.localPosition = pos;
@@ -225,6 +226,7 @@ function Adjust(){
 		while (repeatedObjs.Count < num){
 			var go:GameObject = Instantiate(visualPart.gameObject, Vector3.zero, Quaternion.identity);
 			go.renderer.enabled = true;
+			go.isStatic = true;
 			go.transform.parent = repeatedContainer.transform;
 			go.transform.localRotation = Quaternion.identity;//visStartRotation;
 			repeatedObjs.Push(go);

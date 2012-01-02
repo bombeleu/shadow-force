@@ -48,6 +48,10 @@ function OnEnable(){
 		shield.parent = transform;
 		shield.localPosition = Vector3(0,0,0.8);//equal to radius, so that weapon can shoot out!
 		shield.localRotation = Quaternion.Euler(0, 180, 0);
+
+		//Debug.Log("Child count:" + shield.childCount);
+		//Debug.Log(shield.GetChild(0).gameObject);
+		visiBucket.AddVisibleObject(shield.GetChild(0).gameObject); // hacking, 
 		var blocker:BlockingAI = gameObject.AddComponent(BlockingAI);
 		#if !UNITY_FLASH
 		var dodger:DodgingAI = GetComponent(DodgingAI);

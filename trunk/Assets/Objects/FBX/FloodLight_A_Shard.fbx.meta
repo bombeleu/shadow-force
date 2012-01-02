@@ -1,8 +1,8 @@
 fileFormatVersion: 2
-guid: 64b578e4b7990734bb0f466958c21172
+guid: 667add1bf2bf6b146915fa65b50b53ca
 ModelImporter:
   fileIDToRecycleName:
-    4300000: ChamferCyl04
+    4300000: polySurface633
   serializedVersion: 10
   materials:
     importMaterials: 1
@@ -20,11 +20,11 @@ ModelImporter:
     clipAnimations: []
   meshes:
     lODScreenPercentages: []
-    globalScale: 0.010000
+    globalScale: 1.000000
     meshCompression: 0
     addColliders: 0
     swapUVChannels: 0
-    generateSecondaryUV: 1
+    generateSecondaryUV: 0
     useFileUnits: 1
     meshOptimization: 4
     secondaryUVAngleDistortion: 8.000000

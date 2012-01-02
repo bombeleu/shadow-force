@@ -9,7 +9,7 @@ function Awake(){
 
 function OnTriggerEnter (other : Collider) {
     if (other.gameObject.CompareTag("Player")){
-    	mainMenu.GainStar();
+    	if (mainMenu) mainMenu.GainStar();
     	DestroyObject(gameObject);
     }
 }

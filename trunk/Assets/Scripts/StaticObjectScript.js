@@ -113,6 +113,11 @@ private function initPhysics(){
 		colliderPart = physFind.GetComponent(BoxCollider);*/
 	if ((!customMode) && (colliderPart==null)){
 		var go:GameObject = new GameObject();
+		go.isStatic = true;
+		go.layer = gameObject.layer;
+		if (go.layer == LineOfSight.BLOCKER_LAYER){
+			go.tag = "Blocker";
+		}
 		go.AddComponent(BoxCollider);
 		go.name = PHYS_PART_NAME;
 		colliderPart = go.GetComponent(BoxCollider);
@@ -121,9 +126,9 @@ private function initPhysics(){
 	}
 	colliderPart.transform.localPosition = Vector3(0, visStartCenter.y*sizeHandle.y,1);//readjust position
 	
-	if (customMode)//exist PhysicalPart
+	if (customMode){//exist PhysicalPart
 		if (colliderPart) physStartExtents = colliderPart.extents;
-	else{
+	}else{
 		physStartExtents = meshExtents;
 	}
 }
@@ -143,6 +148,7 @@ function Init(){
 	Debug.Log("init!");
 	
 	gameObject.isStatic = true;
+	gameObject.layer = LineOfSight.BLOCKER_LAYER;
 	
 	if ((!customMode) && visualPrefab){
 		createVisual();

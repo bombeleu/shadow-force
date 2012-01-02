@@ -4,6 +4,8 @@
 public var layerMask: LayerMask;
 public var revealAll: boolean = false;
 
+
+public static var BLOCKER_LAYER:int = 18;
 function Awake(){
 	Physics.IgnoreLayerCollision(0, 11, true);//default vs playertrigger
 	Physics.IgnoreLayerCollision(8, 22, true);//player vs smoke

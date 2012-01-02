@@ -211,7 +211,7 @@ function Adjust(){
 	transform.position = (startPos+endPos)*0.5 + up*(meshExtents.y - visStartCenter.y)*sizeHandle.y;
 	//Debug.Log("up vec"+meshExtents.y +" "+ visStartCenter.y);
 	if (repeat){
-		var num:int = Mathf.CeilToInt( fLen / (wallLen*2* maxSizeRatio ) );
+		var num:int = Mathf.CeilToInt( fLen*0.5 / (sizeHandle.x*wallLen* maxSizeRatio ) );
 		var realLen:float = fLen / num;
 		visualPart.transform.localScale = Vector3.one;
 		visualPart.renderer.enabled = false;

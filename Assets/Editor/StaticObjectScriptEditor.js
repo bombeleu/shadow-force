@@ -28,11 +28,21 @@ class StaticObjectScriptEditor extends Editor {
 		}
        	Tools.current = -1;//TODO: check the validity of this hack!
     	//DrawDefaultInspector();
+    	Undo.SetSnapshotTarget(target, "Adjust object");
+    	
     	go.startPos = Handles.PositionHandle(go.startPos, Quaternion.identity);
     	go.endPos = Handles.PositionHandle(go.endPos, Quaternion.identity);
     	
     	var scalePos:Vector3 = (go.startPos+go.endPos)*0.5;
     	go.sizeHandle = Handles.ScaleHandle(go.sizeHandle, scalePos, go.transform.rotation, HandleUtility.GetHandleSize(scalePos));
     	go.Adjust();
+    	if (GUI.changed)
+            EditorUtility.SetDirty (target);
+            
+        if(Input.GetMouseButtonDown(0)) {
+            // Register the undos when we press the Mouse button.
+            Undo.CreateSnapshot();
+            Undo.RegisterSnapshot();
+        }
     }
 }

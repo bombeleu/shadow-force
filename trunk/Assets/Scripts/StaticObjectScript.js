@@ -117,7 +117,7 @@ private function initPhysics(){
 		colliderPart.transform.parent = transform;
 		colliderPart.transform.localRotation = Quaternion.identity;
 	}
-	colliderPart.transform.localPosition = visStartCenter;//readjust position
+	colliderPart.transform.localPosition = Vector3(0, visStartCenter.y*sizeHandle.y,1);//readjust position
 	box = colliderPart as BoxCollider;
 	if (box){ 
 		if (customMode)//exist PhysicalPart
@@ -238,9 +238,9 @@ function Adjust(){
 		visualPart.transform.localScale = Vector3.Scale(realScale, visStartScale);
 		visualPart.renderer.enabled = true;
 	}
-	var box:BoxCollider = colliderPart as BoxCollider;
-	if (box){
-		box.extents = Vector3.Scale(realScale, physStartExtents);
+	if (colliderPart){
+		colliderPart.extents = Vector3.Scale(realScale, physStartExtents);
+		colliderPart.transform.localPosition = Vector3(0, visStartCenter.y*sizeHandle.y,1);//readjust position
 	}
 	//TODO: implement for capsule collider! (which can only partially scale!)
 }

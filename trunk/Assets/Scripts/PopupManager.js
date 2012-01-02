@@ -7,17 +7,22 @@ public class PopupMessage
 	
 	public function Draw()
 	{
-		Debug.Log("3");
 		//GUI.Window(0, PopupManager.Instance.popupRect,DoWindow,title);
-		GUI.Window(0,new Rect(0,0,100,100),DoWindow,"dfdfdfdf");
+		var rect : Rect = PopupManager.Instance.popupRect;
+		GUI.DrawTexture(rect,PopupManager.Instance.bgTexture);
 		
-		Debug.Log("4");
+		rect.height = PopupManager.Instance.titleHeight;
+		GUI.DrawTexture(rect,PopupManager.Instance.titleTexture);
+		
+		GUI.Label(rect,title,PopupManager.Instance.titleStyle);
+		
+		var xPadding : int = 10;
+		var yPadding : int = 15;
+		rect.x += xPadding; rect.y += PopupManager.Instance.titleHeight + yPadding;
+		rect.width -= 2*xPadding; rect.height = PopupManager.Instance.popupRect.height - PopupManager.Instance.titleHeight - 2*yPadding;
+		GUI.Label(rect,content,PopupManager.Instance.contentStyle);
 	}
 	
-	function DoWindow(windowID : int)
-	{
-		GUI.Label(PopupManager.Instance.rect,content);	        
-	}
 	
 	public function ParseFromString(line : String)
 	{
@@ -46,8 +51,11 @@ private var msgList : List.<PopupMessage> = new List.<PopupMessage>();
 private var msgPool : PopupMessage[];
 
 public var popupRect : Rect;
-public var rect : Rect;
-public var style : GUIStyle;
+public var bgTexture : Texture;
+public var titleTexture: Texture;
+public var titleHeight : float;
+public var titleStyle : GUIStyle;
+public var contentStyle : GUIStyle;
 
 public static var Instance : PopupManager;
 
@@ -120,17 +128,12 @@ function Update () {
     }
 }
 
-function DoWindow0(windowID: int)
-{
-
-}
-
 function OnGUI()
 {
 	if (msgList.Count > 0)
 	{
 		#if UNITY_FLASH
-		//msgList[0] as PopupMessage).Draw();
+		(msgList[0] as PopupMessage).Draw();
 		#else
 		msgList[0].Draw();
 		#endif

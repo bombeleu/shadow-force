@@ -1,13 +1,13 @@
 #pragma strict
 //@script ExecuteInEditMode()
 
-public var editorSupport:boolean = false;
+public var editorSupport:boolean = true;
 
 @HideInInspector
 public var visualPart:MeshFilter;
 @HideInInspector
 public var colliderPart:BoxCollider;//TODO: capsule?
-public var repeat:boolean = false;
+public var repeat:boolean = true;
 public var maxSizeRatio:float = 1.25;
 @HideInInspector
 public var customMode:boolean = false;
@@ -143,6 +143,7 @@ function Init(){
 	if (init) return;
 	Debug.Log("init!");
 	
+	gameObject.isStatic = true;
 	
 	if ((!customMode) && visualPrefab){
 		createVisual();
@@ -175,13 +176,9 @@ function Init(){
 }
 
 function Reactivate(){
-	startPos = transform.position - (init?fLen*0.5:wallLen) * transform.right;
-	endPos = transform.position + (init?fLen*0.5:wallLen) * transform.right;
-	if (init){//reactivate
-		startPos -= transform.up*(meshExtents.y- visStartCenter.y)*sizeHandle.y;
-		endPos -= transform.up*(meshExtents.y- visStartCenter.y)*sizeHandle.y;
-	//Debug.Log("shift "+meshExtents.y);
-	}else{//placement on the ground
+	if (!init){//placement on the ground
+		startPos = transform.position - (init?fLen*0.5:wallLen) * transform.right;
+		endPos = transform.position + (init?fLen*0.5:wallLen) * transform.right;
 		startPos.y = 0.5;
 		endPos.y = 0.5;
 	}
@@ -192,7 +189,8 @@ public var fLen:float = 0;
 function Adjust(){
 	if (curVisPrefab != visualPrefab){//prefab change!
 		Debug.Log("prefab change");
-		init = false;
+		if (curVisPrefab == null) init = false;
+		//init = false;
 		createVisual();
 		initVisual();
 		initPhysics();

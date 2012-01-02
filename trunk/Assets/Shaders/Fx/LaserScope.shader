@@ -1,6 +1,7 @@
 
-Shader "AngryBots/FX/LaserScope" {
+Shader "FateHunter/LaserScope" {
     Properties {
+    	_Color ("Main Color", Color) = (1,1,1,1)
         _MainTex ("MainTex", 2D) = "white"
         _NoiseTex ("NoiseTex", 2D) = "white" 
     }
@@ -8,7 +9,7 @@ Shader "AngryBots/FX/LaserScope" {
 	CGINCLUDE
 
 		#include "UnityCG.cginc"
-
+		fixed4 _Color;
 		sampler2D _MainTex;
 		sampler2D _NoiseTex;
 		
@@ -35,7 +36,7 @@ Shader "AngryBots/FX/LaserScope" {
 		
 		fixed4 frag( v2f i ) : COLOR
 		{	
-			return tex2D (_MainTex, i.uv.xy) * tex2D (_NoiseTex, i.uv.zw);
+			return tex2D (_MainTex, i.uv.xy) * tex2D (_NoiseTex, i.uv.zw) * _Color;
 		}
 	
 	ENDCG

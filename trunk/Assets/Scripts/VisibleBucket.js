@@ -5,6 +5,7 @@ class FadingData {
 	public var material : Material;
 	public var originalShader : Shader;
 	public var replacedShader : Shader;	
+	public var useTint : boolean ;
 }
 
 public var visibleObjects:GameObject[];
@@ -20,7 +21,7 @@ enum FadingState { Out, In, None};
 private var _fadingState : FadingState = FadingState.None;
 
 private var visible : boolean = true;
-private var _fadingData : FadingData[];
+private var _fadingData : ArrayList = new ArrayList();
 private var _vision : VisionMeshScript ;
 private var _textMesh : TextMesh;
 
@@ -31,24 +32,24 @@ function Awake(){
 
 function Initialize()
 {
-	var nMaterials : int = 0;
-	for (var obj:GameObject in visibleObjects){
-		nMaterials += obj.renderer.materials.Length;
-	}	
-	for (var obj:GameObject in _dyVisibleObjects){
-		nMaterials += obj.renderer.materials.Length;
-	}
+//	var nMaterials : int = 0;
+//	for (var obj:GameObject in visibleObjects){
+//		nMaterials += obj.renderer.materials.Length;
+//	}	
+//	for (var obj:GameObject in _dyVisibleObjects){
+//		nMaterials += obj.renderer.materials.Length;
+//	}
 	// save the original shader
 	// get corresponding replacement shader
 	var weapon : Weapon = GetComponentInChildren(Weapon);
 	var weaponRenderer:Renderer;
 	if (weapon!=null) weaponRenderer = weapon.GetComponentInChildren(Renderer);
-	if (weapon != null) nMaterials += weaponRenderer.materials.Length;
+	//if (weapon != null) nMaterials += weaponRenderer.materials.Length;
 	
-	_fadingData = new FadingData[nMaterials];
-	for (var i : int ; i < nMaterials; i++)
-		_fadingData[i] = new FadingData(); // this is ridiculous !!!
-	
+	//_fadingData = new FadingData[nMaterials];
+	//for (var i : int ; i < nMaterials; i++)
+	//	_fadingData[i] = new FadingData(); // this is ridiculous !!!
+	_fadingData.Clear();
 	var count : int = 0 ;
 	for (var obj:GameObject in visibleObjects){
 		AddFadingData(count,obj);
@@ -68,14 +69,12 @@ function Initialize()
 
 public function RemoveVisibleObject(go : GameObject)
 {
-	return;
 	_dyVisibleObjects.Remove(go);
 	Initialize();
 }
 
 public function AddVisibleObject(go : GameObject)
 {
-	return;
 	// check for duplciation
 	for (var obj:GameObject in visibleObjects)
 	{
@@ -91,16 +90,28 @@ public function AddVisibleObject(go : GameObject)
 	Initialize();
 }
 
-private
- function AddFadingData(count : int, obj : GameObject) {
-	for (var mat : Material in obj.renderer.materials) {
-		_fadingData[count].material = mat;
-		_fadingData[count].originalShader = mat.shader;
+private function AddFadingData(count : int, obj : GameObject) {
+	//for (var mat : Material in obj.renderer.materials) {
+	for (var ren : Renderer in obj.GetComponentsInChildren(Renderer)) {
+		var mat : Material = (ren as Renderer).material;
+		var fd : FadingData = new FadingData();
+		fd.material = mat;
+		fd.originalShader = mat.shader;
 		
-		_fadingData[count].replacedShader = Shader.Find(mat.shader.name + "-Transparent");
-		if (_fadingData[count].replacedShader == null) {
-			_fadingData[count].replacedShader = Shader.Find("FateHunter/Character-Transparent"); // set to default shader
+		if (ren.GetType() == ParticleRenderer)
+		{
+			Debug.Log("Particle renderer spotted");
+			fd.replacedShader = mat.shader;
+			fd.useTint = true;
+		} else
+		{
+			fd.replacedShader = Shader.Find(mat.shader.name + "-Transparent");
+			if (fd.replacedShader == null) {
+				fd.replacedShader = Shader.Find("FateHunter/Character-Transparent"); // set to default shader
+			}
+			fd.useTint = false;
 		}
+		_fadingData.Add(fd);
 		count++;
 	}
 }
@@ -184,7 +195,13 @@ function Update() {
 	
 	for (var data : FadingData in _fadingData) {
 		//Debug.Log(data.material);
-		data.material.color.a = _alpha;
+		if (data.useTint)
+		{
+			data.material.GetColor("_TintColor").a = _alpha;
+		} else
+		{
+			data.material.color.a = _alpha;
+		}
 	}
 
 	if (_vision != null)

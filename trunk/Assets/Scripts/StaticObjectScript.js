@@ -92,6 +92,8 @@ private function createVisual(){
 	//remove the default MeshCollider
 	var collider:Collider = visualPart.GetComponent(Collider);
 	if (collider) GameObject.DestroyImmediate(collider);
+	var anim:Animation = visualPart.GetComponent(Animation);
+	if (anim) GameObject.DestroyImmediate(anim);
 }
 
 private function initVisual(){

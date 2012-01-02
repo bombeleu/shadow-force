@@ -10,7 +10,7 @@ ModelImporter:
     materialName: 3
     materialSearch: 1
   animations:
-    generateAnimations: 3
+    generateAnimations: 0
     bakeSimulation: 0
     splitAnimations: 1
     animationCompression: 1
@@ -54,6 +54,3 @@ ModelImporter:
       data:
         first: 64
         second: 00a86100
-      data:
-        first: 111
-        second: 605fa900

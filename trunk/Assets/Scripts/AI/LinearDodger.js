@@ -13,13 +13,20 @@ public var affectRadius:float;
 static public var slowestDodgerVel : float = 3;
 static public var dodgerRadius : float = 1.5;//buffer size
 
+public var blockerLayers:LayerMask;
 public var bounce:boolean = false;
 
+private var checkDistance:float;
+private var capsule:CapsuleCollider;
+
+private var bufferDist:float = 0.5;
+
 function Initialize(){
-	var capsule = collider as CapsuleCollider;
+	capsule = collider as CapsuleCollider;
 	var evadeTime : float = (affectRadius + dodgerRadius) / slowestDodgerVel;
 	capsule.height = evadeTime * velocity;
-	capsule.radius = affectRadius + dodgerRadius;
+	checkDistance = capsule.height * 0.5;
+	capsule.radius = affectRadius + dodgerRadius + bufferDist;
 	capsule.isTrigger = true;
 
 	transform.localRotation = Quaternion.Euler(90, 0, 0);
@@ -29,9 +36,9 @@ function Initialize(){
 	checkDistance = evadeTime * velocity;
 }
 
-private var checkDistance:float;
 
 /*
+private var checkDistance:float;
 function Update(){
 	var hitInfo : RaycastHit;
 	Physics.SphereCast(transform.position, affectRadius, velVector.normalized, hitInfo, checkDistance);
@@ -56,9 +63,15 @@ function OnTriggerStay (other : Collider) : void{
 		//if (dotN<0) return;
 		var offset:Vector3 = dir - velN*dotN;
 		var offsetM:float = offset.magnitude;
-		var affectDist:float = affectRadius + dodgerRadius + 0.5;
+		var affectDist:float = capsule.radius - bufferDist;//so that dodger stay active at the edge --> remove fluctuation problem!
 		//if (offsetM < affectDist){
-		ai.OnEvadeZone(offset.normalized*(affectDist-offsetM));
+		//check blocker
+		var oriPos:Vector3 = transform.position-velN*checkDistance;
+		if (!Physics.Raycast(oriPos, velN, (other.transform.position-oriPos).magnitude, blockerLayers)){//not blocked
+			ai.OnEvadeZone((affectDist > offsetM)?
+				offset.normalized*(affectDist-offsetM):
+				Vector3.zero);
+		}
 		//}
 	}
 	var blocker : BlockingAI = other.GetComponent(BlockingAI);

@@ -2,6 +2,11 @@
 
 //public var motor : FreeMovementMotor;
 
+static public var slowestDodgerVel : float = 3;
+static public var dodgerRadius : float = 0.95;//to compute running time
+static public var dodgingBuffer:float = 0.5;
+
+
 private var escapeV : Vector3;
 private var finalV:Vector3;
 private var isActive:boolean = false;

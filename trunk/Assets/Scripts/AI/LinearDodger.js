@@ -10,8 +10,6 @@ public var velocity:float;
 @HideInInspector
 public var affectRadius:float;
 
-static public var slowestDodgerVel : float = 3;
-static public var dodgerRadius : float = 1.5;//buffer size
 
 public var blockerLayers:LayerMask;
 public var bounce:boolean = false;
@@ -19,14 +17,12 @@ public var bounce:boolean = false;
 private var checkDistance:float;
 private var capsule:CapsuleCollider;
 
-private var bufferDist:float = 0.5;
-
 function Initialize(){
 	capsule = collider as CapsuleCollider;
-	var evadeTime : float = (affectRadius + dodgerRadius) / slowestDodgerVel;
+	var evadeTime : float = (affectRadius + DodgingAI.dodgerRadius) / DodgingAI.slowestDodgerVel;
 	capsule.height = evadeTime * velocity;
 	checkDistance = capsule.height * 0.5;
-	capsule.radius = affectRadius + dodgerRadius + bufferDist;
+	capsule.radius = affectRadius + DodgingAI.dodgerRadius + DodgingAI.dodgingBuffer;
 	capsule.isTrigger = true;
 
 	transform.localRotation = Quaternion.Euler(90, 0, 0);
@@ -63,7 +59,7 @@ function OnTriggerStay (other : Collider) : void{
 		//if (dotN<0) return;
 		var offset:Vector3 = dir - velN*dotN;
 		var offsetM:float = offset.magnitude;
-		var affectDist:float = capsule.radius - bufferDist;//so that dodger stay active at the edge --> remove fluctuation problem!
+		var affectDist:float = capsule.radius - DodgingAI.dodgingBuffer;//so that dodger stay active at the edge --> remove fluctuation problem!
 		//if (offsetM < affectDist){
 		//check blocker
 		var oriPos:Vector3 = transform.position-velN*checkDistance;

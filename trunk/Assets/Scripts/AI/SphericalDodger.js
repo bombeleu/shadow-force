@@ -2,8 +2,6 @@
 @script RequireComponent (SphereCollider)
 
 private var sCollider:SphereCollider;
-static public var dodgerRadius : float = 1.5;//buffer size
-
 
 function Awake(){
 	sCollider = collider as SphereCollider;
@@ -12,8 +10,12 @@ function Awake(){
 function OnTriggerStay (other : Collider) : void{
 	var ai : DodgingAI = other.GetComponent.<DodgingAI>();
 	if (ai){
-		var dir:Vector3 = other.transform.position - transform.position;
+		var dir:Vector3 = ai.transform.position - transform.position;
 		dir.y = 0;
-		ai.OnEvadeZone(dir.normalized*(sCollider.radius + dodgerRadius + 0.5 - dir.magnitude));
+		var affectDist:float = sCollider.radius + DodgingAI.dodgerRadius - DodgingAI.dodgingBuffer;
+		var dist:float = dir.magnitude;
+		ai.OnEvadeZone( affectDist>dist? 
+			dir.normalized*(affectDist - dist):
+			Vector3.zero);//stay in buffer zone!
 	}
 }

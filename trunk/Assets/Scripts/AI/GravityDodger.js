@@ -9,14 +9,12 @@ public var landingPos:Vector3;
 @HideInInspector
 public var affectRadius:float;
 
-static public var slowestDodgerVel : float = 3;
-static public var dodgerRadius : float = 1.5;
-
 private var startEvadeTime:float;
 private var sphereC:SphereCollider;
 function Initialize(){
 	sphereC = collider as SphereCollider;
-	startEvadeTime = landingTime - (affectRadius + dodgerRadius) / slowestDodgerVel;
+	startEvadeTime = landingTime - (affectRadius + DodgingAI.dodgerRadius + DodgingAI.dodgingBuffer) 
+		/ DodgingAI.slowestDodgerVel;
 
 	sphereC.radius = affectRadius;
 	sphereC.isTrigger = true;

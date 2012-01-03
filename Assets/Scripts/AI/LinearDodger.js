@@ -19,7 +19,7 @@ function Initialize(){
 	var capsule = collider as CapsuleCollider;
 	var evadeTime : float = (affectRadius + dodgerRadius) / slowestDodgerVel;
 	capsule.height = evadeTime * velocity;
-	capsule.radius = affectRadius;
+	capsule.radius = affectRadius + dodgerRadius;
 	capsule.isTrigger = true;
 
 	transform.localRotation = Quaternion.Euler(90, 0, 0);

@@ -7,6 +7,7 @@ public enum TalkType{
 	None,
 	Patrol,
 	PatrolNotChase,
+	PatrolBack,
 	Chase,
 	NotChase,
 	Shoot,
@@ -33,6 +34,9 @@ function Say(sentence:TalkType){
 			break;
 		case TalkType.PatrolNotChase:
 			str = RandomStr(["Wont leave position", "No trepassing", "Defend here"]);
+			break;
+		case TalkType.PatrolBack:
+			str = RandomStr(["Gotta leave", "Nothing here", "Hmm, strange .."]);
 			break;
 		case TalkType.Chase:
 			str = RandomStr(["Stop coward!", "See ya", "Wait there", "Think u can run?"]);

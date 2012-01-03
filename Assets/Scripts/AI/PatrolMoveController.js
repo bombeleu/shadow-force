@@ -9,8 +9,11 @@ public var patrolPointRadius : float = 0.5;
 private var nextPatrolPoint : int = 0;
 private var patrolDirection : int = 1;
 
+private var startPos:Vector3;
+
 function Start () {
 	//patrolRoute.Register (transform.parent.gameObject);
+	startPos = transform.position;
 	if (patrolRoute)
 		nextPatrolPoint = patrolRoute.GetClosestPatrolPoint (transform.position);
 }
@@ -23,10 +26,25 @@ function OnDestroy () {
 	//patrolRoute.UnRegister (transform.parent.gameObject);
 }
 
+function Update(){
+	Compute();
+}
+
+function LateUpdate(){
+	computed = false;
+}
+
+function NoPatrolRoute(){
+	return (patrolRoute == null || patrolRoute.patrolPoints.Count == 0);
+}
+
 private var targetVector:Vector3;
-function Update () {
+private var computed:boolean = false;
+function Compute () {//this func is to ensure update order independence
+	if (computed) return;//so that it won't perform 2 times per frame
+	computed = true;
 	// Early out if there are no patrol points
-	if (patrolRoute == null || patrolRoute.patrolPoints.Count == 0){
+	if (NoPatrolRoute()){
 		//motor.movementDirection = Vector3.zero;
 		targetVector = Vector3.zero;
 		return;
@@ -38,6 +56,7 @@ function Update () {
 	
 	// If the patrol point has been reached, select the next one.
 	if (targetVector.sqrMagnitude < patrolPointRadius * patrolPointRadius) {
+		InPatrolRoute = true;//set the flag to disable path finding!
 		nextPatrolPoint += patrolDirection;
 		if (nextPatrolPoint < 0) {
 			nextPatrolPoint = 1;
@@ -66,5 +85,13 @@ function Update () {
 }
 
 function GetVector():Vector3{
+	if (!computed) Compute();
 	return targetVector;
 }
+
+function GetNextPatrolPoint():Vector3{
+	if (!computed) Compute();
+	return NoPatrolRoute()?startPos:(patrolRoute.patrolPoints[nextPatrolPoint].position);
+}
+
+public var InPatrolRoute:boolean = false;

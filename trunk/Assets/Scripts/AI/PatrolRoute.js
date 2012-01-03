@@ -11,6 +11,7 @@ public var patrolPoints : System.Collections.Generic.List.<PatrolPoint> = new Sy
 
 private var activePatrollers : System.Collections.Generic.List.<GameObject> = new System.Collections.Generic.List.<GameObject> ();
 
+
 /*
 function Register (go : GameObject) {
 	activePatrollers.Add (go);
@@ -69,8 +70,10 @@ function GetClosestPatrolPoint (pos : Vector3) : int {
 function OnDrawGizmos () {
 	if (patrolPoints.Count == 0)
 		return;
+
 	
 	Gizmos.color = Color (0.5, 0.5, 1.0);
+    Gizmos.DrawCube(transform.position, Vector3.one);
 	
 	var lastPoint : Vector3 = patrolPoints[0].transform.position;
 	var loopCount = patrolPoints.Count;

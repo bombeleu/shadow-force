@@ -55,12 +55,22 @@ class PatrolRouteEditor extends Editor {
 		var lastPoint : Vector3 = route.patrolPoints[0].transform.position;
 		
 		var loopCount = route.patrolPoints.Count;
+		
+		
+		//handle to move patrol point
+		for (var j:int = 0; j<route.patrolPoints.Count; j++){
+			route.patrolPoints[j].transform.position = Handles.PositionHandle(route.patrolPoints[j].transform.position,
+				Quaternion.identity);
+		}
+
+		
 		if (route.pingPong)
 			loopCount--;
 		
 		for (var i : int = 0; i < loopCount; i++) {
 			if (!route.patrolPoints[i])
 				break;
+			
 			
 			var newPoint = route.patrolPoints[(i + 1) % route.patrolPoints.Count].transform.position;
 			if (newPoint != lastPoint) {

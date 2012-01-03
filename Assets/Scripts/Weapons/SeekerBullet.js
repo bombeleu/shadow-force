@@ -34,6 +34,10 @@ function OnEnable () {
 }
 
 function Update () {
+    if (Time.time - spawnTime > lifeTime){//(bounceTime==0){
+    	Explode();
+    	return;
+    }
 	
 	/*if (Time.time > spawnTime + lifeTime) {
 		Spawner.Destroy (gameObject);
@@ -67,13 +71,11 @@ function Update () {
 
 function Explode(){
 	Spawner.Destroy (gameObject);
-	//Network.RemoveRPCs(gameObject, 0);
-	//Network.DestroyPlayerObjects(gameObject);
-
 	Spawner.Spawn (explosionPrefab, transform.position, transform.rotation);
 }
 
-public var bounceTime : int = 5;
+//public var bounceTime : int = 5;
+public var lifeTime:float = 6;
 function OnCollisionEnter(collision : Collision) {
 	var targetHealth : Health = collision.transform.GetComponent.<Health> ();
 	if (targetHealth) {
@@ -90,11 +92,7 @@ function OnCollisionEnter(collision : Collision) {
 	}
 
     // Debug-draw all contact points and normals
-    if (bounceTime==0){
-    	Explode();
-    	return;
-    }
-    bounceTime --;
+    //bounceTime --;
     var norm : Vector3 = Vector3.zero;
     for (var contact : ContactPoint in collision.contacts)
     	norm += contact.normal;

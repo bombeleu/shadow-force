@@ -54,6 +54,8 @@ class AICentral extends DetectionAI{
 		//movement control
 		var canPatrol:boolean = false;
 		var fromChase:boolean = false;
+		var patrolFace:boolean = true;
+		motor.facingDirection = Vector3.zero;
 		if (
 			//#if UNITY_FLASH
 			!blocker && 
@@ -78,6 +80,7 @@ class AICentral extends DetectionAI{
 				tarPos.y = transform.position.y;
 				var dir:Vector3 = tarPos - transform.position;
 				motor.facingDirection = dir.normalized;
+				patrolFace = false;
 				if (IsShootable(tarPos)){
 					chasing = false;
 					shootingTarget = target as Visibility;
@@ -97,6 +100,7 @@ class AICentral extends DetectionAI{
 						}
 					}else{
 						talkAI.Say(TalkType.NotChase);
+						canPatrol = true;
 					}
 				}
 			}else{
@@ -121,7 +125,7 @@ class AICentral extends DetectionAI{
 						}
 					}
 				}
-				motor.facingDirection = Vector3.zero;
+				//motor.facingDirection = Vector3.zero;
 				if (!chasing){
 					canPatrol = true;
 				}
@@ -144,6 +148,7 @@ class AICentral extends DetectionAI{
 					//Debug.Log("chase!"+v+navigator.isPathStale+navigator.hasPath+navigator.pathStatus+navigator.remainingDistance);
 					//Debug.Log("chase"+v);
 					motor.movementDirection = v.normalized;
+					motor.facingDirection = v.normalized;//so that it won't rotate when dodging
 					patroller.InPatrolRoute = false;
 				}
 			}
@@ -153,6 +158,10 @@ class AICentral extends DetectionAI{
 				if (patroller.InPatrolRoute){
 					backtrackPathCompute = false;
 					motor.movementDirection = patroller.GetVector().normalized;
+					if (patrolFace){
+						if (motor.movementDirection == Vector3.zero)
+							motor.facingDirection = patroller.GetStartDir();
+					}
 					if (chaseAI){
 						if (motor.movementDirection == Vector3.zero)
 							talkAI.Say(TalkType.None);
@@ -171,6 +180,7 @@ class AICentral extends DetectionAI{
 						ve.y = 0;
 						motor.movementDirection = ve.normalized;
 						ve = transform.position - patroller.GetNextPatrolPoint();
+						ve.y=0;
 						if (ve.sqrMagnitude < patroller.patrolPointRadius * patroller.patrolPointRadius){
 							patroller.InPatrolRoute = true;
 							//backtrackPathCompute = false;
@@ -183,9 +193,11 @@ class AICentral extends DetectionAI{
 			}
 		}
 		//direction control
-		if (blocker && blocker.IsActive()){
-			motor.facingDirection = blocker.GetVector().normalized;
-			talkAI.Say(TalkType.Block);
+		if (blocker){
+			if (blocker.IsActive()){
+				motor.facingDirection = blocker.GetVector().normalized;
+				talkAI.Say(TalkType.Block);
+			}
 		}
 	}
 	

@@ -10,10 +10,12 @@ private var nextPatrolPoint : int = 0;
 private var patrolDirection : int = 1;
 
 private var startPos:Vector3;
+private var startDir:Vector3;
 
 function Start () {
 	//patrolRoute.Register (transform.parent.gameObject);
 	startPos = transform.position;
+	startDir = transform.forward;
 	if (patrolRoute)
 		nextPatrolPoint = patrolRoute.GetClosestPatrolPoint (transform.position);
 }
@@ -87,6 +89,10 @@ function Compute () {//this func is to ensure update order independence
 function GetVector():Vector3{
 	if (!computed) Compute();
 	return targetVector;
+}
+
+function GetStartDir():Vector3{
+	return startDir;
 }
 
 function GetNextPatrolPoint():Vector3{

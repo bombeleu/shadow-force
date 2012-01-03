@@ -40,15 +40,19 @@ class AICentral extends DetectionAI{
 	private var shootingTarget:Visibility;
 	private var saidNotChase:boolean = false;
 	private var dodging:boolean = false;
+	
+	private var backtrackPathCompute:boolean = false;
 	function Update () {
 		//movement control
 		var canPatrol:boolean = false;
+		var fromChase:boolean = false;
 		if (
 			#if UNITY_FLASH
 			!blocker && 
 			#endif
 			dodger && dodger.IsActive()){
 			motor.movementDirection = dodger.GetVector().normalized;
+			patroller.InPatrolRoute = false;
 			dodging = true;
 		}else if (shootAI){
 			if (dodging){//done dodging, can check here because all dodgers have shooting
@@ -110,7 +114,9 @@ class AICentral extends DetectionAI{
 					}
 				}
 				motor.facingDirection = Vector3.zero;
-				if (!chasing) canPatrol = true;
+				if (!chasing){
+					canPatrol = true;
+				}
 			}
 			if (chasing){
 				var v:Vector3 = 
@@ -121,25 +127,48 @@ class AICentral extends DetectionAI{
 				//#endif
 				- transform.position;
 				v.y = 0;
-				if ((lastTarget - transform.position).sqrMagnitude < 0.25){
+				if ((lastTarget - transform.position).sqrMagnitude < patroller.patrolPointRadius * patroller.patrolPointRadius){
 					chasing = false;
-					motor.movementDirection = Vector3.zero;
+					fromChase = true;
+					canPatrol = true;
+					//motor.movementDirection = Vector3.zero;
 				}else{
 					//Debug.Log("chase!"+v+navigator.isPathStale+navigator.hasPath+navigator.pathStatus+navigator.remainingDistance);
 					//Debug.Log("chase"+v);
 					motor.movementDirection = v.normalized;
+					patroller.InPatrolRoute = false;
 				}
 			}
 		}else canPatrol = true;
 		if (canPatrol){
 			if (patroller){
-				motor.movementDirection = patroller.GetVector().normalized;
-				if (chaseAI){
-					if (motor.movementDirection == Vector3.zero)
-						talkAI.Say(TalkType.None);
-					else 
-						talkAI.Say(TalkType.Patrol);
-				}else talkAI.Say(TalkType.PatrolNotChase);
+				if (patroller.InPatrolRoute){
+					backtrackPathCompute = false;
+					motor.movementDirection = patroller.GetVector().normalized;
+					if (chaseAI){
+						if (motor.movementDirection == Vector3.zero)
+							talkAI.Say(TalkType.None);
+						else 
+							talkAI.Say(TalkType.Patrol);
+					}else talkAI.Say(TalkType.PatrolNotChase);
+				}else{//move back to position
+					if (!backtrackPathCompute){
+						if (navigator.SetDestination(patroller.GetNextPatrolPoint())){
+							backtrackPathCompute = true;
+							if (fromChase) talkAI.Say(TalkType.PatrolBack);
+						}
+					}
+					if (backtrackPathCompute){
+						var ve:Vector3 = navigator.nextPosition - transform.position;
+						ve.y = 0;
+						motor.movementDirection = ve.normalized;
+						ve = transform.position - patroller.GetNextPatrolPoint();
+						if (ve.sqrMagnitude < patroller.patrolPointRadius * patroller.patrolPointRadius){
+							patroller.InPatrolRoute = true;
+							//backtrackPathCompute = false;
+						}
+					}
+				}
 			}else{
 				motor.movementDirection = Vector3.zero;
 				talkAI.Say(TalkType.None);

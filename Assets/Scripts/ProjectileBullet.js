@@ -15,17 +15,36 @@ function Awake(){
 function OnLaunchBullet(pos:Vector3){
 	trajectory.OnUpdateTarget(pos);
 	var velo:Vector3 = trajectory.GetComputedVelocity();
+	var duration:float = trajectory.GetDuration();
 	var go:GameObject = NetworkU.Instantiate(bulletPrefab, spawnPoint.position, 
 		spawnPoint.rotation);
 	//go.rigidbody.velocity = velo;
-	go.SendMessage("SetVelocity",velo);
-	var dodger: GravityDodger = go.GetComponentInChildren.<GravityDodger>();
+	go.SendMessage("SetVelocity", velo);//TODO: network sync correct?
+	go.SendMessage("SetDuration", duration);
+	
+	
+	//for doding ai
+	var affectRadius:float = 2.5;//TODO: remove hard code
+	var startEvadeTime:float = duration - (affectRadius + DodgingAI.dodgerRadius + DodgingAI.dodgingBuffer) 
+		/ DodgingAI.slowestDodgerVel;
+	yield WaitForSeconds(startEvadeTime);
+	var dodgingZone = new GameObject();
+	dodgingZone.transform.position = pos;
+	var sphere:SphereCollider = dodgingZone.AddComponent(SphereCollider);
+	sphere.radius = affectRadius+DodgingAI.dodgingBuffer;
+	sphere.isTrigger = true;
+	dodgingZone.AddComponent(SphericalDodger);
+	
+	yield WaitForSeconds(duration - startEvadeTime);
+	Destroy(dodgingZone);
+	
+	/*var dodger: GravityDodger = go.GetComponentInChildren.<GravityDodger>();
 	if (dodger){
-		dodger.affectRadius = 5;
-		dodger.landingTime = trajectory.GetDuration();
+		//dodger.affectRadius = 5;
+		dodger.landingTime = duration;
 		dodger.landingPos = pos;
 		dodger.Initialize();
-	}
+	}*/
 	
 	//go.rigidbody.angularVelocity = Vector3(Random.value,Random.value,Random.value)*Random.value*4;
 }

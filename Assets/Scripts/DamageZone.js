@@ -2,7 +2,11 @@
 @script RequireComponent (Collider)
 
 public var damagePerSecond:float;
-public var raycastCheck:boolean = false;
+
+public var hasSphericalDodger:boolean = false;
+private var sphere:SphereCollider;
+
+public var raycastCheck:boolean = false;//to support flame thrower
 public var raycast:PerFrameRaycast;
 
 private var frequency : float;
@@ -12,6 +16,10 @@ private var lastFireTime : float = -1;
 function Awake(){
 	frequency = NetworkU.SendRate();
 	interval = 1/frequency;
+	if (hasSphericalDodger){
+		sphere = collider as SphereCollider;
+		sphere.radius += DodgingAI.dodgingBuffer;
+	}
 }
 
 function OnEnable(){
@@ -26,6 +34,11 @@ function OnDisable(){
 function OnTriggerStay (other : Collider) : void{
 	var health : Health = other.GetComponent(Health);
 	if (health){
+		if (hasSphericalDodger){
+			var dist:float = (health.transform.position - transform.position).magnitude;
+			if (dist > sphere.radius + DodgingAI.dodgerRadius - DodgingAI.dodgingBuffer)
+				return;//no damage on buffer zone!
+		}
 		if (raycastCheck){
 			var hit:RaycastHit = raycast.GetHitInfo();
 			if (hit.transform && 

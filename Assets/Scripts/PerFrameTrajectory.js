@@ -24,7 +24,7 @@ function OnUpdateTarget(p:Vector3){
 
 //z of the vector is the duration!
 private function ComputeVelo(d:float, g:float, targetY:float, hitInfo:RaycastHit):Vector3{
-	targetY = spawnPoint.position.y;
+	//targetY = spawnPoint.position.y;
 	var h0:float = spawnPoint.position.y - targetY;
 	var h : float;// = wallHeight;
 	

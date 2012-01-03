@@ -41,15 +41,23 @@ class AICentral extends DetectionAI{
 	private var saidNotChase:boolean = false;
 	private var dodging:boolean = false;
 	
+	private var forceChase:boolean = false;
+	public function ForceChase(target:Vector3):void{
+		if (navigator.SetDestination(target)){
+			forceChase = true;
+			chasing = true;
+		}
+	}
+	
 	private var backtrackPathCompute:boolean = false;
 	function Update () {
 		//movement control
 		var canPatrol:boolean = false;
 		var fromChase:boolean = false;
 		if (
-			#if UNITY_FLASH
+			//#if UNITY_FLASH
 			!blocker && 
-			#endif
+			//#endif
 			dodger && dodger.IsActive()){
 			motor.movementDirection = dodger.GetVector().normalized;
 			patroller.InPatrolRoute = false;

@@ -28,27 +28,30 @@ function Say(sentence:TalkType){
 		if (saying) return;
 	}
 	var str:String;
+	var emphasize:boolean = false;
 	switch (sentence){
 		case TalkType.Patrol:
-			str = RandomStr(["Cardio's good", "For my 6pak", "Few more rounds", "Hunting enemy"]);
+			str = RandomStr(["Cardio's good", "For my 6pak", "Will chase u"]);
 			break;
 		case TalkType.PatrolNotChase:
 			str = RandomStr(["Wont leave position", "No trepassing", "Defend here"]);
 			break;
 		case TalkType.PatrolBack:
-			str = RandomStr(["Gotta leave", "Nothing here", "Hmm, strange .."]);
+			str = RandomStr(["Gotta leave", "Nothing here?", "Hmm, strange .."]);
 			break;
 		case TalkType.Chase:
 			str = RandomStr(["Stop coward!", "See ya", "Wait there", "Think u can run?"]);
+			emphasize = true;
 			break;
 		case TalkType.NotChase:
 			str = RandomStr(["Better stay", "Lure me out?", "Come here!"]);
 			break;
 		case TalkType.Shoot:
 			str = RandomStr(["Die!", "Training time!", "Ya better run"]);
+			emphasize = true;
 			break;
 		case TalkType.Dodge:
-			str = RandomStr(["Open your eye!", "Miss!", "Know aiming?"]);
+			str = RandomStr(["Learn to shoot!", "Miss!", "Y U NO aim?"]);
 			break;
 		case TalkType.Block:
 			str = RandomStr(["Cant kill me", "Tickle me?", "No damage!"]);
@@ -62,6 +65,7 @@ function Say(sentence:TalkType){
 	}
 	lastSentence = sentence;
 	text.text = str;
+	text.renderer.material.color = emphasize?Color(1,0.5,0.5,1):Color.white;
 	saying = true;
 	startTime = Time.time;
 }

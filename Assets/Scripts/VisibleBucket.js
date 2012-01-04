@@ -217,7 +217,7 @@ function Update() {
 		//Debug.Log(data.material + "---" + data.material.shader);
 		if (data.useTint)
 		{
-			Debug.Log(data.material);
+			//Debug.Log(data.material);
 			var col : Color = data.material.GetColor("_TintColor");
 			col.a = _alpha;
 			data.material.SetColor("_TintColor",col);

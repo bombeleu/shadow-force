@@ -1,54 +1,12 @@
 #pragma strict
-public class PopupMessage
-{
-	public var id : int;
-	public var title : String;
-	public var content : String;
-	
-	public function Draw()
-	{
-		//GUI.Window(0, PopupManager.Instance.popupRect,DoWindow,title);
-		var rect : Rect = PopupManager.Instance.popupRect;
-		GUI.DrawTexture(rect,PopupManager.Instance.bgTexture);
-		
-		rect.height = PopupManager.Instance.titleHeight;
-		GUI.DrawTexture(rect,PopupManager.Instance.titleTexture);
-		
-		GUI.Label(rect,title,PopupManager.Instance.titleStyle);
-		
-		var xPadding : int = 10;
-		var yPadding : int = 15;
-		rect.x += xPadding; rect.y += PopupManager.Instance.titleHeight + yPadding;
-		rect.width -= 2*xPadding; rect.height = PopupManager.Instance.popupRect.height - PopupManager.Instance.titleHeight - 2*yPadding;
-		GUI.Label(rect,content,PopupManager.Instance.contentStyle);
-	}
-	
-	
-	public function ParseFromString(line : String)
-	{
-		//Debug.Log(line);
-		var row : String[] = line.Split(","[0]);
-        for (var i : int= 0; i < row.Length; i++) 
-        {
-            // This line was to replace "" with " 
-            //row[i] = row[i].Replace("\"\"", "\"");
-			row[i] = row[i].Replace("\"", "");
-			//Debug.Log(row[i]);
-        }
-		// now, populate the data
-		var index : int = 0;
-		id = int.Parse(row[index++]);
-		title = row[index++];
-		content = row[index++];
-	}
-}
+
 
 #if UNITY_FLASH
 private var msgList : ArrayList = new ArrayList();
 #else
 private var msgList : List.<PopupMessage> = new List.<PopupMessage>();
 #endif
-private var msgPool : PopupMessage[];
+//private var msgPool : PopupMessage[];
 
 public var popupRect : Rect;
 public var bgTexture : Texture;
@@ -66,27 +24,33 @@ function Awake()
 
 function Start () {
 	// get data from csv files
-	var csvFile : TextAsset = Resources.Load("Messages") as TextAsset;
-	var csvText : String = csvFile.text;
-		
-	var lines : String[] = csvText.Split("\n"[0]); 
-	//Debug.Log(lines.Length);
-	msgPool = new PopupMessage[lines.Length-1];
-    
-    //Debug.Log(csvText);
-	for (var i : int = 1 ; i < lines.Length; i++)
-	{
-		msgPool[i-1] = new PopupMessage();
-		msgPool[i-1].ParseFromString(lines[i]);
-	}
-	
+//	var csvFile : TextAsset = Resources.Load("Messages") as TextAsset;
+//	var csvText : String = csvFile.text;
+//		
+//	var lines : String[] = csvText.Split("\n"[0]); 
+//	//Debug.Log(lines.Length);
+//	msgPool = new PopupMessage[lines.Length-1];
+//    
+//    //Debug.Log(csvText);
+//	for (var i : int = 1 ; i < lines.Length; i++)
+//	{
+//		msgPool[i-1] = new PopupMessage();
+//		msgPool[i-1].ParseFromString(lines[i]);
+//	}
+//	
 	
 }
 
-public function AddPopupMessage(id : int)
+//public function AddPopupMessage(id : int)
+//{
+//	Time.timeScale = 0f;
+//	msgList.Add(msgPool[id]);
+//}
+
+public function AddPopupMessage(msg : PopupMessage)
 {
 	Time.timeScale = 0f;
-	msgList.Add(msgPool[id]);
+	msgList.Add(msg);
 }
 
 function RemoveMessage()
@@ -97,11 +61,6 @@ function RemoveMessage()
 
 function Update () {
 	// test
-	
-	if (Input.GetKeyUp(KeyCode.T))
-	{
-		AddPopupMessage(0);
-	}	
 	
 	if (msgList.Count == 0) return; 
 	

@@ -46,7 +46,8 @@ function Initialize()
 		}
 		
 	var weaponManager : WeaponManager = gameObject.GetComponent(WeaponManager);
-	var weapon : Weapon = weaponManager.GetCurrentWeapon();
+	var weapon : Weapon = null;
+	if (weaponManager) weapon = weaponManager.GetCurrentWeapon();
 
 	var weaponRenderer:Renderer;
 	if (weapon!=null) weaponRenderer = weapon.GetComponentInChildren(Renderer);
@@ -69,14 +70,14 @@ function Initialize()
 	// fade weapon
 	if (weapon != null) 
 	{
-		Debug.Log("Weapon render obj:" + weapon.gameObject);
+		//Debug.Log("Weapon render obj:" + weapon.gameObject);
 		AddFadingData(weapon.gameObject);
 	}
 
 	//fade team name
 	_textMesh = GetComponentInChildren(TextMesh);
 	_vision = GetComponentInChildren(VisionMeshScript);
-	Debug.Log("Count :" + _fadingData.Count);
+	//Debug.Log("Count :" + _fadingData.Count);
 	// refresh state;
 	if (enabled) OnEnable();
 }
@@ -141,7 +142,10 @@ private function SetRenderer(activate : boolean) {
 	}
 	if (_vision != null) _vision.enabled = activate;
 	if (_textMesh != null) _textMesh.gameObject.renderer.enabled = activate;
-	var weapon : Weapon = gameObject.GetComponent(WeaponManager).GetCurrentWeapon();
+	
+	var weaponManager : WeaponManager = gameObject.GetComponent(WeaponManager);
+	var weapon : Weapon = null;
+	if (weaponManager) weapon = weaponManager.GetCurrentWeapon();
 	if (weapon) weapon.enabled = activate;
 }
 

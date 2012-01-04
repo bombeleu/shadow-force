@@ -200,6 +200,7 @@ function Adjust(){
 
 	if (curVisPrefab != visualPrefab){//prefab change!
 		Debug.Log("prefab change");
+		var oldExtends:Vector3 = meshExtents;
 		if (curVisPrefab == null) init = false;
 		//init = false;
 		createVisual();
@@ -207,6 +208,11 @@ function Adjust(){
 		initPhysics();
 		Reactivate();
 		init = true;
+		sizeHandle.Scale(Vector3(oldExtends.x / meshExtents.x, oldExtends.y / meshExtents.y,
+			oldExtends.z / meshExtents.z));
+		//sizeHandle.Scale(Vector3( visStartScale.x/lastVisScale.x, visStartScale.y/lastVisScale.y,
+		//	visStartScale.z/lastVisScale.z));
+		Debug.Log("scale change: "+oldExtends+" "+meshExtents);
 	}
 	
 	if (visualPart == null) return;

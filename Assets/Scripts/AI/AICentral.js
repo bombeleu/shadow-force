@@ -50,6 +50,7 @@ class AICentral extends DetectionAI{
 	}
 	
 	private var backtrackPathCompute:boolean = false;
+	private var lastTimeChase:float = -1;
 	function Update () {
 		//movement control
 		var canPatrol:boolean = false;
@@ -81,9 +82,9 @@ class AICentral extends DetectionAI{
 				var dir:Vector3 = tarPos - transform.position;
 				motor.facingDirection = dir.normalized;
 				patrolFace = false;
+				shootingTarget = target as Visibility;
 				if (IsShootable(tarPos)){
 					chasing = false;
-					shootingTarget = target as Visibility;
 					Shoot(tarPos);
 					motor.movementDirection = Vector3.zero;
 					talkAI.Say(TalkType.Shoot);
@@ -92,8 +93,9 @@ class AICentral extends DetectionAI{
 						/*#if UNITY_FLASH
 						if (NetworkU.NavSetDest(navigator,tarPos)){
 						#else*/
-						if (navigator.SetDestination(tarPos)){
+						if ((!chasing || Time.time-lastTimeChase>0.2)&& navigator.SetDestination(tarPos)){
 						//#endif
+							lastTimeChase = Time.time;
 							lastTarget = tarPos;
 							chasing = true;
 							talkAI.Say(TalkType.Chase);
@@ -109,6 +111,7 @@ class AICentral extends DetectionAI{
 					if (chaseAI){
 						var tarP:Vector3 = shootingTarget.transform.position;
 						tarP.y = transform.position.y;
+						shootingTarget=null;//lose sight
 						/*#if UNITY_FLASH
 						if (NetworkU.NavSetDest(navigator,tarP)){
 						#else*/
@@ -216,7 +219,8 @@ class AICentral extends DetectionAI{
 	public var glassLayers:LayerMask;
 	private function IsShootable(tarPos:Vector3):boolean{
 		tarPos.y = transform.position.y;
-		var targetV:Vector3 = tarPos - transform.position;
+		var oriPos:Vector3 = transform.position + transform.forward*0.7;
+		var targetV:Vector3 = tarPos - oriPos;
 		var weapon:Weapon = weaponManager.GetCurrentWeapon();
 		var shoot:boolean = false;
 		if (weapon.hasRange){
@@ -224,7 +228,7 @@ class AICentral extends DetectionAI{
 				shoot = true;
 		}else shoot = true;
 		if (shoot && (!weapon.needPosition)){//check for glass
-			if (Physics.Raycast(transform.position, targetV, targetV.magnitude, glassLayers))
+			if (Physics.Raycast(oriPos, targetV, targetV.magnitude, glassLayers))
 				shoot = false;
 		}
 		return shoot;

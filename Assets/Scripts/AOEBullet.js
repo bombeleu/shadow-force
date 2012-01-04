@@ -25,7 +25,8 @@ function OnLaunchBullet(){
 			if (targetHealth && targetHealth!=myHealth) {
 				//check for angle
 				var forwardV:Vector3 = wp.owner.transform.forward;
-				var toV:Vector3 = col.transform.position - transform.position;
+				var oriPos:Vector3 = wp.owner.transform.position + wp.owner.transform.forward*0.7;
+				var toV:Vector3 = col.transform.position - oriPos;
 				toV.y=0;
 				var angle:float = Quaternion.FromToRotation(forwardV, toV).eulerAngles.y;
 				if (angle>=270) angle = 360-angle;
@@ -33,13 +34,13 @@ function OnLaunchBullet(){
 				if (angle<shotgun.angle){
 					//check for occluder
 					//var hitInfo:RaycastHit;
-					if (!Physics.Raycast(transform.position, toV, toV.magnitude, blockLayers)){
+					if (!Physics.Raycast(oriPos, toV, toV.magnitude, blockLayers)){
 						// Apply damage
 						#if UNITY_FLASH
-						col.GetComponent(Health).OnDamage(damage, -wp.owner.transform.forward*7);
+						col.GetComponent(Health).OnDamage(damage, -toV.normalized*7);
 						#else
 						NetworkU.RPC(col.GetComponent(Health), "OnDamage", NetRPCMode.All, 
-							[damage, -wp.owner.transform.forward*7]);
+							[damage, -toV.normalized*7]);
 						#endif
 					}
 					//Debug.Log(hitInfo.transform);

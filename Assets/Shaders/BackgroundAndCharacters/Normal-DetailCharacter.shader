@@ -33,11 +33,11 @@ half4 LightingBumpSpecularMap (SurfaceOutput s, half3 lightDir, half3 viewDir, h
   	half diff = max (0, dot (s.Normal, lightDir));
 
   	float nh = max (0, dot (s.Normal, h));
-  	float spec = pow (nh, 48.0) *_Shininess* s.Specular;
+  	float spec = pow (nh, 64.0) *_Shininess* s.Specular;
   	//spec = pow(nh,s.Specular);
 
   	half4 c;
-  	c.rgb = (s.Albedo * _LightColor0.rgb * diff + _LightColor0.rgb * spec ) * (atten * 2);
+  	c.rgb = (s.Albedo * _LightColor0.rgb * diff + _SpecColor.rgb * spec ) * (atten * 2);
   	c.a = 1.0;
   	
   	return c;

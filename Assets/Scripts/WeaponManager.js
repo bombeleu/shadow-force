@@ -73,6 +73,7 @@ function OnEnable(){
 private var weaponGUI:SelectWeaponGUI;
 function Awake(){
 	weaponGUI = GameObject.FindObjectOfType(SelectWeaponGUI);
+	visi = GetComponent(Visibility);
 	playerMovementPlane = new Plane (transform.up, transform.position + transform.up * cursorPlaneHeight);
 }
 
@@ -191,6 +192,7 @@ function Start(){
 }
 
 public var playerAnimation : PlayerAnimation;
+private var visi:Visibility;
 
 private var weaponSwitchGUI:boolean;
 function Update () {
@@ -280,12 +282,18 @@ function Update () {
 			}else{
 				weapon.gameObject.SendMessage("OnLaunchBullet");
 			}
+			if (visi.visibilityType == VisibilityType.TeamShare){//all shot reveal shooter
+				visi.visibilityType = VisibilityType.Reveal;
+			}
 			if (controllable) weapon.ammoRemain--;
 			#if UNITY_FLASH
 			onetimeFireAnimation();
 			#else
 			NetworkU.RPC(this, "onetimeFireAnimation", NetRPCMode.All);			
 			#endif
+		}
+		if ((visi.visibilityType == VisibilityType.Reveal) && (Time.time - altFireTimer > weapon.cooldown)){//TODO:use seperate para for this
+			visi.visibilityType = VisibilityType.TeamShare;
 		}
 	}else{//continuous firing
 		if (isFiring && (firing || angle<=3)){
@@ -302,6 +310,9 @@ function Update () {
 			}else{
 				weapon.gameObject.SendMessage("OnLaunchBullet");
 			}
+			if (visi.visibilityType == VisibilityType.TeamShare){//all shot reveal shooter
+				visi.visibilityType = VisibilityType.Reveal;
+			}
 		}else{
 			if (firing){
 				#if UNITY_FLASH
@@ -312,6 +323,9 @@ function Update () {
 			}
 			firing = false;
 			weapon.gameObject.SendMessage("OnStopFiring");
+			if (visi.visibilityType == VisibilityType.Reveal){//all shot reveal shooter
+				visi.visibilityType = VisibilityType.TeamShare;
+			}
 		}
 	}
 }

@@ -123,6 +123,9 @@ function Update () {
 			}
 		}
 		//if (!visi) Debug.Log('hidden', viobj);
+		if (viobj.visibilityType == VisibilityType.Reveal){//set to true but still scan for AI to work
+			visi = true;
+		}
 		viobj.SetVisible(visi);
 	}
 }

@@ -192,14 +192,16 @@ private var weaponSwitchGUI:boolean;
 function Update () {
 	if (!NetworkU.IsMine(this)) return;//weapon manager only updates the local player, network update is done per weapon basis
 
-	//return;
-	//this is only needed if the terrain is uneven!
-	playerMovementPlane.normal = transform.up;
-	playerMovementPlane.distance = -transform.position.y + cursorPlaneHeight;
-
 	var cursorWorldPosition : Vector3;
 
 	var weapon : Weapon = ws[curWeapon];
+
+	//return;
+	//this is only needed if the terrain is uneven!
+	playerMovementPlane.normal = transform.up;
+	//playerMovementPlane.distance = -transform.position.y + cursorPlaneHeight;
+	playerMovementPlane.distance = -weapon.spawnPoint.position.y;
+
 	//weapon.SetEnable(true);
 
 	//direction takes from mouse position

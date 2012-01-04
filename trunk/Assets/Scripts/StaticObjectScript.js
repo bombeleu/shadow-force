@@ -196,7 +196,7 @@ function Reactivate(){
 public var fLen:float = 0;
 function Adjust(){
 	if (colliderPart)
-		colliderPart.active = hasCollider;
+		colliderPart.gameObject.active = hasCollider;
 
 	if (curVisPrefab != visualPrefab){//prefab change!
 		Debug.Log("prefab change");

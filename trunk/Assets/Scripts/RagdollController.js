@@ -153,6 +153,8 @@ public function Die()
     DestroyObject(gameObject);
     ragDoll.SendMessage("OnRestart", SendMessageOptions.DontRequireReceiver);//so that player can restart
     
+    ragDoll.GetComponent(AutoKill).enabled = true;    
+    
    	//DestroyObject(animationObject);
     //ragDoll.transform.parent = null;
     

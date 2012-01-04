@@ -114,8 +114,9 @@ public function InsertCheckPointAt(index : int) : GameObject
 	ggo.transform.parent = cp.gameObject.transform;
 	cp.AddPopup(ggo.GetComponent.<PopupMessage>());
 	
-	//
-	var count : int = checkPoints.Length;
+	//	
+	var count : int = 0;
+	if (checkPoints) count =  checkPoints.Length;
 	
 	if (count >= 0) {
 		cp.transform.localPosition = Vector3.zero;

@@ -268,6 +268,7 @@ private function GetIntersectPts(pt0 : Vector2, pt1 : Vector2, pt2 : Vector2, bl
 	
 	} else
 	{
+		if (blocker.collider == null) return _result;
 		var mat : Matrix4x4 = _playerTransform.worldToLocalMatrix * blocker.transform.localToWorldMatrix;
 		var size : Vector3 = 0.5 * blocker.GetComponent(BoxCollider).size;
 		

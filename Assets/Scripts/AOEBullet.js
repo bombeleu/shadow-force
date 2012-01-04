@@ -31,10 +31,12 @@ function OnLaunchBullet(){
 				var angle:float = Quaternion.FromToRotation(forwardV, toV).eulerAngles.y;
 				if (angle>=270) angle = 360-angle;
 				//Debug.Log("shotgun angle: "+angle);
+				var hit:boolean = false;
 				if (angle<shotgun.angle){
 					//check for occluder
 					//var hitInfo:RaycastHit;
 					if (!Physics.Raycast(oriPos, toV, toV.magnitude, blockLayers)){
+						hit = true;
 						// Apply damage
 						#if UNITY_FLASH
 						col.GetComponent(Health).OnDamage(damage, -toV.normalized*7);
@@ -45,6 +47,12 @@ function OnLaunchBullet(){
 					}
 					//Debug.Log(hitInfo.transform);
 					//Debug.Log(spawnPoint.position);
+				}
+				if (!hit){//hear the noise!
+					var ai:AICentral = targetHealth.GetComponent(AICentral);
+					if (ai.chaseAI) {
+						ai.ForceChase(oriPos);//for those who is willing to chase
+					}else ai.SayNoChase();
 				}
 			}
 		}

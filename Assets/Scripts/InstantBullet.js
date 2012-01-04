@@ -39,13 +39,9 @@ function OnLaunchBullet(){
 	}
 	
 	if (hitInfo.transform) {
-		var ai : DodgingAI = hitInfo.transform.GetComponent(DodgingAI);
+		var ai : AICentral = hitInfo.transform.GetComponent(AICentral);
 		if (ai){
-			var dir:Vector3 = hitInfo.transform.position - spawnPoint.position;
-			dir.y = 0;
-			var velN : Vector3 = raycast.GetDir().normalized;
-			var offset:Vector3 = dir - velN*Vector3.Dot(dir, velN);
-			ai.OnEvadeZone(offset.normalized);//TODO: use real size
+			ai.ForceChase(transform.position);
 		}
 		var blocker : BlockingAI = hitInfo.transform.GetComponent(BlockingAI);
 		if (blocker){

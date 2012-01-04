@@ -25,7 +25,7 @@ private var _fadingData : ArrayList = new ArrayList();
 private var _vision : VisionMeshScript ;
 private var _textMesh : TextMesh;
 
-function Awake(){
+function Start(){
 	//Debug.Log("Start");
 	Initialize();
 }
@@ -45,7 +45,9 @@ function Initialize()
 			data.material.shader = data.originalShader;
 		}
 		
-	var weapon : Weapon = GetComponentInChildren(Weapon);
+	var weaponManager : WeaponManager = gameObject.GetComponent(WeaponManager);
+	var weapon : Weapon = weaponManager.GetCurrentWeapon();
+
 	var weaponRenderer:Renderer;
 	if (weapon!=null) weaponRenderer = weapon.GetComponentInChildren(Renderer);
 	//if (weapon != null) nMaterials += weaponRenderer.materials.Length;
@@ -63,8 +65,13 @@ function Initialize()
 		AddFadingData(obj);
 		
 	}
+	Debug.Log("Weapon:" + weapon);
 	// fade weapon
-	if (weapon != null) AddFadingData(weaponRenderer.gameObject);
+	if (weapon != null) 
+	{
+		Debug.Log("Weapon render obj:" + weapon.gameObject);
+		AddFadingData(weapon.gameObject);
+	}
 
 	//fade team name
 	_textMesh = GetComponentInChildren(TextMesh);
@@ -127,10 +134,15 @@ private function AddFadingData( obj : GameObject) {
 private function SetRenderer(activate : boolean) {
 	for (var obj:GameObject in visibleObjects){
 		if (obj != null) 
+		{
+			//Debug.Log(obj);
 			obj.renderer.enabled = activate;
+		}
 	}
 	if (_vision != null) _vision.enabled = activate;
 	if (_textMesh != null) _textMesh.gameObject.renderer.enabled = activate;
+	var weapon : Weapon = gameObject.GetComponent(WeaponManager).GetCurrentWeapon();
+	if (weapon) weapon.enabled = activate;
 }
 
 function OnEnable() {

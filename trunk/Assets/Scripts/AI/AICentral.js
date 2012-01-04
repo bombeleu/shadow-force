@@ -41,16 +41,25 @@ class AICentral extends DetectionAI{
 	private var saidNotChase:boolean = false;
 	private var dodging:boolean = false;
 	
-	private var forceChase:boolean = false;
+	//private var forceChase:boolean = false;
+	
 	public function ForceChase(target:Vector3):void{
-		if (navigator.SetDestination(target)){
-			forceChase = true;
+		if ((!chasing || Time.time-lastTimeChase>chaseInterval) && navigator.SetDestination(target)){
+			//forceChase = true;
+			lastTimeChase = Time.time;
+			lastTarget = target;
 			chasing = true;
+			talkAI.Say(TalkType.Chase);
 		}
+	}
+	
+	public function SayNoChase():void{
+		talkAI.Say(TalkType.NotChase);
 	}
 	
 	private var backtrackPathCompute:boolean = false;
 	private var lastTimeChase:float = -1;
+	static private var chaseInterval:float = 0.2;
 	function Update () {
 		//movement control
 		var canPatrol:boolean = false;
@@ -90,18 +99,9 @@ class AICentral extends DetectionAI{
 					talkAI.Say(TalkType.Shoot);
 				}else{
 					if (chaseAI){
-						/*#if UNITY_FLASH
-						if (NetworkU.NavSetDest(navigator,tarPos)){
-						#else*/
-						if ((!chasing || Time.time-lastTimeChase>0.2)&& navigator.SetDestination(tarPos)){
-						//#endif
-							lastTimeChase = Time.time;
-							lastTarget = tarPos;
-							chasing = true;
-							talkAI.Say(TalkType.Chase);
-						}
+						ForceChase(tarPos);
 					}else{
-						talkAI.Say(TalkType.NotChase);
+						SayNoChase();
 						canPatrol = true;
 					}
 				}
@@ -115,15 +115,10 @@ class AICentral extends DetectionAI{
 						/*#if UNITY_FLASH
 						if (NetworkU.NavSetDest(navigator,tarP)){
 						#else*/
-						if (navigator.SetDestination(tarP)){
-						//#endif
-							lastTarget = tarP;
-							chasing = true;
-							talkAI.Say(TalkType.Chase);
-						}
+						ForceChase(tarP);
 					}else{ 
 						if (!saidNotChase){
-							talkAI.Say(TalkType.NotChase);
+							SayNoChase();
 							saidNotChase = true;
 						}
 					}

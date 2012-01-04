@@ -39,12 +39,16 @@ function OnTriggerStay (other : Collider) : void{
 			if (dist > sphere.radius + DodgingAI.dodgerRadius - DodgingAI.dodgingBuffer)
 				return;//no damage on buffer zone!
 		}
-		if (raycastCheck){
+		if (raycastCheck){//for flamethrower
 			var hit:RaycastHit = raycast.GetHitInfo();
 			if (hit.transform && 
 				hit.distance < (health.transform.position - raycast.GetOrigin()).magnitude){
 				//blocked, check like this because there could be more than 1 target in the AOE zone
 				return;
+			}
+			var ai:AICentral = health.GetComponent(AICentral);
+			if (ai){
+				ai.ForceChase(raycast.GetOrigin());
 			}
 		}
 		if (Time.time > lastFireTime + interval) {

@@ -14,7 +14,7 @@ public class TutorialLevelController
 //public var checkPoints : List.<CheckPoint> = new List.<CheckPoint>();
 //#endif
 
-public var checkPoints : System.Collections.Generic.List.<CheckPoint> = new System.Collections.Generic.List.<CheckPoint> ();
+public var checkPoints : ArrayList = new ArrayList();
 //public var checkPoints : CheckPoint[];
 private var _currentCheckPoint : int  = 0 ;
 public var checkPointPrefab : CheckPoint;
@@ -70,7 +70,7 @@ function GetIndexOfCheckPoint (point : CheckPoint) {
 
 public function RemoveCheckPointAt(index :int) : GameObject
 {
-	var go : GameObject = checkPoints[index].gameObject;
+	var go : GameObject = (checkPoints[index] as CheckPoint).gameObject;
 	checkPoints.RemoveAt (index);
 	DestroyImmediate (go);
 }
@@ -99,8 +99,8 @@ public function InsertCheckPointAt(index : int) : GameObject
 			prevIndex += count;
 		
 		cp.transform.position = (
-			checkPoints[prevIndex].transform.position
-			+ checkPoints[index].transform.position
+			(checkPoints[prevIndex] as CheckPoint).transform.position
+			+ (checkPoints[index] as CheckPoint).transform.position
 		) * 0.5;
 	
 		Debug.Log("Index:"+ index);

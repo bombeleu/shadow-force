@@ -10,7 +10,7 @@ class CheckPointEditor extends Editor {
 		if (GUILayout.Button ("Remove This Patrol Point")) {
 			tutorial.RemoveCheckPointAt (thisIndex);
 			var newSelectionIndex : int = Mathf.Clamp (thisIndex, 0, tutorial.checkPoints.Count - 1);
-			Selection.activeGameObject = tutorial.checkPoints[newSelectionIndex].gameObject;
+			Selection.activeGameObject = (tutorial.checkPoints[newSelectionIndex] as CheckPoint).gameObject;
 		}
 		if (GUILayout.Button ("Insert Patrol Point Before")) {
 			Selection.activeGameObject = tutorial.InsertCheckPointAt (thisIndex);

@@ -58,7 +58,7 @@ function OnGUI(){
 
 						
 		var spawners = GameObject.FindGameObjectsWithTag ("Respawn");
-		Debug.Log("Instantiate here"+spawners.length);
+		
 		spawn = spawners[ Mathf.Floor( (spawners.length-1) * Random.value)].transform;
 
 		character = NetworkU.Instantiate(playerPrefab, spawn.position + Vector3(0,4,0), spawn.rotation);

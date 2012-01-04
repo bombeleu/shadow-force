@@ -361,6 +361,16 @@ function OnGUI(){
 			}
 		}
 	}
+	
+	// show ammo
+	var rect : Rect = new Rect(Screen.width * 0.5f, 0, 150,30);
+	if (GetCurrentWeapon().hasAmmo)
+	{
+		GUI.Label(rect,"Ammo remains : " + GetCurrentWeapon().ammoRemain.ToString());
+	} else
+	{
+		GUI.Label(rect,"Unlimited ammo");
+	}
 }
 
 #if !UNITY_FLASH

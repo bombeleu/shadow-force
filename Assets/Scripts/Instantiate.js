@@ -7,6 +7,7 @@ function Awake(){
 }
 #endif
 
+
 /*
 function OnLevelWasLoaded (level : int) {
 	var spawn: Transform;
@@ -28,6 +29,16 @@ function OnNetworkLoadedLevel () {
 	GetComponent(LineOfSight).revealAll = true;
 }
 
+private var cameraFocusPos:Vector3;
+private var cameraLastFocus:Vector3;
+private var cameraPlane:Plane;
+private var cameraFocusStartTime:float = -1;
+function Start(){
+	cameraFocusPos = Camera.main.transform.position;
+	cameraLastFocus = cameraFocusPos;
+	cameraPlane = new Plane(Vector3.up, cameraFocusPos);
+}
+
 private var ready:boolean = false;
 function OnGUI(){
 	if (!loaded) return;
@@ -36,7 +47,7 @@ function OnGUI(){
 	rect.width = Screen.width * 0.2;
 	rect.y = 0;
 	rect.height = Screen.height * 0.2;
-	if (GUI.Button(rect,"Ready!")){
+	if (GUI.Button(rect,"Ready!(click around to pan)")){
 		loaded = false;
 		ready = true;
 		camStartPos = Camera.main.transform.position;
@@ -73,6 +84,22 @@ function OnGUI(){
 		LineOfSight.myTeam = te;
 		//setCamera(character);	
 	}
+	var cam:Camera = Camera.main;
+	if (Event.current.type == EventType.MouseDown){
+		var hitInfo:RaycastHit;
+	 	Physics.Raycast(cam.ScreenPointToRay(Input.mousePosition), hitInfo);
+	 	if (hitInfo.transform){
+	 		var invertRay:Ray = new Ray(hitInfo.point, -cam.transform.forward);
+	 		var dist:float;
+	 		cameraPlane.Raycast(invertRay, dist); 
+	 		cameraFocusPos = invertRay.GetPoint(dist);
+	 		cameraFocusStartTime = Time.time;
+	 		cameraLastFocus = cam.transform.position;
+	 		//Debug.Log("cam "+cameraFocusPos+" "+cameraLastFocus+" "+dist);
+	 	}
+	}
+	var t:float = Time.time - cameraFocusStartTime;//1 second
+	cam.transform.position = Vector3.Slerp(cameraLastFocus, cameraFocusPos, t);
 }
 
 private var camStartPos:Vector3;
@@ -94,7 +121,7 @@ function Update(){
 	}else{			
 		ready = false;
 		character.GetComponent(PlayerMoveController).enabled = true;
-	}	
+	}
 }
 
 #if !UNITY_FLASH

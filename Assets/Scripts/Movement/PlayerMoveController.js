@@ -179,8 +179,9 @@ function Update () {
 	
 	// optimization (instead of newing Plane):
 	
-	playerMovementPlane.normal = character.up;
-	playerMovementPlane.distance = -character.position.y + cursorPlaneHeight;
+	playerMovementPlane.normal = character.up;//TODO: should use the same plane!
+	playerMovementPlane.distance = -character.GetComponent(WeaponManager)
+		.GetCurrentWeapon().spawnPoint.transform.position.y;//-character.position.y + cursorPlaneHeight;
 	
 	// used to adjust the camera based on cursor or joystick position
 	

@@ -1,7 +1,7 @@
 public var lifeTime:float = 1;
 private var timer:float;
 
-function Awake(){
+function Start(){
 	timer = Time.time;
 }
 

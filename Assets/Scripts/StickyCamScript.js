@@ -56,11 +56,13 @@ function OnCollisionEnter(collision : Collision) {
 	startTime = Time.time;
 	state = State.Initializing;
 	
-	Destroy(rigidbody);
-	/*
-	rigidbody.velocity = Vector3.zero;
+	#if UNITY_FLASH
+	rigidbody.velocity = Vector3.zero;//rigidBody seems not destroy in flash!
 	rigidbody.angularVelocity = Vector3.zero;
-	rigidbody.isKinematic = true;*/
+	rigidbody.isKinematic = true;
+	rigidbody.detectCollisions = false;
+	#endif
+	Destroy(rigidbody);
 	
 	animationComponent.Play(initAnimation.name);
 	var normal:Vector3 = Vector3.zero;

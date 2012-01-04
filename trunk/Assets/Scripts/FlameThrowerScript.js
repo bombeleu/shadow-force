@@ -7,6 +7,7 @@ public var collisionPrefab : GameObject;
 public var particleFire : ParticleEmitter;
 public var particleSmoke : ParticleEmitter;
 public var particleGlow : ParticleRenderer;
+public var particleGun : ParticleEmitter;
 
 private var weapon:Weapon;
 private var spawnPoint:Transform;
@@ -61,6 +62,8 @@ function SetFlameEnable(b:boolean):void{
 	for (var p: ParticleEmitter in particleEffect.GetComponentsInChildren(ParticleEmitter)) {
 		p.emit = b;
 	}
+	
+	particleGun.emit = !b;
 }
 public var collisionFrequency:float = 20;
 private var interval:float;

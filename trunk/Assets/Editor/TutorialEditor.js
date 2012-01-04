@@ -15,7 +15,9 @@ class TutorialEditor extends Editor {
 		if (GUILayout.Button(isAddPoint?"Right click to Add, click here to Stop":"Add Check Point")) {
 			isAddPoint = !isAddPoint;
 		}
-
+		if (GUILayout.Button("Clean All")) {
+			tutorial.checkPoints.Clear();
+		}
 		EditorGUILayout.Separator();
 		
 		tutorial.checkPointPrefab = EditorGUILayout.ObjectField("CheckPointPrefab",tutorial.checkPointPrefab,CheckPoint);

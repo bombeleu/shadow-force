@@ -143,6 +143,7 @@ function OnSetVisible(visi:boolean){
 }
 
 function GetCurrentWeapon():Weapon{
+	if (!ws || ws.Length == 0) return null;
 	return ws[curWeapon];
 }
 

@@ -125,7 +125,8 @@ public function Die()
 	ragDoll.GetComponentInChildren.<SkinnedMeshRenderer>().enabled = true;
 	
 	RecursiveIgnoreRagdollCollision(ragDoll.transform);
-	gameObject.rigidbody.Sleep();
+	
+	if (rigidbody) rigidbody.Sleep();
 	
 	// copy transforms
     CopyTransforms(animationObject.transform,ragDoll.transform);

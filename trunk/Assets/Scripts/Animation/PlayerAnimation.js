@@ -75,7 +75,7 @@ function addMixTransform(boneName:String):void{
 }
 
 function Awake () {
-	tr = rigid.transform;
+	tr = transform;
 	lastPosition = tr.position;
 	
 	for (var moveAnimation : MoveAnimation in moveAnimations) {
@@ -185,7 +185,11 @@ function Lean(normal : Vector3, toRight: boolean){
 	rigid.velocity = Vector3.zero;
 	rigid.angularVelocity = Vector3.zero;*/
 	
-	rigid.velocity = Vector3.zero;
+	if (rigid){
+		rigid.velocity = Vector3.zero;
+	}else{
+		//GetComponent(CharacterController).SimpleMove(Vector3.zero);//no acceleration to stop here!
+	}
 	motor.movementDirection = Vector3.zero;
 	motor.facingDirection = normal;
 	controller.disableRotation = true;

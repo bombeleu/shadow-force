@@ -1,6 +1,6 @@
 #pragma strict
 
-@script RequireComponent (Rigidbody)
+//@script RequireComponent (Rigidbody)
 
 class FreeMovementMotor extends MovementMotor {
 	
@@ -13,22 +13,30 @@ class FreeMovementMotor extends MovementMotor {
 	
 	//public var disableRotation
 	
+	private var curAngle:float = 0;
 	function FixedUpdate () {
 		// Handle the movement of the character
 		var targetVelocity : Vector3 = movementDirection * walkingSpeed;
-		var deltaVelocity : Vector3 = targetVelocity - rigidbody.velocity;
-		if (rigidbody.useGravity)
-			deltaVelocity.y = 0;
-		rigidbody.AddForce (deltaVelocity * walkingSnappyness, ForceMode.Acceleration);
-		
+		var controller:CharacterController = GetComponent(CharacterController);
+		if (controller){
+			if (!controller.isGrounded) targetVelocity+= Physics.gravity;
+			controller.SimpleMove(targetVelocity);
+		}else{
+			var deltaVelocity : Vector3 = targetVelocity - rigidbody.velocity;
+			if (rigidbody.useGravity)
+				deltaVelocity.y = 0;
+			rigidbody.AddForce (deltaVelocity * walkingSnappyness, ForceMode.Acceleration);
+		}
 		// Setup player to face facingDirection, or if that is zero, then the movementDirection
 		var faceDir : Vector3 = facingDirection;
+		var anguVelo:float;
 		if (faceDir == Vector3.zero)
 			faceDir = movementDirection;
 		
 		// Make the character rotate towards the target rotation
 		if (faceDir == Vector3.zero) {
-			rigidbody.angularVelocity = Vector3.zero;
+			//rigidbody.angularVelocity = Vector3.zero;
+			anguVelo = 0;
 		}
 		else {
 			var rotationAngle : float = AngleAroundAxis (transform.forward, faceDir, Vector3.up);
@@ -36,7 +44,14 @@ class FreeMovementMotor extends MovementMotor {
 			if (Mathf.Abs(rotationAngle)>threshold){
 				rotationAngle = rotationAngle>0?maxTurnSpeed:-maxTurnSpeed;
 			}
-			rigidbody.angularVelocity = (Vector3.up * rotationAngle);
+			//rigidbody.angularVelocity = (Vector3.up * rotationAngle);
+			anguVelo = rotationAngle;
+		}
+		if (controller){
+			curAngle += Time.deltaTime * anguVelo;
+			transform.rotation = Quaternion.AxisAngle(Vector3.up, curAngle);
+		}else{
+			rigidbody.angularVelocity = (Vector3.up * anguVelo);
 		}
 	}
 	

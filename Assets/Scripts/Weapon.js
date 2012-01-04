@@ -12,6 +12,11 @@ public var playerAutoShoot: boolean = false;
 public var hasRange: boolean = false;
 public var range: float = 0;
 
+//ammo: only apply for player, not AI!
+public var hasAmmo:boolean = false;
+public var ammoCapacity:int = 10;
+public var ammoRemain:int = 10;
+
 @HideInInspector
 public var owner: Transform;
 /*class Weapon extends ScriptableObject{

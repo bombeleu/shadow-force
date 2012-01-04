@@ -3,7 +3,8 @@
 
 public enum VisibilityType{
 	Always,
-	TeamShare
+	TeamShare,
+	Reveal
 };
 
 public enum FogType{

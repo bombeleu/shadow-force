@@ -12,8 +12,12 @@ private var curAngle:float = 0;
 private var curScale:float = 1;
 private var startTime:float = -1;
 
+//private var localUp:Vector3;
 function Start(){
 	startTime = Time.time;
+	//localUp = transform.worldToLocalMatrix.MultiplyVector(Vector3.up);
+	/*Debug.Log(gameObject);
+	Debug.Log(localUp);*/
 }
 
 function Update(){

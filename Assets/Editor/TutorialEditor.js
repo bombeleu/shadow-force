@@ -6,7 +6,7 @@ class TutorialEditor extends Editor {
 	function OnInspectorGUI () {
 		var tutorial : TutorialManager = target as TutorialManager;
 		
-		GUILayout.Label (tutorial.checkPoints.Count + " checkpoints");
+		if (tutorial.checkPoints) GUILayout.Label (tutorial.checkPoints.Length + " checkpoints");
 		
 		if (GUI.changed) {
 			SceneView.RepaintAll ();
@@ -16,7 +16,7 @@ class TutorialEditor extends Editor {
 			isAddPoint = !isAddPoint;
 		}
 		if (GUILayout.Button("Clean All")) {
-			tutorial.checkPoints.Clear();
+			tutorial.ClearCheckPoints();
 		}
 		EditorGUILayout.Separator();
 		
@@ -33,7 +33,7 @@ class TutorialEditor extends Editor {
 				var ray:Ray = HandleUtility.GUIPointToWorldRay(e.mousePosition);
 				Physics.Raycast(ray.origin, ray.direction, hitInfo);
 				if (hitInfo.transform){
-					var po:GameObject = tutorial.InsertCheckPointAt(tutorial.checkPoints.Count);
+					var po:GameObject = tutorial.InsertCheckPointAt(tutorial.checkPoints.Length);
 					po.transform.position = hitInfo.point;
 				}
 				e.Use();

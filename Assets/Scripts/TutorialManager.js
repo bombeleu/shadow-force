@@ -14,25 +14,25 @@ public class TutorialLevelController
 //public var checkPoints : List.<CheckPoint> = new List.<CheckPoint>();
 //#endif
 
-public var checkPoints : ArrayList = new ArrayList();
-//public var checkPoints : CheckPoint[];
+private var _checkPoints : ArrayList = new ArrayList();
+public var checkPoints : CheckPoint[];
 private var _currentCheckPoint : int  = 0 ;
 //public var checkPointPrefab : CheckPoint;
 
 
 function Awake()
 {
-	Debug.Log("check points:" + checkPoints.Count);
+	Debug.Log("check points:" + checkPoints.Length);
 }
 
 function Start () {
-	Debug.Log(checkPoints.Count);
+	Debug.Log(checkPoints.Length);
 	// deactivate all checkpoints;
 	for (var cp : CheckPoint in checkPoints)
 	{
 		DeactivateCheckPoint(cp);
 	}
-	if (checkPoints.Count>0)
+	if (checkPoints.Length>0)
 		ActivateCheckPoint(checkPoints[_currentCheckPoint]);
 }
 
@@ -56,7 +56,7 @@ public function ReachCheckPoint(cp : CheckPoint)
 	{
 		DeactivateCheckPoint(cp);
 		_currentCheckPoint++;
-		if (_currentCheckPoint >= checkPoints.Count)
+		if (_currentCheckPoint >= checkPoints.Length)
 		{
 			_currentCheckPoint = -1;
 		} else
@@ -67,18 +67,35 @@ public function ReachCheckPoint(cp : CheckPoint)
 }
 
 function GetIndexOfCheckPoint (point : CheckPoint) {
-	for (var i : int = 0; i < checkPoints.Count; i++) {
+	for (var i : int = 0; i < checkPoints.Length; i++) {
 		if (checkPoints[i] == point)
 			return i;
 	}
 	return -1;
 }
 
+private function SyncArray()
+{
+	var i : int = 0;
+	checkPoints = new CheckPoint[_checkPoints.Count];
+	for (var cp : CheckPoint in _checkPoints)
+	{
+		checkPoints[i++] = cp;
+	}
+}
+
 public function RemoveCheckPointAt(index :int) : GameObject
 {
 	var go : GameObject = (checkPoints[index] as CheckPoint).gameObject;
-	checkPoints.RemoveAt (index);
+	_checkPoints.RemoveAt (index);
 	DestroyImmediate (go);
+	SyncArray();
+}
+
+public function ClearCheckPoints()
+{
+	_checkPoints.Clear();
+	checkPoints = null;
 }
 
 public function InsertCheckPointAt(index : int) : GameObject
@@ -98,25 +115,26 @@ public function InsertCheckPointAt(index : int) : GameObject
 	cp.AddPopup(ggo.GetComponent.<PopupMessage>());
 	
 	//
-	var count : int = checkPoints.Count;
+	var count : int = checkPoints.Length;
 	
-	if (count < 2) {
+	if (count >= 0) {
 		cp.transform.localPosition = Vector3.zero;
-		checkPoints.Add(cp);
+		//checkPoints.Add(cp);
+		_checkPoints.Insert(index,cp);
 	}
-	else {
-		var prevIndex : int = index - 1;
-		if (prevIndex < 0)
-			prevIndex += count;
-		
-		cp.transform.position = (
-			(checkPoints[prevIndex] as CheckPoint).transform.position
-			+ (checkPoints[index] as CheckPoint).transform.position
-		) * 0.5;
-	
-		Debug.Log("Index:"+ index);
-		checkPoints.Insert(index, cp);
-	}
-	
+//	else {
+//		var prevIndex : int = index - 1;
+//		if (prevIndex < 0)
+//			prevIndex += count;
+//		Debug.Log(prevIndex + "----" + index);
+//		cp.transform.position = (
+//			(checkPoints[prevIndex] as CheckPoint).transform.position
+//			+ (checkPoints[index] as CheckPoint).transform.position
+//		) * 0.5;
+//	
+//		Debug.Log("Index:"+ index);
+//		checkPoints.Insert(index, cp);
+//	}
+	SyncArray();
 	return cp.gameObject;
 }

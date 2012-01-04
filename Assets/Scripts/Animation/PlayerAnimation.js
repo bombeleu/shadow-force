@@ -30,7 +30,7 @@ class MoveAnimation {
 	}
 }
 
-var rigid : Rigidbody;
+var rigid : Transform;
 var rootBone : Transform;
 var upperBodyBone : Transform;
 
@@ -75,7 +75,7 @@ function addMixTransform(boneName:String):void{
 }
 
 function Awake () {
-	tr = transform;
+	tr = rigid;
 	lastPosition = tr.position;
 	
 	for (var moveAnimation : MoveAnimation in moveAnimations) {
@@ -186,7 +186,7 @@ function Lean(normal : Vector3, toRight: boolean){
 	rigid.angularVelocity = Vector3.zero;*/
 	
 	if (rigid){
-		rigid.velocity = Vector3.zero;
+		rigid.rigidbody.velocity = Vector3.zero;
 	}else{
 		//GetComponent(CharacterController).SimpleMove(Vector3.zero);//no acceleration to stop here!
 	}

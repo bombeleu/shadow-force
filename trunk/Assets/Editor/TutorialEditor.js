@@ -33,7 +33,14 @@ class TutorialEditor extends Editor {
 				var ray:Ray = HandleUtility.GUIPointToWorldRay(e.mousePosition);
 				Physics.Raycast(ray.origin, ray.direction, hitInfo);
 				if (hitInfo.transform){
-					var po:GameObject = tutorial.InsertCheckPointAt(tutorial.checkPoints.Length);
+					var po : GameObject;
+					if (tutorial.checkPoints)
+					{
+						po = tutorial.InsertCheckPointAt(tutorial.checkPoints.Length);
+					} else
+					{
+						po = tutorial.InsertCheckPointAt(0);
+					}
 					po.transform.position = hitInfo.point;
 				}
 				e.Use();

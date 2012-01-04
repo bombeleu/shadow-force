@@ -1,5 +1,5 @@
 
-Shader "AngryBots/FX/Additive" {
+Shader "FateHunter/Additive" {
 	Properties {
 		_MainTex ("Base", 2D) = "white" {}
 		_TintColor ("TintColor", Color) = (1.0, 1.0, 1.0, 1.0)
@@ -29,7 +29,7 @@ Shader "AngryBots/FX/Additive" {
 		}
 		
 		fixed4 frag( v2f i ) : COLOR {	
-			return tex2D (_MainTex, i.uv.xy) * _TintColor;
+			return tex2D (_MainTex, i.uv.xy) * _TintColor.a;
 		}
 	
 	ENDCG

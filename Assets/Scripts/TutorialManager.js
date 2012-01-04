@@ -17,10 +17,16 @@ public class TutorialLevelController
 public var checkPoints : ArrayList = new ArrayList();
 //public var checkPoints : CheckPoint[];
 private var _currentCheckPoint : int  = 0 ;
-public var checkPointPrefab : CheckPoint;
+//public var checkPointPrefab : CheckPoint;
 
+
+function Awake()
+{
+	Debug.Log("check points:" + checkPoints.Count);
+}
 
 function Start () {
+	Debug.Log(checkPoints.Count);
 	// deactivate all checkpoints;
 	for (var cp : CheckPoint in checkPoints)
 	{
@@ -77,8 +83,13 @@ public function RemoveCheckPointAt(index :int) : GameObject
 
 public function InsertCheckPointAt(index : int) : GameObject
 {
-	//var go  = new GameObject ("CheckPoint", CheckPoint);
-	var cp = Instantiate(checkPointPrefab,Vector3.zero,Quaternion.identity);
+	var go : GameObject  = new GameObject ("CheckPoint");
+	go.AddComponent(BoxCollider);
+	go.AddComponent(CheckPoint);
+	go.collider.isTrigger = true;
+	
+	var cp = go.GetComponent(CheckPoint);
+	//var cp = Instantiate(checkPointPrefab,Vector3.zero,Quaternion.identity);
 	cp.transform.parent = transform;
 	cp.tutorial = this;
 	// add default 1 popup to checkpoint

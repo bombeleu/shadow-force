@@ -20,7 +20,7 @@ class TutorialEditor extends Editor {
 		}
 		EditorGUILayout.Separator();
 		
-		tutorial.checkPointPrefab = EditorGUILayout.ObjectField("CheckPointPrefab",tutorial.checkPointPrefab,CheckPoint);
+		//tutorial.checkPointPrefab = EditorGUILayout.ObjectField("CheckPointPrefab",tutorial.checkPointPrefab,CheckPoint);
 	}
 	
 	function OnSceneGUI () {

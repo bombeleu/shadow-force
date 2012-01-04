@@ -41,6 +41,10 @@ function Initialize()
 //	}
 	// save the original shader
 	// get corresponding replacement shader
+	for (var data : FadingData in _fadingData) {
+			data.material.shader = data.originalShader;
+		}
+		
 	var weapon : Weapon = GetComponentInChildren(Weapon);
 	var weaponRenderer:Renderer;
 	if (weapon!=null) weaponRenderer = weapon.GetComponentInChildren(Renderer);
@@ -50,22 +54,22 @@ function Initialize()
 	//for (var i : int ; i < nMaterials; i++)
 	//	_fadingData[i] = new FadingData(); // this is ridiculous !!!
 	_fadingData.Clear();
-	var count : int = 0 ;
+	
 	for (var obj:GameObject in visibleObjects){
-		AddFadingData(count,obj);
-		count += obj.renderer.materials.Length;
+		AddFadingData(obj);
+		
 	}
 	for (var obj:GameObject in _dyVisibleObjects){
-		AddFadingData(count,obj);
-		count += obj.renderer.materials.Length;
+		AddFadingData(obj);
+		
 	}
-	// fade weapon`
-	if (weapon != null) AddFadingData(count, weaponRenderer.gameObject);
+	// fade weapon
+	if (weapon != null) AddFadingData(weaponRenderer.gameObject);
 
 	//fade team name
 	_textMesh = GetComponentInChildren(TextMesh);
 	_vision = GetComponentInChildren(VisionMeshScript);
-	
+	Debug.Log("Count :" + _fadingData.Count);
 	// refresh state;
 	if (enabled) OnEnable();
 }
@@ -93,7 +97,7 @@ public function AddVisibleObject(go : GameObject)
 	Initialize();
 }
 
-private function AddFadingData(count : int, obj : GameObject) {
+private function AddFadingData( obj : GameObject) {
 	//for (var mat : Material in obj.renderer.materials) {
 	for (var ren : Renderer in obj.GetComponentsInChildren(Renderer)) {
 		var mat : Material = (ren as Renderer).material;
@@ -110,13 +114,13 @@ private function AddFadingData(count : int, obj : GameObject) {
 		{
 			fd.replacedShader = Shader.Find(mat.shader.name + "-Transparent");
 			if (fd.replacedShader == null) {
+				Debug.Log("Cannot match transparent shader:" + mat + "," + mat.shader.name);
 				fd.replacedShader = Shader.Find("FateHunter/Character-Transparent"); // set to default shader
 			}
 			fd.useTint = false;
 		}
-
+		//Debug.Log(fd.replacedShader);
 		_fadingData.Add(fd);
-		count++;
 	}
 }
 

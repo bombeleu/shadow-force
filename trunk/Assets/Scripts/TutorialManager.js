@@ -8,15 +8,17 @@ public class TutorialLevelController
 
 }
 
+//#if UNITY_FLASH
+//public var checkPoints : ArrayList = new ArrayList();
+//#else
+//public var checkPoints : List.<CheckPoint> = new List.<CheckPoint>();
+//#endif
 
-public var checkPoints : CheckPoint[];
+public var checkPoints : System.Collections.Generic.List.<CheckPoint> = new System.Collections.Generic.List.<CheckPoint> ();
+//public var checkPoints : CheckPoint[];
 private var _currentCheckPoint : int  = 0 ;
-public static var Instance : TutorialManager;
+public var checkPointPrefab : CheckPoint;
 
-function Awake()
-{
-	Instance = this;
-}
 
 function Start () {
 	// deactivate all checkpoints;
@@ -24,7 +26,7 @@ function Start () {
 	{
 		DeactivateCheckPoint(cp);
 	}
-	if (checkPoints.Length>0)
+	if (checkPoints.Count>0)
 		ActivateCheckPoint(checkPoints[_currentCheckPoint]);
 }
 
@@ -48,7 +50,7 @@ public function ReachCheckPoint(cp : CheckPoint)
 	{
 		DeactivateCheckPoint(cp);
 		_currentCheckPoint++;
-		if (_currentCheckPoint >= checkPoints.Length)
+		if (_currentCheckPoint >= checkPoints.Count)
 		{
 			_currentCheckPoint = -1;
 		} else
@@ -56,4 +58,54 @@ public function ReachCheckPoint(cp : CheckPoint)
 			ActivateCheckPoint(checkPoints[_currentCheckPoint]);
 		}
 	}
+}
+
+function GetIndexOfCheckPoint (point : CheckPoint) {
+	for (var i : int = 0; i < checkPoints.Count; i++) {
+		if (checkPoints[i] == point)
+			return i;
+	}
+	return -1;
+}
+
+public function RemoveCheckPointAt(index :int) : GameObject
+{
+	var go : GameObject = checkPoints[index].gameObject;
+	checkPoints.RemoveAt (index);
+	DestroyImmediate (go);
+}
+
+public function InsertCheckPointAt(index : int) : GameObject
+{
+	//var go  = new GameObject ("CheckPoint", CheckPoint);
+	var cp = Instantiate(checkPointPrefab,Vector3.zero,Quaternion.identity);
+	cp.transform.parent = transform;
+	cp.tutorial = this;
+	// add default 1 popup to checkpoint
+	var ggo  = new GameObject("PopupMessage",PopupMessage);
+	ggo.transform.parent = cp.gameObject.transform;
+	cp.AddPopup(ggo.GetComponent.<PopupMessage>());
+	
+	//
+	var count : int = checkPoints.Count;
+	
+	if (count < 2) {
+		cp.transform.localPosition = Vector3.zero;
+		checkPoints.Add(cp);
+	}
+	else {
+		var prevIndex : int = index - 1;
+		if (prevIndex < 0)
+			prevIndex += count;
+		
+		cp.transform.position = (
+			checkPoints[prevIndex].transform.position
+			+ checkPoints[index].transform.position
+		) * 0.5;
+	
+		Debug.Log("Index:"+ index);
+		checkPoints.Insert(index, cp);
+	}
+	
+	return cp.gameObject;
 }

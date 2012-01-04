@@ -145,6 +145,10 @@ function GetCurrentWeapon():Weapon{
 	return ws[curWeapon];
 }
 
+function GetAllWeapons():Weapon[]{
+	return ws;
+}
+
 public var autoShoot:AutoShoot;
 private var autoShootAllow:boolean=true;
 private var leaning:boolean;
@@ -260,12 +264,15 @@ function Update () {
 
 	if (weapon.cooldown > 0){
 		if (!oldIsFiring && isFiring){
-			bufferedShot=1;//maximum buffered 1 shot
+			if ((!controllable) || (!weapon.hasAmmo) || weapon.ammoRemain>0)//do not buffer if no ammo left
+				bufferedShot=1;//maximum buffered 1 shot
 		}
-		if ((bufferedShot>0 || isFiring) && angle<=3 && (Time.time - altFireTimer > weapon.cooldown)){
-			bufferedShot = 0;
+		if ((bufferedShot>0 || isFiring) && angle<=3 && (Time.time - altFireTimer > weapon.cooldown) &&
+				((!controllable) || (!weapon.hasAmmo) || weapon.ammoRemain>0)){
+			//if (controllable && weapon.hasAmmo && (weapon.ammoRemain>0)) bufferedShot = 0;
 			//RPCFireMissile();
 			//transform.SendMessage ("RPCFireMissile");
+			bufferedShot = 0;
 			altFireTimer = Time.time;
 			if (weapon.needPosition){
 				weapon.gameObject.SendMessage("OnLaunchBullet", cursorWorldPosition);
@@ -273,6 +280,7 @@ function Update () {
 			}else{
 				weapon.gameObject.SendMessage("OnLaunchBullet");
 			}
+			if (controllable) weapon.ammoRemain--;
 			#if UNITY_FLASH
 			onetimeFireAnimation();
 			#else

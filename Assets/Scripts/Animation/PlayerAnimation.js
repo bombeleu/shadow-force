@@ -185,7 +185,7 @@ function Lean(normal : Vector3, toRight: boolean){
 	rigid.velocity = Vector3.zero;
 	rigid.angularVelocity = Vector3.zero;*/
 	
-	if (rigid){
+	if (rigid.rigidbody){
 		rigid.rigidbody.velocity = Vector3.zero;
 	}else{
 		//GetComponent(CharacterController).SimpleMove(Vector3.zero);//no acceleration to stop here!

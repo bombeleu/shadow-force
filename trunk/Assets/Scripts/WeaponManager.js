@@ -232,7 +232,7 @@ function Update () {
 			isFiring = (fireAlt>=1);
 		#endif
 		if (weapon.needPositionUpdate){
-			weapon.gameObject.SendMessage("OnUpdateTarget", cursorWorldPosition);
+			weapon.gameObject.SendMessage("OnUpdateTarget", cursorWorldPosition - Vector3.up*2.5);
 		}
 		var weaponSwitch:boolean;
 		if (weaponSwitchGUI==false){
@@ -277,7 +277,7 @@ function Update () {
 			bufferedShot = 0;
 			altFireTimer = Time.time;
 			if (weapon.needPosition){
-				weapon.gameObject.SendMessage("OnLaunchBullet", cursorWorldPosition);
+				weapon.gameObject.SendMessage("OnLaunchBullet", cursorWorldPosition - Vector3.up*2.5);
 				//isFiring = false;
 			}else{
 				weapon.gameObject.SendMessage("OnLaunchBullet");
@@ -306,7 +306,7 @@ function Update () {
 			}
 			firing = true;
 			if (weapon.needPosition){
-				weapon.gameObject.SendMessage("OnLaunchBullet", cursorWorldPosition);
+				weapon.gameObject.SendMessage("OnLaunchBullet", cursorWorldPosition - Vector3.up*2.5);//TODO: hard code
 			}else{
 				weapon.gameObject.SendMessage("OnLaunchBullet");
 			}

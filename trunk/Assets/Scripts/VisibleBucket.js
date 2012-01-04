@@ -65,7 +65,7 @@ function Initialize()
 		AddFadingData(obj);
 		
 	}
-	Debug.Log("Weapon:" + weapon);
+	//Debug.Log("Weapon:" + weapon);
 	// fade weapon
 	if (weapon != null) 
 	{

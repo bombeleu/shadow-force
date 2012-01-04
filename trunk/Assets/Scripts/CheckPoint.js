@@ -25,7 +25,7 @@ function OnTriggerEnter (other : Collider) {
 
 function OnDestroy()
 {
-	tutorial.checkPoints.RemoveAt(tutorial.GetIndexOfCheckPoint(this));
+	//tutorial.checkPoints.RemoveAt(tutorial.GetIndexOfCheckPoint(this));
 }
 
 function OnGUI()

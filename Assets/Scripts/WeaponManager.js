@@ -139,7 +139,7 @@ private var manualPos:Vector3;
 function OnSetVisible(visi:boolean){
 	/*for (var weapon:Weapon in ws)
 		weapon.SetEnable(false);*/
-	ws[curWeapon].SetEnable(visi);
+	//ws[curWeapon].SetEnable(visi);
 }
 
 function GetCurrentWeapon():Weapon{

@@ -16,7 +16,7 @@ function OnGUI(){
     {
     	alpha += fadeDir * fadeSpeed * (1/30f);
     }
-    alpha = Mathf.Clamp(alpha,0,0.5);   
+    alpha = Mathf.Clamp(alpha,0,0.7);   
     
     GUI.color.a = alpha;
     

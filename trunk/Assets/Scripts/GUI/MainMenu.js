@@ -7,6 +7,8 @@ class MainMenu extends ScreenGUI{
 	private var currentLevel : int = 0;
 	private var stars : int[];
 	
+	public static var UseCheat:boolean = false;
+	
 	private var uiController : UIController;
 	public static var instance:MainMenu;
 	function Awake () {
@@ -110,8 +112,12 @@ class MainMenu extends ScreenGUI{
 			if (GUILayout.Button("(cheat)Unlock all")){
 				UnlockAll();
 			}
+			if (GUILayout.Button("(cheat)Weapon select & unlimitted ammo: "+(UseCheat?"On":"Off"))){
+				UseCheat = !UseCheat;
+			}
 			#endif
 			GUILayout.Label("Select an unlocked level");
+			if (currentLevel>levelList.Length-1) currentLevel = levelList.Length-1;
 			for (var i:int = 0; i <= currentLevel; i++){
 				GUILayout.BeginHorizontal();
 				if (GUILayout.Button("Level " + 
@@ -144,6 +150,9 @@ class MainMenu extends ScreenGUI{
 				#endif
 				Application.LoadLevel("MainMenu");
 				DestroyObject(gameObject);
+			}
+			if (UseCheat){
+				GetComponent(SelectWeaponGUI).DrawGUI();
 			}
 		}
 	}

@@ -244,8 +244,10 @@ function Update () {
 		var posCursor:Vector3 = ScreenPointToWorldPointOnPlane (cursorScreenPosition, groundPlane, Camera.main);
 		var posHit:RaycastHit;
 		Physics.Raycast(posCursor + Vector3.up*10, -Vector3.up, posHit, Mathf.Infinity, positionalLayers);
-		var positionalTarget:Vector3 = (posHit.transform==null || posHit.point.y>cursorWorldPosition.y)?
-			(posCursor - Vector3.up*50):posHit.point;//no abyss, no wall top
+		var positionalTarget:Vector3 = controllable?
+			((posHit.transform==null || posHit.point.y>cursorWorldPosition.y)?
+			(posCursor - Vector3.up*50):posHit.point)://no abyss, no wall top
+			(cursorWorldPosition-Vector3.up*2.5);
 		
 		if (weapon.needPositionUpdate){
 			weapon.gameObject.SendMessage("OnUpdateTarget", positionalTarget);
@@ -279,7 +281,8 @@ function Update () {
 	var quat: Quaternion = Quaternion.FromToRotation( fromV, toV);
 	var axis:Vector3;
 	quat.ToAngleAxis(angle, axis);
-
+	
+	if (MainMenu.UseCheat) weapon.ammoRemain = 1000;
 
 	var actualShot:boolean = true;
 	if (weapon.cooldown > 0){
@@ -295,7 +298,10 @@ function Update () {
 			if (weapon.needPosition){
 				//weapon.gameObject.SendMessage("OnLaunchBullet", cursorWorldPosition - Vector3.up*2.5);
 				var projectile:ProjectileBullet = weapon.GetComponent(ProjectileBullet);
-				if (projectile.CheckValidTarget(positionalTarget)){
+				if (!controllable){
+					positionalTarget = (cursorWorldPosition-Vector3.up*2.5);
+				}
+				if (projectile.CheckValidTarget(positionalTarget) || (!controllable)){
 					projectile.OnLaunchBullet(positionalTarget);
 				}else actualShot = false;
 				//isFiring = false;

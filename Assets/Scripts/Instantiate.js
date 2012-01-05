@@ -38,7 +38,9 @@ private var cameraFocusStartTime:float = -1;
 // gui
 public var playButtonStyle : GUIStyle;
 public var playButtonRect : Rect;
-
+public var infoLabelRect : Rect;
+public var infoText : String;
+public var infoLabelStyle : GUIStyle;
 // end gui
 
 private var init:boolean = false;
@@ -97,6 +99,8 @@ function OnGUI(){
 		LineOfSight.myTeam = te;
 		//setCamera(character);	
 	}
+	
+	GUI.Label(infoLabelRect,infoText,infoLabelStyle);
 	var cam:Camera = Camera.main;
 	if (Event.current.type == EventType.MouseDown){
 		var hitInfo:RaycastHit;

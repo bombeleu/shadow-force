@@ -36,7 +36,7 @@ function OnTriggerStay (other : Collider) : void{
 	if (health){
 		if (hasSphericalDodger){
 			var dist:float = (health.transform.position - transform.position).magnitude;
-			if (dist > sphere.radius + DodgingAI.dodgerRadius - DodgingAI.dodgingBuffer)
+			if (dist > sphere.radius - DodgingAI.dodgingBuffer + DodgingAI.dodgerRadius )
 				return;//no damage on buffer zone!
 		}
 		if (raycastCheck){//for flamethrower

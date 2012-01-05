@@ -3,7 +3,7 @@
 //@script RequireComponent (Rigidbody)
 
 class FreeMovementMotor extends MovementMotor {
-	
+	public static var ControllerOffset:float = 0.01;
 	//public var movement : MoveController;
 	public var walkingSpeed : float = 5.0;
 	public var walkingSnappyness : float = 50;
@@ -19,7 +19,8 @@ class FreeMovementMotor extends MovementMotor {
 		var targetVelocity : Vector3 = movementDirection * walkingSpeed;
 		var controller:CharacterController = GetComponent(CharacterController);
 		if (controller){
-			if (!controller.isGrounded) targetVelocity+= Physics.gravity;
+			if (targetVelocity == Vector3.zero) targetVelocity = Vector3(Random.value-0.5, 0, Random.value-0.5)*ControllerOffset;//TODO: this hack is used to enable collision detection because static Character controller will sleep
+			if (!controller.isGrounded) targetVelocity+= Physics.gravity*Time.deltaTime;
 			controller.SimpleMove(targetVelocity);
 		}else{
 			var deltaVelocity : Vector3 = targetVelocity - rigidbody.velocity;

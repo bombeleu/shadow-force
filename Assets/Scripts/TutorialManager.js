@@ -66,7 +66,9 @@ public function ReachCheckPoint(cp : CheckPoint)
 	{
 		if (cp == checkPoints[_currentCheckPoint])
 		{
-			DeactivateCheckPoint(cp);
+			//DeactivateCheckPoint(cp);
+			Destroy(cp.gameObject);
+			Camera.main.SendMessage("fadeOut");
 			_currentCheckPoint++;
 			if (_currentCheckPoint >= checkPoints.Length)
 			{
@@ -78,7 +80,9 @@ public function ReachCheckPoint(cp : CheckPoint)
 		}
 	} else
 	{
-		DeactivateCheckPoint(cp);
+		//DeactivateCheckPoint(cp);
+		Destroy(cp.gameObject);
+		Camera.main.SendMessage("fadeOut");
 	}
 }
 

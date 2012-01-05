@@ -35,7 +35,7 @@ class SelectWeaponGUI extends ScreenGUI{
 		{
 			ChooseWeapon(2);
 		}
-		if (GUILayout.Button("Sticky Camera Launcher"))
+		if (GUILayout.Button("Spiderbot Launcher"))
 		{
 			ChooseWeapon(3);
 		}

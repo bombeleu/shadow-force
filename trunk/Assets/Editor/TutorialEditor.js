@@ -42,6 +42,7 @@ class TutorialEditor extends Editor {
 						po = tutorial.InsertCheckPointAt(0);
 					}
 					po.transform.position = hitInfo.point;
+					po.transform.position.y += 0.7f;
 				}
 				e.Use();
 			}

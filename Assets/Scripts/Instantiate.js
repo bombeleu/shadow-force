@@ -33,6 +33,12 @@ private var cameraFocusPos:Vector3;
 private var cameraLastFocus:Vector3;
 private var cameraPlane:Plane;
 private var cameraFocusStartTime:float = -1;
+
+// gui
+public var playButtonImage : Texture;
+public var playButtonRect : Rect;
+
+// end gui
 function Start(){
 	cameraFocusPos = Camera.main.transform.position;
 	cameraLastFocus = cameraFocusPos;
@@ -42,12 +48,14 @@ function Start(){
 private var ready:boolean = false;
 function OnGUI(){
 	if (!loaded) return;
+	
+	GUISizer.BeginGUI();
 	var rect:Rect;
 	rect.x = Screen.width *0.8;
 	rect.width = Screen.width * 0.2;
 	rect.y = 0;
 	rect.height = Screen.height * 0.2;
-	if (GUI.Button(rect,"Ready!(click around to pan)")){
+	if (GUI.Button(playButtonRect,playButtonImage)){
 		loaded = false;
 		ready = true;
 		camStartPos = Camera.main.transform.position;
@@ -100,6 +108,8 @@ function OnGUI(){
 	}
 	var t:float = Time.time - cameraFocusStartTime;//1 second
 	cam.transform.position = Vector3.Slerp(cameraLastFocus, cameraFocusPos, t);
+	
+	GUISizer.EndGUI();
 }
 
 private var camStartPos:Vector3;

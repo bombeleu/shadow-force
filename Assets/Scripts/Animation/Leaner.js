@@ -1,11 +1,14 @@
 #pragma strict
-@script RequireComponent (CharacterController)
+//@script RequireComponent (CharacterController)
 
 public var playerAnimation : PlayerAnimation;
 private var radius : Vector3;
 
 function Awake(){
-	var r : float = (collider as CharacterController).radius;
+	var r:float;
+	if (collider as CharacterController) r = (collider as CharacterController).radius;
+	if (collider as CapsuleCollider) r = (collider as CapsuleCollider).radius;
+	
 	radius = Vector3(r,r,r);
 }
 

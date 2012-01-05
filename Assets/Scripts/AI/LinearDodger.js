@@ -66,7 +66,7 @@ function OnTriggerStay (other : Collider) : void{
 		if (!Physics.Raycast(oriPos, velN, (other.transform.position-oriPos).magnitude, blockerLayers)){//not blocked
 			ai.OnEvadeZone((affectDist > offsetM)?
 				offset.normalized*(affectDist-offsetM):
-				Vector3.zero);
+				Vector3.zero, false);
 		}
 		//}
 	}

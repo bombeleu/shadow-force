@@ -16,6 +16,6 @@ function OnTriggerStay (other : Collider) : void{
 		var dist:float = dir.magnitude;
 		ai.OnEvadeZone( affectDist>dist? 
 			dir.normalized*(affectDist - dist):
-			Vector3.zero);//stay in buffer zone!
+			Vector3.zero, true);//stay in buffer zone!
 	}
 }

@@ -1,35 +1,58 @@
-fileFormatVersion: 1
+fileFormatVersion: 2
 guid: 4ca323c8379440949b1e4c8600558008
 ModelImporter:
-  importerVersion: 7
-  meshes:
-    scaleFactor: 0.01
-    useFileUnits: 1
-    meshCompression: 0
-    generateColliders: 1
-    swapUVs: 0
-  tangentSpace:
-    normalImportMode: 0
-    tangentImportMode: 1
-    smoothingAngle: 60
-    splitTangents: 1
-  materials:
-    generation: 1
-  animations:
-    generation: 3
-    bakeAnimations: 0
-    animationCompression: 1
-    animationWrapMode: 0
-    splitAnimations: 1
-  nodeInfo:
-    //RootNode:
-    - 100000
-    - 400000
-    - 3300000
-    - 2300000
-    - 6400000
-    - 11100000
-AssetImporter:
-  importerVersion: 1
   fileIDToRecycleName:
     4300000: StraightStair02
+  serializedVersion: 10
+  materials:
+    importMaterials: 1
+    materialName: 2
+    materialSearch: 1
+  animations:
+    generateAnimations: 3
+    bakeSimulation: 0
+    splitAnimations: 1
+    animationCompression: 1
+    animationRotationError: 0.500000
+    animationPositionError: 0.500000
+    animationScaleError: 0.500000
+    animationWrapMode: 0
+    clipAnimations: []
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 0.010000
+    meshCompression: 0
+    addColliders: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    meshOptimization: 4
+    secondaryUVAngleDistortion: 8.000000
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88.000000
+    secondaryUVPackMargin: 4.000000
+  tangentSpace:
+    normalSmoothAngle: 60.000000
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  textMetaNamesToFileIDs:
+    //RootNode:
+      data:
+        first: 1
+        second: a0860100
+      data:
+        first: 4
+        second: 801a0600
+      data:
+        first: 23
+        second: 60182300
+      data:
+        first: 33
+        second: a05a3200
+      data:
+        first: 64
+        second: 00a86100
+      data:
+        first: 111
+        second: 605fa900

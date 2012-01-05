@@ -18,6 +18,7 @@ ModelImporter:
     7400022: lean_right //// N_titan
     7400024: lean_left //// N_titan
     7400026: run_left //// N_titan
+    7400028: run_forward2 //// N_titan
   serializedVersion: 10
   materials:
     importMaterials: 1
@@ -33,7 +34,7 @@ ModelImporter:
     animationScaleError: 0.500000
     animationWrapMode: 0
     clipAnimations:
-    - name: run_forward
+    - name: run_forward2
       firstFrame: 1
       lastFrame: 30
       wrapMode: 2

@@ -18,6 +18,7 @@ public enum TalkType{
 private var saying:boolean = false;
 private var lastSentence:TalkType = TalkType.None;
 private var startTime:float = -1;
+private var reveal:boolean = false;
 function Say(sentence:TalkType){
 	if (text==null) return;//dead already
 	if ( (sentence != TalkType.Kill) &&
@@ -42,6 +43,11 @@ function Say(sentence:TalkType){
 		case TalkType.Chase:
 			str = RandomStr(["Stop coward!", "See ya", "Wait there", "Think u can run?"]);
 			emphasize = true;
+			if (visi.visibilityType == VisibilityType.TeamShare){
+				reveal = true;
+				visi.visibilityType = VisibilityType.Reveal;
+				//Debug.Log("reveal!");
+			}
 			break;
 		case TalkType.NotChase:
 			str = RandomStr(["Better stay", "Lure me out?", "Come here!"]);
@@ -74,6 +80,10 @@ function Update(){
 	if (Time.time - startTime > 2){
 		text.text = "";
 		saying = false;
+		if (reveal){
+			visi.visibilityType = VisibilityType.TeamShare;
+			reveal = false;
+		}
 	}
 }
 

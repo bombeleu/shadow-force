@@ -84,6 +84,7 @@ function Update () {
     if (bRead)
     {
     	RemoveMessage();
+    	Camera.main.SendMessage("fadeIn");
     }
 }
 

@@ -5,8 +5,9 @@ var imgIndicator : Texture;
 //var popupMsgs : PopupMessage[];
 public var tutorial : TutorialManager;
 public var popupMsgs : System.Collections.Generic.List.<PopupMessage> = new System.Collections.Generic.List.<PopupMessage> ();
-function Awake(){
-	
+
+function Start(){
+	imgIndicator = Resources.Load("info_icon") as Texture;
 }
 
 function ShowMessages()
@@ -32,14 +33,15 @@ function OnGUI()
 {
 	// draw marker here
 	var screenPos : Vector2 = Camera.main.WorldToScreenPoint(gameObject.transform.position );
-	//GUI.DrawTexture(new Rect(screenPos.x,Screen.height - screenPos.y,50,50),imgIndicator);
-	GUI.Label(new Rect(screenPos.x,Screen.height - screenPos.y,50,50),"CP");
+	var size : float = (Screen.width + Screen.height)*0.05;
+	//GUI.DrawTexture(new Rect(screenPos.x - size*0.5f,Screen.height - screenPos.y - size*0.5f,size,size),imgIndicator);
+	//GUI.Label(new Rect(screenPos.x,Screen.height - screenPos.y,50,50),"CP");
 }
 
 function OnDrawGizmos()
 {
-	Gizmos.color = Color (1.0, 0f, 0f);
-	Gizmos.DrawSphere(transform.position, 0.5f);
+	//Gizmos.color = Color (1.0, 0f, 0f);
+	//Gizmos.DrawSphere(transform.position, 0.5f);
 }	
 
 public function AddPopup(po : PopupMessage)

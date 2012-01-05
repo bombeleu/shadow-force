@@ -7,6 +7,8 @@ public var content : String;
 public function Draw()
 {
 	//GUI.Window(0, PopupManager.Instance.popupRect,DoWindow,title);
+	GUISizer.BeginGUI();
+	
 	var rect : Rect = PopupManager.Instance.popupRect;
 	GUI.DrawTexture(rect,PopupManager.Instance.bgTexture);
 	
@@ -18,6 +20,8 @@ public function Draw()
 	rect.y += PopupManager.Instance.titleHeight ;
 	rect.height = PopupManager.Instance.popupRect.height - PopupManager.Instance.titleHeight;
 	GUI.Label(rect,content,PopupManager.Instance.contentStyle);
+	
+	GUISizer.EndGUI();
 }
 
 

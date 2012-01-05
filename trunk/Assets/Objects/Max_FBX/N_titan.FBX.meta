@@ -5,6 +5,19 @@ ModelImporter:
     4300000: Electri_gun
     4300002: N_titan
     7400000: Take 001 //// N_titan
+    7400002: run_forward //// N_titan
+    7400004: run_backward //// N_titan
+    7400006: walk //// N_titan
+    7400008: walk_back //// N_titan
+    7400010: run_right //// N_titan
+    7400012: jump //// N_titan
+    7400014: shoot //// N_titan
+    7400016: die //// N_titan
+    7400018: idle //// N_titan
+    7400020: reload //// N_titan
+    7400022: lean_right //// N_titan
+    7400024: lean_left //// N_titan
+    7400026: run_left //// N_titan
   serializedVersion: 10
   materials:
     importMaterials: 1
@@ -19,7 +32,72 @@ ModelImporter:
     animationPositionError: 0.500000
     animationScaleError: 0.500000
     animationWrapMode: 0
-    clipAnimations: []
+    clipAnimations:
+    - name: run_forward
+      firstFrame: 1
+      lastFrame: 30
+      wrapMode: 2
+      loop: 1
+    - name: run_backward
+      firstFrame: 40
+      lastFrame: 70
+      wrapMode: 2
+      loop: 1
+    - name: walk
+      firstFrame: 80
+      lastFrame: 110
+      wrapMode: 2
+      loop: 1
+    - name: walk_back
+      firstFrame: 120
+      lastFrame: 150
+      wrapMode: 2
+      loop: 1
+    - name: run_right
+      firstFrame: 160
+      lastFrame: 190
+      wrapMode: 2
+      loop: 1
+    - name: jump
+      firstFrame: 230
+      lastFrame: 260
+      wrapMode: 2
+      loop: 1
+    - name: shoot
+      firstFrame: 270
+      lastFrame: 290
+      wrapMode: 2
+      loop: 1
+    - name: die
+      firstFrame: 440
+      lastFrame: 500
+      wrapMode: 2
+      loop: 1
+    - name: idle
+      firstFrame: 510
+      lastFrame: 610
+      wrapMode: 2
+      loop: 1
+    - name: reload
+      firstFrame: 300
+      lastFrame: 368
+      wrapMode: 2
+      loop: 1
+    - name: lean_right
+      firstFrame: 611
+      lastFrame: 635
+      wrapMode: 1
+      loop: 0
+    - name: lean_left
+      firstFrame: 640
+      lastFrame: 655
+      wrapMode: 0
+      loop: 0
+    - name: run_left
+      firstFrame: 190
+      lastFrame: 220
+      wrapMode: 2
+      loop: 1
   meshes:
     lODScreenPercentages: []
     globalScale: 0.035000

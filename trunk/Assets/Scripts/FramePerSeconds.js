@@ -14,6 +14,11 @@ function Start()
         return;
     }
     timeleft = updateInterval;  
+    
+    #if UNITY_EDITOR
+    #else
+    	gameObject.active = false;
+    #endif
 }
 
 function Update()

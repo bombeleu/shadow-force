@@ -321,12 +321,12 @@ function Update () {
 				#else
 				NetworkU.RPC(this, "stopFireAnimation", NetRPCMode.All);
 				#endif
+				weapon.gameObject.SendMessage("OnStopFiring");
+				if (visi.visibilityType == VisibilityType.Reveal){//all shot reveal shooter
+					visi.visibilityType = VisibilityType.TeamShare;
+				}
 			}
 			firing = false;
-			weapon.gameObject.SendMessage("OnStopFiring");
-			if (visi.visibilityType == VisibilityType.Reveal){//all shot reveal shooter
-				visi.visibilityType = VisibilityType.TeamShare;
-			}
 		}
 	}
 }

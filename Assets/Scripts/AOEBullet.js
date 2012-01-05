@@ -50,9 +50,11 @@ function OnLaunchBullet(){
 				}
 				if (!hit){//hear the noise!
 					var ai:AICentral = targetHealth.GetComponent(AICentral);
-					if (ai.chaseAI) {
-						ai.ForceChase(oriPos);//for those who is willing to chase
-					}else ai.SayNoChase();
+					if (ai){
+						if (ai.chaseAI) {
+							ai.ForceChase(oriPos);//for those who is willing to chase
+						}else ai.SayNoChase();
+					}
 				}
 			}
 		}

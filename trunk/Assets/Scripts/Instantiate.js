@@ -40,16 +40,18 @@ public var playButtonStyle : GUIStyle;
 public var playButtonRect : Rect;
 
 // end gui
-function Start(){
-	cameraFocusPos = Camera.main.transform.position;
-	cameraLastFocus = cameraFocusPos;
-	cameraPlane = new Plane(Vector3.up, cameraFocusPos);
-}
 
-
+private var init:boolean = false;
 private var ready:boolean = false;
 function OnGUI(){
 	if (!loaded) return;
+	if (!init){//func Start code here
+		init = true;
+		cameraFocusPos = Camera.main.transform.position;
+		cameraLastFocus = cameraFocusPos;
+		cameraPlane = new Plane(Vector3.up, cameraFocusPos);
+		groundPlane = new Plane(Vector3.up, Vector3.zero);
+	}
 	
 	GUISizer.BeginGUI();
 //	var rect:Rect;
@@ -61,11 +63,6 @@ function OnGUI(){
 		loaded = false;
 		ready = true;
 		
-		cameraFocusPos = Camera.main.transform.position;
-		cameraLastFocus = cameraFocusPos;
-		cameraPlane = new Plane(Vector3.up, cameraFocusPos);
-		groundPlane = new Plane(Vector3.up, Vector3.zero);
-
 		camStartPos = Camera.main.transform.position;
 		camStartRot = Camera.main.transform.rotation;
 		startTime = Time.time;

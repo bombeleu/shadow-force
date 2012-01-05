@@ -24,8 +24,8 @@ private var ws: Weapon[];
 private var playerMovementPlane : Plane;
 
 // gui
-public var ammoRect : Rect;
 public var ammoStyle : GUIStyle;
+public var switchButtonStyle : GUIStyle;
 //
 
 
@@ -353,13 +353,15 @@ function Update () {
 private var buttonFire:boolean = false;
 function OnGUI(){
 	if (!NetworkU.IsMine(this) || !controllable) return;
-	var btnRect : Rect;
-	btnRect.x = 0.4*Screen.width;
-	btnRect.width = 0.2*Screen.width;
-	btnRect.y = 0.9*Screen.height;
-	btnRect.height = 0.1*Screen.height;
+		
+	GUISizer.BeginGUI();
 	
-	if (GUI.Button(btnRect, "switch")){
+	var btnRect : Rect = new Rect();
+	btnRect.width = switchButtonStyle.normal.background.width;
+	btnRect.height = switchButtonStyle.normal.background.height;
+	btnRect.x = (GUISizer.width - btnRect.width) * 0.5f;
+	btnRect.y = GUISizer.height - btnRect.height;
+	if (GUI.Button(btnRect, "Switch",switchButtonStyle)){
 		weaponSwitchGUI = true;
 	}
 	
@@ -380,15 +382,15 @@ function OnGUI(){
 			}
 		}
 	}
-	
-	GUISizer.BeginGUI();
+
 	// show ammo
 	var ammo : String = "Infinity";
+	var rect : Rect = new Rect(GUISizer.width - 100, 0,100,100);
 	if (GetCurrentWeapon().hasAmmo)
 	{
 		ammo = GetCurrentWeapon().ammoRemain.ToString();
 	}
-	GUI.Button(ammoRect,ammo,ammoStyle);
+	GUI.Button(rect,ammo,ammoStyle);
 	
 	GUISizer.EndGUI();
 }

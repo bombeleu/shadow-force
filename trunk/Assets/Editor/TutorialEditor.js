@@ -19,7 +19,7 @@ class TutorialEditor extends Editor {
 			tutorial.ClearCheckPoints();
 		}
 		EditorGUILayout.Separator();
-		
+		tutorial.isSequential = EditorGUILayout.Toggle("Is Sequential",tutorial.isSequential);
 		//tutorial.checkPointPrefab = EditorGUILayout.ObjectField("CheckPointPrefab",tutorial.checkPointPrefab,CheckPoint);
 	}
 	

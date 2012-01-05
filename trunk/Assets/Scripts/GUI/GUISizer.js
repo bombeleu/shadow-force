@@ -17,7 +17,6 @@ public class GUISizer
 	public static function BeginGUI () {
 		//GUISizer.width = width;
 		//GUISizer.height = height;
-		Debug.Log(GUI.matrix);
 		stack.Add (GUI.matrix);
 		var m : Matrix4x4 = new Matrix4x4 ();
 		ComputeScaleAndOffset();

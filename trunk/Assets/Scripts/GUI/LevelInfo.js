@@ -9,7 +9,7 @@ private var selector:SelectWeaponGUI;
 function Awake(){//this function is called when the level is loaded, always after SelectWeaponGUI is initialized
 	Debug.Log("level is loaded!");
 	
-	if (MainMenu.state == MainMenu.MenuState.OuterMost){
+	if (MainMenu.state == MainMenu.MenuState.Single){
 		var go:GameObject = Instantiate(levelTesterPrefab, Vector3.zero, Quaternion.identity);
 		go.transform.parent = transform;
 		selector = go.GetComponent(SelectWeaponGUI);

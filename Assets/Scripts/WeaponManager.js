@@ -23,6 +23,12 @@ private var ws: Weapon[];
 
 private var playerMovementPlane : Plane;
 
+// gui
+public var ammoRect : Rect;
+public var ammoStyle : GUIStyle;
+//
+
+
 function OnEnable(){
 	//character = transform;
 	ws = new Weapon[weapons.length];
@@ -375,15 +381,16 @@ function OnGUI(){
 		}
 	}
 	
+	GUISizer.BeginGUI();
 	// show ammo
-	var rect : Rect = new Rect(Screen.width * 0.5f, 0, 150,30);
+	var ammo : String = "Infinity";
 	if (GetCurrentWeapon().hasAmmo)
 	{
-		GUI.Label(rect,"Ammo remains : " + GetCurrentWeapon().ammoRemain.ToString());
-	} else
-	{
-		GUI.Label(rect,"Unlimited ammo");
+		ammo = GetCurrentWeapon().ammoRemain.ToString();
 	}
+	GUI.Button(ammoRect,ammo,ammoStyle);
+	
+	GUISizer.EndGUI();
 }
 
 #if !UNITY_FLASH

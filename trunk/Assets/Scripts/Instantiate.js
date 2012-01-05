@@ -36,7 +36,7 @@ private var groundPlane:Plane;
 private var cameraFocusStartTime:float = -1;
 
 // gui
-public var playButtonImage : Texture;
+public var playButtonStyle : GUIStyle;
 public var playButtonRect : Rect;
 
 // end gui
@@ -52,12 +52,12 @@ function OnGUI(){
 	if (!loaded) return;
 	
 	GUISizer.BeginGUI();
-	var rect:Rect;
-	rect.x = Screen.width *0.8;
-	rect.width = Screen.width * 0.2;
-	rect.y = 0;
-	rect.height = Screen.height * 0.2;
-	if (GUI.Button(playButtonRect,playButtonImage)){
+//	var rect:Rect;
+//	rect.x = Screen.width *0.8;
+//	rect.width = Screen.width * 0.2;
+//	rect.y = 0;
+//	rect.height = Screen.height * 0.2;
+	if (GUI.Button(playButtonRect,"",playButtonStyle)){
 		loaded = false;
 		ready = true;
 		

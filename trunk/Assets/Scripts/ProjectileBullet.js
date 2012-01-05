@@ -12,8 +12,11 @@ function Awake(){
 	trajectory = GetComponent.<PerFrameTrajectory>();
 }
 
+function CheckValidTarget(pos:Vector3){
+	return trajectory.OnUpdateTarget(pos);
+}
+
 function OnLaunchBullet(pos:Vector3){
-	trajectory.OnUpdateTarget(pos);
 	var velo:Vector3 = trajectory.GetComputedVelocity();
 	var duration:float = trajectory.GetDuration();
 	var go:GameObject = NetworkU.Instantiate(bulletPrefab, spawnPoint.position, 

@@ -71,10 +71,12 @@ function OnEnable(){
 }
 
 private var weaponGUI:SelectWeaponGUI;
+private var groundPlane:Plane;
 function Awake(){
 	weaponGUI = GameObject.FindObjectOfType(SelectWeaponGUI);
 	visi = GetComponent(Visibility);
 	playerMovementPlane = new Plane (transform.up, transform.position + transform.up * cursorPlaneHeight);
+	groundPlane = new Plane (transform.up, Vector3.up * 0.5);//ground plane
 }
 
 function SetWeaponSelection(){
@@ -194,6 +196,7 @@ function Start(){
 
 public var playerAnimation : PlayerAnimation;
 private var visi:Visibility;
+public var positionalLayers:LayerMask;
 
 private var weaponSwitchGUI:boolean;
 function Update () {
@@ -232,8 +235,14 @@ function Update () {
 			var fireAlt:float = Input.GetAxis("Fire1");
 			isFiring = (fireAlt>=1);
 		#endif
+		var posCursor:Vector3 = ScreenPointToWorldPointOnPlane (cursorScreenPosition, groundPlane, Camera.main);
+		var posHit:RaycastHit;
+		Physics.Raycast(posCursor + Vector3.up*10, -Vector3.up, posHit, Mathf.Infinity, positionalLayers);
+		var positionalTarget:Vector3 = (posHit.transform==null || posHit.point.y>cursorWorldPosition.y)?
+			(posCursor - Vector3.up*50):posHit.point;//no abyss, no wall top
+		
 		if (weapon.needPositionUpdate){
-			weapon.gameObject.SendMessage("OnUpdateTarget", cursorWorldPosition - Vector3.up*2.5);
+			weapon.gameObject.SendMessage("OnUpdateTarget", positionalTarget);
 		}
 		var weaponSwitch:boolean;
 		if (weaponSwitchGUI==false){
@@ -265,6 +274,8 @@ function Update () {
 	var axis:Vector3;
 	quat.ToAngleAxis(angle, axis);
 
+
+	var actualShot:boolean = true;
 	if (weapon.cooldown > 0){
 		if (!oldIsFiring && isFiring){
 			if ((!controllable) || (!weapon.hasAmmo) || weapon.ammoRemain>0)//do not buffer if no ammo left
@@ -275,44 +286,56 @@ function Update () {
 			//if (controllable && weapon.hasAmmo && (weapon.ammoRemain>0)) bufferedShot = 0;
 			//RPCFireMissile();
 			//transform.SendMessage ("RPCFireMissile");
-			bufferedShot = 0;
-			altFireTimer = Time.time;
 			if (weapon.needPosition){
-				weapon.gameObject.SendMessage("OnLaunchBullet", cursorWorldPosition - Vector3.up*2.5);
+				//weapon.gameObject.SendMessage("OnLaunchBullet", cursorWorldPosition - Vector3.up*2.5);
+				var projectile:ProjectileBullet = weapon.GetComponent(ProjectileBullet);
+				if (projectile.CheckValidTarget(positionalTarget)){
+					projectile.OnLaunchBullet(positionalTarget);
+				}else actualShot = false;
 				//isFiring = false;
 			}else{
 				weapon.gameObject.SendMessage("OnLaunchBullet");
 			}
-			if (visi.visibilityType == VisibilityType.TeamShare){//all shot reveal shooter
-				visi.visibilityType = VisibilityType.Reveal;
+			bufferedShot = 0;//cancel the buffer even when the shot is not made!
+			if (actualShot){
+				altFireTimer = Time.time;
+				if (visi.visibilityType == VisibilityType.TeamShare){//all shot reveal shooter
+					visi.visibilityType = VisibilityType.Reveal;
+				}
+				if (controllable) weapon.ammoRemain--;
+				#if UNITY_FLASH
+				onetimeFireAnimation();
+				#else
+				NetworkU.RPC(this, "onetimeFireAnimation", NetRPCMode.All);
+				#endif
 			}
-			if (controllable) weapon.ammoRemain--;
-			#if UNITY_FLASH
-			onetimeFireAnimation();
-			#else
-			NetworkU.RPC(this, "onetimeFireAnimation", NetRPCMode.All);			
-			#endif
 		}
 		if ((visi.visibilityType == VisibilityType.Reveal) && (Time.time - altFireTimer > weapon.cooldown)){//TODO:use seperate para for this
 			visi.visibilityType = VisibilityType.TeamShare;
 		}
 	}else{//continuous firing
 		if (isFiring && (firing || angle<=3)){
-			if (!firing){ 
-				#if UNITY_FLASH
-				startFireAnimation();
-				#else
-				NetworkU.RPC(this, "startFireAnimation", NetRPCMode.All);
-				#endif
-			}
-			firing = true;
 			if (weapon.needPosition){
-				weapon.gameObject.SendMessage("OnLaunchBullet", cursorWorldPosition - Vector3.up*2.5);//TODO: hard code
+				//weapon.gameObject.SendMessage("OnLaunchBullet", cursorWorldPosition - Vector3.up*2.5);//TODO: hard code
+				var projectile2:ProjectileBullet = weapon.GetComponent(ProjectileBullet);
+				if (projectile2.CheckValidTarget(positionalTarget)){
+					projectile2.OnLaunchBullet(positionalTarget);
+				}else actualShot = false;
 			}else{
 				weapon.gameObject.SendMessage("OnLaunchBullet");
 			}
-			if (visi.visibilityType == VisibilityType.TeamShare){//all shot reveal shooter
-				visi.visibilityType = VisibilityType.Reveal;
+			if (actualShot){
+				if (!firing){ 				
+					#if UNITY_FLASH
+					startFireAnimation();
+					#else
+					NetworkU.RPC(this, "startFireAnimation", NetRPCMode.All);
+					#endif
+				}
+				firing = true;
+				if (visi.visibilityType == VisibilityType.TeamShare){//all shot reveal shooter
+					visi.visibilityType = VisibilityType.Reveal;
+				}
 			}
 		}else{
 			if (firing){

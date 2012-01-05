@@ -14,9 +14,9 @@ function Update () {
 	var velo:Vector3 = trajectory.GetComputedVelocity();
 	var duration:float = trajectory.GetDuration();
 	
-	lRenderer.SetVertexCount(vertexNumber);
+	lRenderer.SetVertexCount(vertexNumber+1);
 	
-	for(var i:int=0; i<vertexNumber; i++){
+	for(var i:int=0; i<=vertexNumber; i++){
 		var t = i*duration/vertexNumber;
 		lRenderer.SetPosition(i, spawnPoint.position + velo*t + 0.5*Physics.gravity*t*t);
 	}

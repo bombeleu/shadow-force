@@ -3,6 +3,7 @@
 
 public var heightOffset:float = 0.5;
 public var travelTime:float = 1.5;
+public var maxSpeed:float = 15;
 //public var raycast:PerFrameRaycast;
 public var blockLayers:LayerMask;
 
@@ -11,15 +12,17 @@ private var outVelo: Vector3;
 private var outDuration: float = 0;
 private var pos: Vector3;
 
+private var weapon:Weapon;
 
 function Awake(){
-	spawnPoint = GetComponent.<Weapon>().spawnPoint;
+	weapon = GetComponent(Weapon);	
+	spawnPoint = weapon.spawnPoint;
 	pos = spawnPoint.position;
 }
 
-function OnUpdateTarget(p:Vector3){
+function OnUpdateTarget(p:Vector3):boolean{
 	pos = p;
-	Compute();
+	return Compute();
 }
 
 //z of the vector is the duration!
@@ -73,7 +76,7 @@ private function ComputeVelo(d:float, g:float, targetY:float, hitInfo:RaycastHit
 	return Vector3(v_x, v_y, duration);
 }
 
-function Compute(){
+function Compute():boolean{
 	//compute!
 	var oriPos:Vector3 = Vector3(pos.x,pos.y,pos.z);
 	var tarPos:Vector3 = oriPos;
@@ -95,6 +98,11 @@ function Compute(){
 	outVelo = Vector3(0,finalRet.y,0) + Vector3(dir.x, 0, dir.z) * finalRet.x;
 	outDuration = finalRet.z;
 	
+	var valid:boolean = outVelo.sqrMagnitude<=(maxSpeed*maxSpeed);
+	if (!valid){
+		outDuration = 0;//so that it will not render!
+	}
+	return valid;
 	//Debug.Log(forwardRet + " " + backwardRet);
 }
 

@@ -299,9 +299,7 @@ function Update () {
 			bufferedShot = 0;//cancel the buffer even when the shot is not made!
 			if (actualShot){
 				altFireTimer = Time.time;
-				if (visi.visibilityType == VisibilityType.TeamShare){//all shot reveal shooter
-					visi.visibilityType = VisibilityType.Reveal;
-				}
+				visi.Reveal();
 				if (controllable) weapon.ammoRemain--;
 				#if UNITY_FLASH
 				onetimeFireAnimation();
@@ -309,9 +307,6 @@ function Update () {
 				NetworkU.RPC(this, "onetimeFireAnimation", NetRPCMode.All);
 				#endif
 			}
-		}
-		if ((visi.visibilityType == VisibilityType.Reveal) && (Time.time - altFireTimer > weapon.cooldown)){//TODO:use seperate para for this
-			visi.visibilityType = VisibilityType.TeamShare;
 		}
 	}else{//continuous firing
 		if (isFiring && (firing || angle<=3)){
@@ -333,9 +328,7 @@ function Update () {
 					#endif
 				}
 				firing = true;
-				if (visi.visibilityType == VisibilityType.TeamShare){//all shot reveal shooter
-					visi.visibilityType = VisibilityType.Reveal;
-				}
+				visi.Reveal();
 			}
 		}else{
 			if (firing){
@@ -345,9 +338,6 @@ function Update () {
 				NetworkU.RPC(this, "stopFireAnimation", NetRPCMode.All);
 				#endif
 				weapon.gameObject.SendMessage("OnStopFiring");
-				if (visi.visibilityType == VisibilityType.Reveal){//all shot reveal shooter
-					visi.visibilityType = VisibilityType.TeamShare;
-				}
 			}
 			firing = false;
 		}

@@ -14,6 +14,7 @@ function Awake(){//this function is called when the level is loaded, always afte
 		go.transform.parent = transform;
 		selector = go.GetComponent(SelectWeaponGUI);
 		testing = true;
+		Debug.Log("testing mode");
 		//return;
 	}else
 		selector = GameObject.FindObjectOfType(SelectWeaponGUI);

@@ -18,7 +18,6 @@ public enum TalkType{
 private var saying:boolean = false;
 private var lastSentence:TalkType = TalkType.None;
 private var startTime:float = -1;
-private var reveal:boolean = false;
 function Say(sentence:TalkType){
 	if (text==null) return;//dead already
 	if ( (sentence != TalkType.Kill) &&
@@ -30,6 +29,7 @@ function Say(sentence:TalkType){
 	}
 	var str:String;
 	var emphasize:boolean = false;
+	var willReveal:boolean = false;
 	switch (sentence){
 		case TalkType.Patrol:
 			str = RandomStr(["Cardio's good", "For my 6pak", "Will chase u"]);
@@ -39,18 +39,18 @@ function Say(sentence:TalkType){
 			break;
 		case TalkType.PatrolBack:
 			str = RandomStr(["Gotta leave", "Nothing here?", "Hmm, strange .."]);
+			emphasize = true;
+			willReveal = true;
 			break;
 		case TalkType.Chase:
-			str = RandomStr(["Stop coward!", "See ya", "Wait there", "Think u can run?"]);
+			str = RandomStr(["Will catch u!", "Spot ya!", "Wait there!", "Think u can run?"]);
 			emphasize = true;
-			if (visi.visibilityType == VisibilityType.TeamShare){
-				reveal = true;
-				visi.visibilityType = VisibilityType.Reveal;
-				//Debug.Log("reveal!");
-			}
+			willReveal = true;
 			break;
 		case TalkType.NotChase:
-			str = RandomStr(["Better stay", "Lure me out?", "Come here!"]);
+			str = RandomStr(["Lure me out?", "Come here!"]);
+			emphasize = true;
+			willReveal = true;
 			break;
 		case TalkType.Shoot:
 			str = RandomStr(["Die!", "Training time!", "Ya better run"]);
@@ -60,7 +60,7 @@ function Say(sentence:TalkType){
 			str = RandomStr(["Learn to shoot!", "Miss!", "Y U NO aim?"]);
 			break;
 		case TalkType.Block:
-			str = RandomStr(["Cant kill me", "Tickle me?", "No damage!"]);
+			str = RandomStr(["Deflect!", "Tickle me?", "No damage!"]);
 			break;
 		case TalkType.Kill:
 			str = RandomStr(["Oh ye!", "Done!", "Easy!", "Dead?"]);
@@ -68,6 +68,9 @@ function Say(sentence:TalkType){
 		case TalkType.None:
 			str = RandomStr(["Boring", "Zzz..", "Why am I here"]);
 			break;
+	}
+	if (willReveal){
+		visi.Reveal();
 	}
 	lastSentence = sentence;
 	text.text = str;
@@ -80,10 +83,6 @@ function Update(){
 	if (Time.time - startTime > 2){
 		text.text = "";
 		saying = false;
-		if (reveal){
-			visi.visibilityType = VisibilityType.TeamShare;
-			reveal = false;
-		}
 	}
 }
 

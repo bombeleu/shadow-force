@@ -23,6 +23,20 @@ function Awake() {
 }
 #endif
 
+private var reveal:boolean = false;
+private var revealStart:float = -1;
+public function Reveal():void{
+	reveal = true;
+	revealStart = Time.time;
+	visibilityType = VisibilityType.Reveal;
+}
+function Update(){
+	if (reveal && Time.time - revealStart>2){
+		reveal = false;
+		visibilityType = VisibilityType.TeamShare;
+	}
+}
+
 private var isVisible:boolean = true;
 function SetVisible(visi:boolean){
 	if (isVisible == visi) return;

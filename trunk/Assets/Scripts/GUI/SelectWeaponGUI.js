@@ -23,38 +23,39 @@ class SelectWeaponGUI extends ScreenGUI{
 		if (finished) return;
 		GUILayout.Label("Choose 2 weapons");
 	
-		if (GUILayout.Button("MachineGun"))
+		if (GUILayout.Button("Machine Gun"))
 		{
 			ChooseWeapon(0);
 		}
-		if (GUILayout.Button("BoltGun"))
+		if (GUILayout.Button("Energy Gun"))
 		{
 			ChooseWeapon(1);
 		}
-		if (GUILayout.Button("GrenadeLaunch"))
+		if (GUILayout.Button("Fire grenade launcher"))
 		{
 			ChooseWeapon(2);
 		}
-		if (GUILayout.Button("StickyCam"))
+		if (GUILayout.Button("Sticky Camera Launcher"))
 		{
 			ChooseWeapon(3);
 		}
-		if (GUILayout.Button("ShotGun"))
+		if (GUILayout.Button("Shotgun"))
 		{
 			ChooseWeapon(4);
 		}
-		if (GUILayout.Button("Turret"))
+		if (GUILayout.Button("Flame Thrower"))
 		{
 			ChooseWeapon(5);
 		}
+		/*
 		if (GUILayout.Button("SmokeGrenade"))
 		{
 			ChooseWeapon(6);
 		}	
-		if (GUILayout.Button("FlameThrower"))
+		if (GUILayout.Button("Flame Thrower"))
 		{
 			ChooseWeapon(7);
-		}	
+		}*/
 	}
 	function ChooseWeapon(weaponID : int)
 	{

@@ -1,15 +1,15 @@
 fileFormatVersion: 2
-guid: 9d0018ad35cb9c8489fc591dc54fce9c
+guid: 50d512a30ed86ce4580ec167cef57bdc
 ModelImporter:
   fileIDToRecycleName:
-    4300000: portal
+    4300000: Plane01
   serializedVersion: 10
   materials:
     importMaterials: 1
     materialName: 2
     materialSearch: 1
   animations:
-    generateAnimations: 3
+    generateAnimations: 0
     bakeSimulation: 0
     splitAnimations: 1
     animationCompression: 1
@@ -20,7 +20,7 @@ ModelImporter:
     clipAnimations: []
   meshes:
     lODScreenPercentages: []
-    globalScale: 0.030000
+    globalScale: 0.010000
     meshCompression: 0
     addColliders: 0
     swapUVChannels: 0
@@ -50,6 +50,3 @@ ModelImporter:
       data:
         first: 33
         second: a05a3200
-      data:
-        first: 111
-        second: 605fa900

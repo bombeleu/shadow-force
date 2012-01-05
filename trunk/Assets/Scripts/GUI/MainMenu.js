@@ -55,7 +55,11 @@ class MainMenu extends ScreenGUI{
 		Coop,
 		Multi
 	}
-	public static var state : MenuState = MenuState.OuterMost;
+	#if UNITY_FLASH
+	public static var state : MenuState = MenuState.Single;
+	#else
+	public static var state : MenuState = MenuState.OuterMost;	
+	#endif
 	
 	public var levelList : String[];
 	public var curLevel : int = 0;
@@ -102,25 +106,42 @@ class MainMenu extends ScreenGUI{
 				SaveConfig();
 			}
 		}else if (state == MenuState.Single){
+			#if UNITY_FLASH
+			if (GUILayout.Button("(cheat)Unlock all")){
+				UnlockAll();
+			}
+			#endif
 			GUILayout.Label("Select an unlocked level");
 			for (var i:int = 0; i <= currentLevel; i++){
 				GUILayout.BeginHorizontal();
-				if (GUILayout.Button("Level " + levelList[i])){
+				if (GUILayout.Button("Level " + 
+					#if UNITY_FLASH
+						i
+					#else
+						levelList[i]
+					#endif
+						)){
 					state = MenuState.SinglePlaying;
 					curLevel = i;
 					Debug.Log("load level");
-					Debug.Log("level "+levelList[curLevel]);
+					Debug.Log("level "+curLevel);
 					Application.LoadLevel(levelList[curLevel]);
 				}
 				GUILayout.Label("stars earned: "+stars[i]);
 				GUILayout.EndHorizontal();
 			}
+			#if !UNITY_FLASH
 			if (GUILayout.Button("Back")){
 				state = MenuState.OuterMost;
 			}
+			#endif
 		}else if (state == MenuState.SinglePlaying){
 			if (GUILayout.Button("Exit")){
+				#if UNITY_FLASH
+				state = MenuState.Single;
+				#else
 				state = MenuState.OuterMost;
+				#endif
 				Application.LoadLevel("MainMenu");
 				DestroyObject(gameObject);
 			}

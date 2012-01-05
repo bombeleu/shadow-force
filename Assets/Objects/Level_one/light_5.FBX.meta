@@ -6,10 +6,10 @@ ModelImporter:
   serializedVersion: 10
   materials:
     importMaterials: 1
-    materialName: 1
+    materialName: 2
     materialSearch: 1
   animations:
-    generateAnimations: 3
+    generateAnimations: 0
     bakeSimulation: 0
     splitAnimations: 1
     animationCompression: 1
@@ -50,6 +50,3 @@ ModelImporter:
       data:
         first: 33
         second: a05a3200
-      data:
-        first: 111
-        second: 605fa900

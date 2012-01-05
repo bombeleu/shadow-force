@@ -16,6 +16,7 @@ public class TutorialLevelController
 
 private var _checkPoints : ArrayList = new ArrayList();
 public var checkPoints : CheckPoint[];
+public var isSequential : boolean = true;
 private var _currentCheckPoint : int  = 0 ;
 //public var checkPointPrefab : CheckPoint;
 
@@ -28,12 +29,21 @@ function Awake()
 function Start () {
 	Debug.Log(checkPoints.Length);
 	// deactivate all checkpoints;
-	for (var cp : CheckPoint in checkPoints)
+	if (isSequential)
 	{
-		DeactivateCheckPoint(cp);
+		for (var cp : CheckPoint in checkPoints)
+		{
+			DeactivateCheckPoint(cp);
+		}
+		if (checkPoints.Length>0)
+			ActivateCheckPoint(checkPoints[_currentCheckPoint]);
+	} else
+	{
+		for (var cp : CheckPoint in checkPoints)
+		{
+			ActivateCheckPoint(cp);
+		}
 	}
-	if (checkPoints.Length>0)
-		ActivateCheckPoint(checkPoints[_currentCheckPoint]);
 }
 
 function Update () {
@@ -52,17 +62,23 @@ function ActivateCheckPoint(cp : CheckPoint)
 
 public function ReachCheckPoint(cp : CheckPoint)
 {
-	if (cp == checkPoints[_currentCheckPoint])
+	if (isSequential)
+	{
+		if (cp == checkPoints[_currentCheckPoint])
+		{
+			DeactivateCheckPoint(cp);
+			_currentCheckPoint++;
+			if (_currentCheckPoint >= checkPoints.Length)
+			{
+				_currentCheckPoint = -1;
+			} else
+			{
+				ActivateCheckPoint(checkPoints[_currentCheckPoint]);
+			}
+		}
+	} else
 	{
 		DeactivateCheckPoint(cp);
-		_currentCheckPoint++;
-		if (_currentCheckPoint >= checkPoints.Length)
-		{
-			_currentCheckPoint = -1;
-		} else
-		{
-			ActivateCheckPoint(checkPoints[_currentCheckPoint]);
-		}
 	}
 }
 

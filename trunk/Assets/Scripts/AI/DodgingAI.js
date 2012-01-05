@@ -16,9 +16,11 @@ function Start(){
 	escapeV = Vector3.zero;
 }
 
-function OnEvadeZone(escapeDir:Vector3):void{
+private var isIgnoreShield:boolean;
+function OnEvadeZone(escapeDir:Vector3, ignoreShield:boolean):void{
 	escapeV += escapeDir;
 	isActive = true;
+	isIgnoreShield = ignoreShield;
 }
 
 function FixedUpdate(){
@@ -34,6 +36,11 @@ function IsActive():boolean{
 	return _isActive;
 }
 
+function IsIgnoreShield():boolean{
+	return isIgnoreShield;
+}
+
 function GetVector():Vector3{
 	return finalV;
 }
+

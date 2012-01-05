@@ -66,11 +66,9 @@ class AICentral extends DetectionAI{
 		var fromChase:boolean = false;
 		var patrolFace:boolean = true;
 		motor.facingDirection = Vector3.zero;
-		if (
-			//#if UNITY_FLASH
-			!blocker && 
-			//#endif
-			dodger && dodger.IsActive()){
+		if (dodger && dodger.IsActive() &&
+				((!blocker) || (dodger.IsIgnoreShield()) )
+			){
 			motor.movementDirection = dodger.GetVector().normalized;
 			patroller.InPatrolRoute = false;
 			dodging = true;

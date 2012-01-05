@@ -37,6 +37,6 @@ function OnTriggerStay (other : Collider) : void{
 	if (ai){
 		var dir:Vector3 = other.transform.position - landingPos;
 		dir.y = 0;
-		ai.OnEvadeZone(dir.normalized*(affectRadius-dir.magnitude));
+		ai.OnEvadeZone(dir.normalized*(affectRadius-dir.magnitude), true);
 	}
 }

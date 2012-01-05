@@ -32,6 +32,7 @@ function OnNetworkLoadedLevel () {
 private var cameraFocusPos:Vector3;
 private var cameraLastFocus:Vector3;
 private var cameraPlane:Plane;
+private var groundPlane:Plane;
 private var cameraFocusStartTime:float = -1;
 
 // gui
@@ -44,6 +45,7 @@ function Start(){
 	cameraLastFocus = cameraFocusPos;
 	cameraPlane = new Plane(Vector3.up, cameraFocusPos);
 }
+
 
 private var ready:boolean = false;
 function OnGUI(){
@@ -58,6 +60,12 @@ function OnGUI(){
 	if (GUI.Button(playButtonRect,playButtonImage)){
 		loaded = false;
 		ready = true;
+		
+		cameraFocusPos = Camera.main.transform.position;
+		cameraLastFocus = cameraFocusPos;
+		cameraPlane = new Plane(Vector3.up, cameraFocusPos);
+		groundPlane = new Plane(Vector3.up, Vector3.zero);
+
 		camStartPos = Camera.main.transform.position;
 		camStartRot = Camera.main.transform.rotation;
 		startTime = Time.time;
@@ -95,16 +103,19 @@ function OnGUI(){
 	var cam:Camera = Camera.main;
 	if (Event.current.type == EventType.MouseDown){
 		var hitInfo:RaycastHit;
-	 	Physics.Raycast(cam.ScreenPointToRay(Input.mousePosition), hitInfo);
-	 	if (hitInfo.transform){
-	 		var invertRay:Ray = new Ray(hitInfo.point, -cam.transform.forward);
-	 		var dist:float;
-	 		cameraPlane.Raycast(invertRay, dist); 
-	 		cameraFocusPos = invertRay.GetPoint(dist);
-	 		cameraFocusStartTime = Time.time;
-	 		cameraLastFocus = cam.transform.position;
-	 		//Debug.Log("cam "+cameraFocusPos+" "+cameraLastFocus+" "+dist);
-	 	}
+	 	//Physics.Raycast(cam.ScreenPointToRay(Input.mousePosition), hitInfo);
+	 	var camRay:Ray = cam.ScreenPointToRay(Input.mousePosition);
+	 	var camDist:float;
+	 	groundPlane.Raycast(camRay, camDist);
+	 	var hitPoint:Vector3 = camRay.GetPoint(camDist);
+ 		var invertRay:Ray = new Ray(hitPoint, -cam.transform.forward);
+
+  		var dist:float;
+ 		cameraPlane.Raycast(invertRay, dist); 
+ 		cameraFocusPos = invertRay.GetPoint(dist);
+ 		cameraFocusStartTime = Time.time;
+ 		cameraLastFocus = cam.transform.position;
+ 		//Debug.Log("cam "+cameraFocusPos+" "+cameraLastFocus+" "+dist);
 	}
 	var t:float = Time.time - cameraFocusStartTime;//1 second
 	cam.transform.position = Vector3.Slerp(cameraLastFocus, cameraFocusPos, t);

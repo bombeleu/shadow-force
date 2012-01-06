@@ -363,13 +363,14 @@ function OnGUI(){
 	GUISizer.BeginGUI();
 	
 	var btnRect : Rect = new Rect();
-	/*btnRect.width = switchButtonStyle.normal.background.width;
+	btnRect.width = switchButtonStyle.normal.background.width;
 	btnRect.height = switchButtonStyle.normal.background.height;
 	btnRect.x = (GUISizer.width - btnRect.width) * 0.5f;
 	btnRect.y = GUISizer.height - btnRect.height;
 	if (GUI.Button(btnRect, "Switch",switchButtonStyle)){
 		weaponSwitchGUI = true;
-	}*/
+		//Event.current.Use();
+	}
 	
 	if (MainMenu.useAutoAim && (!ws[curWeapon].playerAutoShoot)){
 		btnRect.x = Screen.width - Screen.height*0.1;
@@ -377,6 +378,7 @@ function OnGUI(){
 		btnRect.y = 0.9*Screen.height;
 		btnRect.height = 0.1*Screen.height;
 		
+		#if UNITY_IPHONE || UNITY_ANDROID
 		if (GUI.Button(btnRect, "shoot!")){
 			manualFire = true;
 			hasPos = false;
@@ -387,6 +389,7 @@ function OnGUI(){
 				buttonFire = false;
 			}
 		}
+		#endif
 	}
 
 	// show ammo

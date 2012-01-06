@@ -12,6 +12,7 @@ function Awake(){
 	Physics.IgnoreLayerCollision(19, 20, true);//projectile vs fence
 	Physics.IgnoreLayerCollision(19, 22, true);//projectile vs smoke
 	Physics.IgnoreLayerCollision(19, 19, true);//projectile vs projectile
+	Physics.IgnoreLayerCollision(19, 0, true);//projectile vs default!
 	Physics.IgnoreLayerCollision(23, 22, true);//shield vs smoke
 	//Physics.IgnoreLayerCollision(8, 23, true);//player vs shield
 	Physics.IgnoreLayerCollision(8, 24, true);//player vs ragdoll --> prevent climbing!

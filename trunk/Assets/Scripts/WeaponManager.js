@@ -363,13 +363,13 @@ function OnGUI(){
 	GUISizer.BeginGUI();
 	
 	var btnRect : Rect = new Rect();
-	btnRect.width = switchButtonStyle.normal.background.width;
+	/*btnRect.width = switchButtonStyle.normal.background.width;
 	btnRect.height = switchButtonStyle.normal.background.height;
 	btnRect.x = (GUISizer.width - btnRect.width) * 0.5f;
 	btnRect.y = GUISizer.height - btnRect.height;
 	if (GUI.Button(btnRect, "Switch",switchButtonStyle)){
 		weaponSwitchGUI = true;
-	}
+	}*/
 	
 	if (MainMenu.useAutoAim && (!ws[curWeapon].playerAutoShoot)){
 		btnRect.x = Screen.width - Screen.height*0.1;

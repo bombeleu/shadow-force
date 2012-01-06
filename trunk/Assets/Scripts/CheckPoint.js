@@ -17,8 +17,8 @@ function ShowMessages()
 }
 
 function OnTriggerEnter (other : Collider) {
-	Debug.Log("enter");
     if (other.gameObject.CompareTag("Player")){
+		Debug.Log("enter");
     	tutorial.ReachCheckPoint(this);
     	ShowMessages();
     }

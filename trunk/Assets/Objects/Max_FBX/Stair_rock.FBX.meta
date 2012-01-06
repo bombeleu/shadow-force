@@ -9,7 +9,7 @@ ModelImporter:
     materialName: 2
     materialSearch: 1
   animations:
-    generateAnimations: 3
+    generateAnimations: 0
     bakeSimulation: 0
     splitAnimations: 1
     animationCompression: 1
@@ -22,9 +22,9 @@ ModelImporter:
     lODScreenPercentages: []
     globalScale: 0.010000
     meshCompression: 0
-    addColliders: 1
+    addColliders: 0
     swapUVChannels: 0
-    generateSecondaryUV: 0
+    generateSecondaryUV: 1
     useFileUnits: 1
     meshOptimization: 4
     secondaryUVAngleDistortion: 8.000000
@@ -50,9 +50,3 @@ ModelImporter:
       data:
         first: 33
         second: a05a3200
-      data:
-        first: 64
-        second: 00a86100
-      data:
-        first: 111
-        second: 605fa900

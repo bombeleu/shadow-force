@@ -18,12 +18,17 @@ function Awake(){//this function is called when the level is loaded, always afte
 		//return;
 	}else
 		selector = GameObject.FindObjectOfType(SelectWeaponGUI);
-	Debug.Log("reach here");
 	if (!NetworkU.UseNet){//only for single player mode!
 		for (var i:int = 0; i < selector.availableWeapons.Length; i++){
 			var wp:Weapon = selector.availableWeapons[i];
-			if (wp==weapon0) selector.selectedWeapons[0] = i;
-			if (wp==weapon1) selector.selectedWeapons[1] = i;
+			if (wp==weapon0){
+				selector.selectedWeapons[0] = i;
+				Debug.Log("first weapon: "+i);
+			}
+			if (wp==weapon1){
+				selector.selectedWeapons[1] = i;
+				Debug.Log("second weapon: "+i);
+			}
 		}
 		Debug.Log("level info finished");
 	}

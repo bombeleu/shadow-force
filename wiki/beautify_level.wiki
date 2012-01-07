@@ -1,0 +1,6 @@
+Effects:
+- burnable stuffs: wooden boxes, trees, etc.. When use fire weapons, those things will be burned.
+- breakable stuffs: wooden boxes, glasses, etc.. When using shotgun, machine gun, energy gun, grenade, ..
+- water
+- shadow shaft: pre-compute in editor
+...

@@ -11,6 +11,9 @@ class MainMenu extends ScreenGUI{
 	
 	private var uiController : UIController;
 	public static var instance:MainMenu;
+	
+	public var exitButtonStyle : GUIStyle;
+	
 	function Awake () {
 		Debug.Log("program starts!");
 		instance = this;
@@ -142,7 +145,10 @@ class MainMenu extends ScreenGUI{
 			}
 			#endif
 		}else if (state == MenuState.SinglePlaying){
-			if (GUILayout.Button("Exit")){
+			//if (GUILayout.Button("Exit"))
+			GUISizer.BeginGUI();
+			if (GUI.Button(new Rect(0,0,exitButtonStyle.normal.background.width,exitButtonStyle.normal.background.height),"",exitButtonStyle)) 
+			{
 				#if UNITY_FLASH
 				state = MenuState.Single;
 				#else
@@ -154,6 +160,7 @@ class MainMenu extends ScreenGUI{
 			if (UseCheat){
 				GetComponent(SelectWeaponGUI).DrawGUI();
 			}
+			GUISizer.EndGUI();
 		}
 	}
 	

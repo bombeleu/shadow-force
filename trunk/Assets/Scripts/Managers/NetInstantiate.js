@@ -7,18 +7,14 @@
 		instance = this;
 	}
 	static function CreateTeamObject(prefab:GameObject, 
-		#if UNITY_FLASH
-		viewID:int, 
-		#else
-		viewID:NetworkViewID, 
-		#endif
+		viewID:NetViewID, 
 		pos:Vector3, quat: Quaternion, team:int):void
 	{
 		var i:int = instance.GetPrefabID(prefab);
 		#if UNITY_FLASH
 		instance._CreateTeamObject(i, viewID, pos, quat, team); 
 		#else
-		NetworkU.RPC(instance, "_CreateTeamObject", NetRPCMode.AllBuffered, [i, viewID, pos, quat, team]); 
+		NetworkU.RPC(instance, "_CreateTeamObject", NetRPCMode.AllBuffered, i, viewID, pos, quat, team); 
 		#endif
 	}
 	
@@ -34,17 +30,13 @@
 	@RPC
 	#endif
 	function _CreateTeamObject(prefabID:int, 
-		#if UNITY_FLASH
-		viewID:int, 
-		#else
-		viewID:NetworkViewID, 
-		#endif
+		viewID:NetViewID, 
 		pos:Vector3, quat: Quaternion, team:int):void
 	{
 		//Debug.Log(prefabID);
 		var go:GameObject = Instantiate(prefabs[prefabID], pos, quat);
-		go.GetComponent.<Team>().SetTeam(team);
+		go.GetComponent(Team).SetTeam(team);
 		#if !UNITY_FLASH
-			go.networkView.viewID = viewID;
+			//go.networkView.viewID = viewID;//TODO: implement network here
 		#endif
 	}

@@ -104,7 +104,7 @@ private function SyncArray()
 	}
 }
 
-public function RemoveCheckPointAt(index :int) : GameObject
+public function RemoveCheckPointAt(index :int) : GameObject //TODO: is this a mistake or work-around?
 {
 	var go : GameObject = (checkPoints[index] as CheckPoint).gameObject;
 	Debug.Log(_checkPoints.Count);

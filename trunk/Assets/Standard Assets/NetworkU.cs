@@ -11,30 +11,33 @@ public enum NetRPCMode{
 	AllBuffered
 }
 
-public class NetworkU: MonoBehaviour{
+public class NetViewID{
+}
+
+public class NetworkU{
 	public static bool UseNet = false;
-	public static Object Instantiate(Transform prefab, Vector3 pos, Quaternion rot){
-		#if !UNITY_FLASH
+	public static Object Instantiate(GameObject prefab, Vector3 pos, Quaternion rot){
+		/*#if !UNITY_FLASH
 		if (UseNet)
 			return Network.Instantiate(prefab, pos, rot, 0);
 		else
-		#endif
+		#endif*/
 			return GameObject.Instantiate(prefab, pos, rot);
 	}
 	public static void Destroy(Component comp){
-		#if !UNITY_FLASH
+		/*#if !UNITY_FLASH
 		if (UseNet)
 			Network.Destroy(comp.networkView.viewID);
 		else
-		#endif
+		#endif*/
 			GameObject.Destroy(comp.gameObject);
 	}
 	#if !UNITY_FLASH
 	//use the component that contains the RPC function!
 	public static void RPC(Component comp, string func, NetRPCMode mode, params object[] paras){
-		if (UseNet)
+		/*if (UseNet)
 			comp.networkView.RPC(func, mode==NetRPCMode.All?RPCMode.All:RPCMode.AllBuffered, paras);
-		else
+		else*/
 		{
 			comp.GetType().GetMethod(func).Invoke(comp, paras);
 			//gameObject.SendMessage(func, paras);
@@ -42,21 +45,21 @@ public class NetworkU: MonoBehaviour{
 	}
 	#endif
 	public static bool IsMine(Component comp){
-		#if !UNITY_FLASH
+		/*#if !UNITY_FLASH
 		if (UseNet){
 			return comp.networkView.isMine;
 		}
 		else
-		#endif
+		#endif*/
 		{
 			return true;
 		}
 	}
-	#if UNITY_FLASH
-	public static int AllocateID(){
-		return 0;
+	//#if UNITY_FLASH
+	public static NetViewID AllocateID(){
+		return new NetViewID();
 	}
-	#else
+	/*#else
 	public static NetworkViewID AllocateID(){
 		if (UseNet){
 			return Network.AllocateViewID();
@@ -64,14 +67,14 @@ public class NetworkU: MonoBehaviour{
 			return NetworkViewID.unassigned;
 		}
 	}
-	#endif
+	#endif*/
 	public static float SendRate(){
-		#if !UNITY_FLASH
+		/*#if !UNITY_FLASH
 		if (UseNet){
 			return Network.sendRate;
 		}
 		else
-		#endif
+		#endif*/
 		{
 			return 15;
 		}

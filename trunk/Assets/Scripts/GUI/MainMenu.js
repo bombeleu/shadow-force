@@ -115,10 +115,10 @@ class MainMenu extends ScreenGUI{
 			if (GUILayout.Button("(cheat)Unlock all")){
 				UnlockAll();
 			}
+			#endif
 			if (GUILayout.Button("(cheat)Weapon select & unlimitted ammo: "+(UseCheat?"On":"Off"))){
 				UseCheat = !UseCheat;
 			}
-			#endif
 			GUILayout.Label("Select an unlocked level");
 			if (currentLevel>levelList.Length-1) currentLevel = levelList.Length-1;
 			for (var i:int = 0; i <= currentLevel; i++){

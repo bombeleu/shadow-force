@@ -1,5 +1,5 @@
 #pragma strict
-public var playerPrefab : Transform;
+public var playerPrefab : GameObject;
 #if !UNITY_FLASH
 private var conGUI:ConnectionGUI;
 function Awake(){

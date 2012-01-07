@@ -74,14 +74,14 @@ function Awake () {
 			// Create left joystick
 			var joystickLeftGO : GameObject = Instantiate (joystickPrefab) as GameObject;
 			joystickLeftGO.name = "Joystick Left";
-			joystickLeft = joystickLeftGO.GetComponent.<Joystick> ();
+			joystickLeft = joystickLeftGO.GetComponent(Joystick);
 			joystickLeft.touchPad = true;
 			joystickLeft.touchZone = Rect(0,0,Screen.width/2, Screen.height);
 			
 			// Create right joystick
 			joystickRightGO = Instantiate (joystickPrefab) as GameObject;
 			joystickRightGO.name = "Joystick Right";
-			joystickRight = joystickRightGO.GetComponent.<Joystick> ();
+			joystickRight = joystickRightGO.GetComponent(Joystick);
 			joystickRight.touchPad = true;
 			joystickRight.touchZone = Rect(Screen.width/2,0,Screen.width/2, Screen.height);
 			joystickRight.directionalOnly = true;
@@ -115,7 +115,7 @@ function Start () {
 	
 	#if UNITY_IPHONE || UNITY_ANDROID
 		// Move to right side of screen
-		var guiTex : GUITexture = joystickRightGO.GetComponent.<GUITexture> ();
+		var guiTex : GUITexture = joystickRightGO.GetComponent(GUITexture);
 		guiTex.pixelInset.x = Screen.width - guiTex.pixelInset.x - guiTex.pixelInset.width;			
 	#endif	
 	

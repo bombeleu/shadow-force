@@ -106,16 +106,9 @@ function _SetWeaponSelection(weapon0:int, weapon1:int):void{
 	this.enabled = true;
 }
 
-#if UNITY_FLASH
-function RPCSetWeaponViewID(weaponID:int, viewID:int){//dummy func
+function RPCSetWeaponViewID(weaponID:int, viewID:NetViewID){
+	//ws[weaponID].networkView.viewID = viewID;
 }
-#else
-@RPC
-function RPCSetWeaponViewID(weaponID:int, viewID:NetworkViewID){
-	//Debug.Log("RPC Set WeaponViewID " + weaponID + "..." + viewID);
-	ws[weaponID].networkView.viewID = viewID;
-}
-#endif
 
 public static function PlaneRayIntersection (plane : Plane, ray : Ray) : Vector3 {
 	var dist : float;
@@ -228,10 +221,13 @@ function Update () {
 		isFiring = manualFire;
 		if (manualFire && hasPos) cursorWorldPosition = manualPos;
 	}else{
+		var posCursor:Vector3;
 		#if UNITY_IPHONE || UNITY_ANDROID
 			//angle = 0;//TODO: compute angle base on the different between angle and joystick
 			cursorWorldPosition = transform.position + transform.forward * Vector3(joystickPos.x,0,joystickPos.y).magnitude * 10;
 			isFiring = manualFire;//TODO: allow manual control to override autoshoot
+			posCursor = cursorWorldPosition;
+			posCursor.y = 0.5;//TODO: remove hardcode
 		#else
 			// On PC, the cursor point is the mouse position
 			var cursorScreenPosition : Vector3 = Input.mousePosition;
@@ -240,8 +236,8 @@ function Update () {
 	
 			var fireAlt:float = Input.GetAxis("Fire1");
 			isFiring = (fireAlt>=1);
+			posCursor = ScreenPointToWorldPointOnPlane (cursorScreenPosition, groundPlane, Camera.main);
 		#endif
-		var posCursor:Vector3 = ScreenPointToWorldPointOnPlane (cursorScreenPosition, groundPlane, Camera.main);
 		var posHit:RaycastHit;
 		Physics.Raycast(posCursor + Vector3.up*10, -Vector3.up, posHit, Mathf.Infinity, positionalLayers);
 		var positionalTarget:Vector3 = controllable?
@@ -256,7 +252,7 @@ function Update () {
 		if (weaponSwitchGUI==false){
 			#if UNITY_IPHONE || UNITY_ANDROID
 				if (MainMenu.useSensor){
-					if (Input.isGyroAvailable){
+					if (SystemInfo.supportsGyroscope){
 						weaponSwitch = Input.gyro.userAcceleration.z < -0.7;
 					}else{
 						weaponSwitch = Input.acceleration.z <-1.2;
@@ -372,13 +368,13 @@ function OnGUI(){
 		//Event.current.Use();
 	}
 	
-	if (MainMenu.useAutoAim && (!ws[curWeapon].playerAutoShoot)){
-		btnRect.x = Screen.width - Screen.height*0.1;
-		btnRect.width = 0.1*Screen.height;
-		btnRect.y = 0.9*Screen.height;
-		btnRect.height = 0.1*Screen.height;
+	#if UNITY_IPHONE || UNITY_ANDROID
+	//if (MainMenu.useAutoAim && (!ws[curWeapon].playerAutoShoot)){
+		btnRect.x = GUISizer.width - GUISizer.height*0.1;
+		btnRect.width = 0.1*GUISizer.height;
+		btnRect.y = 0.9*GUISizer.height;
+		btnRect.height = 0.1*GUISizer.height;
 		
-		#if UNITY_IPHONE || UNITY_ANDROID
 		if (GUI.Button(btnRect, "shoot!")){
 			manualFire = true;
 			hasPos = false;
@@ -389,8 +385,8 @@ function OnGUI(){
 				buttonFire = false;
 			}
 		}
-		#endif
-	}
+	//}
+	#endif
 
 	// show ammo
 	var ammo : String = "Infinity";

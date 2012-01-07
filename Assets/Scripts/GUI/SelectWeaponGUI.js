@@ -74,7 +74,8 @@ class SelectWeaponGUI extends ScreenGUI{
 		{
 			finished = true;
 			#if !UNITY_FLASH
-				GetComponent(UIController).SetCurrentGUI(GetComponent(ConnectionGUI));
+				if (NetworkU.UseNet)
+					GetComponent(UIController).SetCurrentGUI(GetComponent(ConnectionGUI));
 			#endif
 		}
 	}

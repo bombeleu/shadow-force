@@ -1,0 +1,2 @@
+Ability to leap over wall.
+Some walls can't be leap over (those with spikes, or those which are too tall).

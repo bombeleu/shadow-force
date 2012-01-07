@@ -2,6 +2,7 @@
 
 public var ragDoll : GameObject;
 public var rootRagDoll : GameObject;
+public var headBone:Rigidbody;
 public var animationObject : GameObject;
 public var weaponHoldPoint : Transform;
 public var attachedObjects : GameObject[];
@@ -178,17 +179,14 @@ public function DieByForce(force : Vector3) // absolute direction
 }
 
 public function DieSignal():void{
-	/*if (GetComponent(PlayerMoveController))
-		GetComponent(PlayerMoveController).enabled = false;//TODO:re-enable on respawn!
-	if (GetComponent(AICentral))
-		GetComponent(AICentral).enabled = false;
-	if (GetComponent(AutoShoot))
-		GetComponent(AutoShoot).enabled = false;
-
-	GetComponent(MovementMotor).movementDirection = Vector3.zero;*/
-	
 	DieByForce(GetComponent(Health).damageForce*100);
 
+}
+
+public function DieByArrow(arrow:Transform){
+	Die();
+	headBone.isKinematic = true;
+	headBone.gameObject.transform.parent = arrow;
 }
 
 public function DieByExplosion(force : float, explosionPos : Vector3, explosionRadius : float)

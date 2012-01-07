@@ -3,12 +3,8 @@
 public var speed : float = 15.0;
 //public var lifeTime : float = 1.5;
 public var damageAmount : float = 5;
-public var forceAmount : float = 5;
-public var radius : float = 1.0;
-public var seekPrecision : float = 1.3;
-public var ignoreLayers : LayerMask;
-public var noise : float = 0.0;
 public var explosionPrefab : GameObject;
+public var isBounce:boolean = true;
 
 private var dir : Vector3;
 private var spawnTime : float;
@@ -38,35 +34,10 @@ function Update () {
     	Explode();
     	return;
     }
-	
-	/*if (Time.time > spawnTime + lifeTime) {
-		Spawner.Destroy (gameObject);
-	}*/
-	
-	/*
-	if (targetObject) {
-		var targetPos : Vector3 = targetObject.transform.position;
-		targetPos += transform.right * (Mathf.PingPong (Time.time, 1.0f) - 0.5f) * noise;
-		var targetDir : Vector3 = (targetPos - tr.position);		var targetDist : float = targetDir.magnitude;
-		targetDir /= targetDist;
-		if (Time.time - spawnTime < lifeTime * 0.2 && targetDist > 3)
-			targetDir += transform.right * 0.5 * sideBias;
-		
-		dir = Vector3.Slerp (dir, targetDir, Time.deltaTime * seekPrecision);
-	
-		tr.rotation = Quaternion.LookRotation(dir); 	
-		tr.position += (dir * speed) * Time.deltaTime;
-	}//*/
+
 	tr.rotation = Quaternion.LookRotation(dir); 	
 	tr.position += (dir * speed) * Time.deltaTime;
 	
-		/*// Get the rigidbody if any
-		if (c.rigidbody) {
-			// Apply force to the target object
-			var force : Vector3 = tr.forward * forceAmount;
-			force.y = 0;
-			c.rigidbody.AddForce (force, ForceMode.Impulse);
-		}*/
 }
 
 function Explode(){
@@ -76,31 +47,46 @@ function Explode(){
 
 //public var bounceTime : int = 5;
 public var lifeTime:float = 6;
+
+public var isArrow:boolean = false;
 function OnCollisionEnter(collision : Collision) {
-	var targetHealth : Health = collision.transform.GetComponent.<Health> ();
-	if (targetHealth) {
-		if (NetworkU.IsMine(targetHealth)){//only apply damage if it hits MY character!
-			#if UNITY_FLASH
-			targetHealth.OnDamage(damageAmount, -transform.forward*5);
-			#else
-			NetworkU.RPC(targetHealth, "OnDamage", NetRPCMode.All, 
-				[damageAmount, -transform.forward*5]);
-			#endif
+	if (isArrow){
+		var ragdoll:RagdollController = collision.transform.GetComponent(RagdollController);
+		if (ragdoll){
+			ragdoll.DieByArrow(transform);//TODO:add network code
+		}else{
+			rigidbody.isKinematic = true;
+			rigidbody.velocity = Vector3.zero;
+			speed = 0;
 		}
-		Explode();
-		return;
+	}else{
+		var targetHealth : Health = collision.transform.GetComponent(Health);
+		if (targetHealth) {
+			if (NetworkU.IsMine(targetHealth)){//only apply damage if it hits MY character!
+				#if UNITY_FLASH
+				targetHealth.OnDamage(damageAmount, -transform.forward*5);
+				#else
+				NetworkU.RPC(targetHealth, "OnDamage", NetRPCMode.All, 
+					[damageAmount, -transform.forward*5]);
+				#endif
+			}
+			Explode();
+			return;
+		}
 	}
 
-    // Debug-draw all contact points and normals
-    //bounceTime --;
-    var norm : Vector3 = Vector3.zero;
-    for (var contact : ContactPoint in collision.contacts)
-    	norm += contact.normal;
-        //Debug.DrawRay(contact.point, contact.normal, Color.white);
-    norm.Normalize();
-    
-    dir -= norm * Vector3.Dot(dir, norm) * 2;
-    dir.y = 0;
+	if (isBounce){
+	    // Debug-draw all contact points and normals
+	    //bounceTime --;
+	    var norm : Vector3 = Vector3.zero;
+	    for (var contact : ContactPoint in collision.contacts)
+	    	norm += contact.normal;
+	        //Debug.DrawRay(contact.point, contact.normal, Color.white);
+	    norm.Normalize();
+	    
+	    dir -= norm * Vector3.Dot(dir, norm) * 2;
+	    dir.y = 0;
+    }
     
     Spawner.Spawn (explosionPrefab, transform.position, transform.rotation);
     

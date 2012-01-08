@@ -118,7 +118,7 @@ private function initPhysics(){
 		var go:GameObject = new GameObject();
 		go.isStatic = true;
 		go.layer = gameObject.layer;
-		if (go.layer == LineOfSight.BLOCKER_LAYER){
+		if (go.layer == LineOfSight.LAYER_BLOCKER){
 			go.tag = "Blocker";
 		}
 		go.AddComponent(BoxCollider);
@@ -151,7 +151,7 @@ function Init(){
 	Debug.Log("init!");
 	
 	gameObject.isStatic = true;
-	gameObject.layer = LineOfSight.BLOCKER_LAYER;
+	gameObject.layer = LineOfSight.LAYER_BLOCKER;
 	
 	if ((!customMode) && visualPrefab){
 		createVisual();

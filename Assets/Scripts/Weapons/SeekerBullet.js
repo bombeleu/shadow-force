@@ -54,6 +54,7 @@ function OnCollisionEnter(collision : Collision) {
 		var ragdoll:RagdollController = collision.transform.GetComponent(RagdollController);
 		if (ragdoll){
 			ragdoll.DieByArrow(transform);//TODO:add network code
+			gameObject.layer = LineOfSight.LAYER_ARROW_WITH_RAGDOLL;
 		}else{
 			rigidbody.isKinematic = true;
 			rigidbody.velocity = Vector3.zero;

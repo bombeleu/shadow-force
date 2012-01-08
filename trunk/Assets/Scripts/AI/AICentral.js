@@ -77,14 +77,19 @@ class AICentral extends DetectionAI{
 				dodging = false;
 				talkAI.Say(TalkType.Dodge);
 			}
-			if (enemies.Count>0){
+			var found:boolean = false;
+			var tarPos:Vector3;
+			for (target in enemies.Values){
+				var tarVisi:Visibility = target as Visibility;
+				if (tarVisi.GetComponent(Health)==null) continue;//not sth we can shoot!
+				tarPos = tarVisi.transform.position;
+				found = true;
+				break;
+			}
+			
+			if (found){//got sth to shoot/chase
 				saidNotChase = false;
-				var tarPos:Vector3;
 				var target:Object;
-				for (target in enemies.Values){
-					tarPos = (target as Visibility).transform.position;
-					break;
-				}
 				tarPos.y = transform.position.y;
 				var dir:Vector3 = tarPos - transform.position;
 				motor.facingDirection = dir.normalized;

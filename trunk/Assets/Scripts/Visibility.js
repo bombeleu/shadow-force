@@ -12,7 +12,7 @@ public enum FogType{
 	Ghost
 };
 
-public var visibilityType : VisibilityType;
+public var visibilityType : VisibilityType = VisibilityType.TeamShare;
 public var ghostType : FogType;
 
 #if UNITY_FLASH
@@ -42,6 +42,18 @@ function SetVisible(visi:boolean){
 	if (isVisible == visi) return;
 	isVisible = visi;
 	SendMessage("OnSetVisible",visi);
+}
+
+private var isDetected:boolean = false;
+public var oneTimeDetection:boolean = false;//need to detect 1 time only
+function SetDetected(detect:boolean){
+	if (oneTimeDetection)
+		isDetected |= detect;
+	else
+		isDetected = detect;
+}
+function IsDetected():boolean{
+	return isDetected;
 }
 
 function GetVisible():boolean{

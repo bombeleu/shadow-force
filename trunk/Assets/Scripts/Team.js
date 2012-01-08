@@ -1,7 +1,4 @@
 #pragma strict
-#if !UNITY_FLASH
-@script RequireComponent (NetworkView)
-#endif
 public static var ammo = 20;
 
 public var team: int = 0;

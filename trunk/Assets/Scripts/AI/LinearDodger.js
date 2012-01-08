@@ -13,6 +13,9 @@ public var affectRadius:float;
 
 public var blockerLayers:LayerMask;
 public var bounce:boolean = false;
+public var needDetection:boolean = false;
+public var myTeam:Team;
+public var visibility:Visibility;
 
 private var checkDistance:float;
 private var capsule:CapsuleCollider;
@@ -50,6 +53,13 @@ function Update(){
 */
 
 function OnTriggerStay (other : Collider) : void{
+	if (needDetection){
+		var otherTeam:Team = other.GetComponent(Team);
+		if (otherTeam && otherTeam.team!=myTeam.team && !visibility.IsDetected()){
+			//Debug.Log("won't dodge");
+			return;//can't dodge/block undetected bullet!
+		}
+	}
 	var ai : DodgingAI = other.GetComponent(DodgingAI);
 	if (ai){
 		var dir:Vector3 = other.transform.position - transform.position;

@@ -59,10 +59,10 @@ function OnEnable(){
 		//Debug.Log(shield.GetChild(0).gameObject);
 		visiBucket.AddVisibleObject(shield.GetChild(0).gameObject); // hacking, 
 		var blocker:BlockingAI = gameObject.AddComponent(BlockingAI);
-		#if !UNITY_FLASH
+		/*#if !UNITY_FLASH
 		var dodger:DodgingAI = GetComponent(DodgingAI);
 		if (dodger) Destroy(dodger);
-		#endif
+		#endif*/
 		var ai:AICentral = GetComponent(AICentral);
 		if (ai){
 			ai.blocker = blocker;

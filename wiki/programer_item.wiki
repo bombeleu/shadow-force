@@ -7,6 +7,7 @@ Jay:
 - explosive weapon
 - frost gun effect
 - ios network: iOS prime31
+- GUI
 
 Nam:
 - wall leap

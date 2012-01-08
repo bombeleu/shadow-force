@@ -4,3 +4,10 @@ Effects:
 - water
 - shadow shaft: pre-compute in editor
 ...
+
+- moving platform
+- rotation script:
+  - rotate speed
+  - rotate axis
+- blinking:
+  - Jay please fill in

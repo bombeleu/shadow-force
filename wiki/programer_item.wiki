@@ -1,0 +1,17 @@
+Jay:
+- hole effect
+- burn effect
+- (examine) water effect
+- melee
+- shield drop on dead
+- explosive weapon
+- frost gun effect
+- ios network: iOS prime31
+
+Nam:
+- wall leap
+- weapon change animation
+- bow/crossbow gun
+- dota mode
+- AI for frost gun
+- iOS network: networkView

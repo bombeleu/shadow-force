@@ -5,9 +5,12 @@ public var layerMask: LayerMask;
 public var revealAll: boolean = false;
 
 
-public static var BLOCKER_LAYER:int = 18;
+public static var LAYER_BLOCKER:int = 18;
+public static var LAYER_FENCE:int = 20;
+public static var LAYER_ARROW_WITH_RAGDOLL : int = 17;
 function Awake(){
-	Physics.IgnoreLayerCollision(0, 11, true);//default vs playertrigger
+	//Use Physics setting instead!
+	/*Physics.IgnoreLayerCollision(0, 11, true);//default vs playertrigger
 	Physics.IgnoreLayerCollision(8, 22, true);//player vs smoke
 	Physics.IgnoreLayerCollision(19, 20, true);//projectile vs fence
 	Physics.IgnoreLayerCollision(19, 22, true);//projectile vs smoke
@@ -18,7 +21,7 @@ function Awake(){
 	Physics.IgnoreLayerCollision(8, 24, true);//player vs ragdoll --> prevent climbing!
 	Physics.IgnoreLayerCollision(23, 24, true);//shield vs ragdoll --> prevent climbing!
 	Physics.IgnoreLayerCollision(19, 24, true);//projectile vs ragdoll
-	Physics.IgnoreLayerCollision(22, 24, true);//smoke vs ragdoll
+	Physics.IgnoreLayerCollision(22, 24, true);//smoke vs ragdoll*/
 }
 
 function CheckObserver(seer:Observer, viobj:Visibility):boolean{

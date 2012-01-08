@@ -23,7 +23,7 @@ ModelImporter:
     lODScreenPercentages: []
     globalScale: 0.000300
     meshCompression: 0
-    addColliders: 1
+    addColliders: 0
     swapUVChannels: 0
     generateSecondaryUV: 1
     useFileUnits: 1
@@ -51,9 +51,6 @@ ModelImporter:
       data:
         first: 33
         second: a05a3200
-      data:
-        first: 64
-        second: 00a86100
       data:
         first: 111
         second: 605fa900

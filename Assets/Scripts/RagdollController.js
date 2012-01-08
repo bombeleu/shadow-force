@@ -2,7 +2,7 @@
 
 public var ragDoll : GameObject;
 public var rootRagDoll : GameObject;
-public var headBone:Rigidbody;
+public var arrowBones:Rigidbody[];
 public var animationObject : GameObject;
 public var weaponHoldPoint : Transform;
 public var attachedObjects : GameObject[];
@@ -185,8 +185,10 @@ public function DieSignal():void{
 
 public function DieByArrow(arrow:Transform){
 	Die();
+	var headBone:Rigidbody = arrowBones[ Mathf.FloorToInt (Random.value * arrowBones.Length) ];
 	headBone.isKinematic = true;
 	headBone.gameObject.transform.parent = arrow;
+	headBone.gameObject.transform.localPosition = Vector3.zero;
 }
 
 public function DieByExplosion(force : float, explosionPos : Vector3, explosionRadius : float)

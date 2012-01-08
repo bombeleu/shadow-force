@@ -106,10 +106,12 @@ function Update () {
 			visi = true;
 		}else if (viobj.GetComponent.<Team>().team == myTeam){
 			visi = true;
+			var detected:boolean = false;
 			for (var seer : Observer in wantEvents){
 				if (seer.team.team != myTeam)
-					CheckObserver(seer, viobj);
+					detected |= CheckObserver(seer, viobj);//detection for AI
 			}
+			viobj.SetDetected(detected);
 		}else{
 			var local_visi:boolean;
 			for (var seer : Observer in wantEvents){

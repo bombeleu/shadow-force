@@ -49,16 +49,25 @@ function Explode(){
 public var lifeTime:float = 6;
 
 public var isArrow:boolean = false;
+private var dead:boolean = false;
 function OnCollisionEnter(collision : Collision) {
 	if (isArrow){
+		if (dead) return;
 		var ragdoll:RagdollController = collision.transform.GetComponent(RagdollController);
 		if (ragdoll){
 			ragdoll.DieByArrow(transform);//TODO:add network code
 			gameObject.layer = LineOfSight.LAYER_ARROW_WITH_RAGDOLL;
 		}else{
-			rigidbody.isKinematic = true;
-			rigidbody.velocity = Vector3.zero;
+			//rigidbody.velocity = Vector3.zero;//TODO: reveal the arrow after fist hit
+			//rigidbody.isKinematic = true;
+			Destroy(rigidbody);
+			Destroy(collider);
+			Destroy(GetComponentInChildren(LinearDodger));//TODO: remove hard code
+			if (!collision.transform.gameObject.isStatic){//stick the arrow to dynamic obj like shield
+				transform.parent = collision.transform;
+			}
 			speed = 0;
+			dead = true;
 		}
 	}else{
 		var targetHealth : Health = collision.transform.GetComponent(Health);

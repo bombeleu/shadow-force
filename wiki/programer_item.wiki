@@ -8,3 +8,4 @@ Jay:
 - frost gun effect
 - ios network: iOS prime31
 - GUI
+- Transparent blocker

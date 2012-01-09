@@ -1,4 +1,7 @@
 #pragma strict
+#if !UNITY_FLASH
+import System.Collections.Generic;
+#endif
 
 //public var motor : FreeMovementMotor;
 
@@ -17,19 +20,31 @@ function Start(){
 }
 
 private var isIgnoreShield:boolean;
+
 function OnEvadeZone(escapeDir:Vector3, ignoreShield:boolean):void{
 	escapeV += escapeDir;
 	isActive = true;
 	isIgnoreShield = ignoreShield;
 }
 
-function FixedUpdate(){
+private var resting:boolean = true;
+private var prohibitDirs : System.Collections.Generic.List.<Vector3> 
+	= new System.Collections.Generic.List.<Vector3>();//TODO: flash-beta support here
+function OnSafeZone(prohibitDir:Vector3):void{
+	if (isActive) return;
+	prohibitDirs.Add(prohibitDir);
+	resting = true;
+}
+
+function FixedUpdate(){//fixed update because OnEvadeZone is called from physics events!
 	//result is 1 frame late
 	finalV = escapeV;
 	_isActive = isActive;
 
 	escapeV = Vector3.zero;
 	isActive = false;
+	resting = false;
+	prohibitDirs.Clear();
 }
 
 function IsActive():boolean{
@@ -44,3 +59,10 @@ function GetVector():Vector3{
 	return finalV;
 }
 
+function IsOnSafeZone():boolean{//on the buffer zone
+	return resting;
+}
+
+function GetProhibitDirs():System.Collections.Generic.List.<Vector3>{
+	return prohibitDirs;
+}

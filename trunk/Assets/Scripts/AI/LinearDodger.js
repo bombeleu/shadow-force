@@ -35,23 +35,6 @@ function Initialize(){
 	checkDistance = evadeTime * velocity;
 }
 
-
-/*
-private var checkDistance:float;
-function Update(){
-	var hitInfo : RaycastHit;
-	Physics.SphereCast(transform.position, affectRadius, velVector.normalized, hitInfo, checkDistance);
-	//Physics.Raycast(transform.position, velVector.normalized, hitInfo);
-	if (hitInfo.transform){
-		var ai : DodgingAI = hitInfo.transform.GetComponentInChildren.<DodgingAI>();
-		if (ai){
-			Debug.Log('evade!');
-			ai.OnEvadeZone(Vector3(velVector.z,0,-velVector.x));
-		}
-	}
-}
-*/
-
 function OnTriggerStay (other : Collider) : void{
 	if (needDetection){
 		var otherTeam:Team = other.GetComponent(Team);
@@ -74,9 +57,11 @@ function OnTriggerStay (other : Collider) : void{
 		//check blocker
 		var oriPos:Vector3 = transform.position-velN*checkDistance;
 		if (!Physics.Raycast(oriPos, velN, (other.transform.position-oriPos).magnitude, blockerLayers)){//not blocked
-			ai.OnEvadeZone((affectDist > offsetM)?
-				offset.normalized*(affectDist-offsetM):
-				Vector3.zero, false);
+			if (affectDist > offsetM){
+				ai.OnEvadeZone(offset.normalized*(affectDist-offsetM), false);
+			}else{
+				ai.OnSafeZone(-offset.normalized);//resting on buffer zone
+			}
 		}
 		//}
 	}

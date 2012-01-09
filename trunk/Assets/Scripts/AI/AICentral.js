@@ -19,6 +19,8 @@ class AICentral extends DetectionAI{
 	#else*/
 	private var navigator:NavMeshAgent;
 	//#endif
+	
+	
 	function Awake(){
 		super.Awake();
 		/*#if UNITY_FLASH
@@ -60,12 +62,35 @@ class AICentral extends DetectionAI{
 	private var backtrackPathCompute:boolean = false;
 	private var lastTimeChase:float = -1;
 	static private var chaseInterval:float = 0.2;
+	
+	var isOnSafeZone:boolean;
+	private var prohibitDirs : System.Collections.Generic.List.<Vector3>;
+	private function modifyMovement(vec:Vector3):Vector3{
+		if (isOnSafeZone){
+			vec.Normalize();
+			for (var prohibit:Vector3 in prohibitDirs){
+				var dot:float = Vector3.Dot(vec, prohibit);
+				if (dot>0){
+					vec-=dot*prohibit;
+				}
+			}
+			if (vec.sqrMagnitude < 0.01){//too small
+				return Vector3.zero;
+			}else{
+				return vec.normalized;
+			}
+		}else{
+			return vec.normalized;
+		}
+	}
 	function Update () {
 		//movement control
 		var canPatrol:boolean = false;
 		var fromChase:boolean = false;
 		var patrolFace:boolean = true;
+		isOnSafeZone = false;
 		motor.facingDirection = Vector3.zero;
+		
 		if (dodger && dodger.IsActive() &&
 				((!blocker) || (dodger.IsIgnoreShield()) )
 			){
@@ -73,6 +98,10 @@ class AICentral extends DetectionAI{
 			patroller.InPatrolRoute = false;
 			dodging = true;
 		}else if (shootAI){
+			if (dodger && dodger.IsOnSafeZone()){
+				isOnSafeZone = true;
+				prohibitDirs = dodger.GetProhibitDirs();
+			}
 			if (dodging){//done dodging, can check here because all dodgers have shooting
 				dodging = false;
 				talkAI.Say(TalkType.Dodge);
@@ -148,7 +177,7 @@ class AICentral extends DetectionAI{
 				}else{
 					//Debug.Log("chase!"+v+navigator.isPathStale+navigator.hasPath+navigator.pathStatus+navigator.remainingDistance);
 					//Debug.Log("chase"+v);
-					motor.movementDirection = v.normalized;
+					motor.movementDirection = modifyMovement(v);
 					motor.facingDirection = v.normalized;//so that it won't rotate when dodging
 					patroller.InPatrolRoute = false;
 				}
@@ -158,7 +187,7 @@ class AICentral extends DetectionAI{
 			if (patroller){
 				if (patroller.InPatrolRoute){
 					backtrackPathCompute = false;
-					motor.movementDirection = patroller.GetVector().normalized;
+					motor.movementDirection = modifyMovement(patroller.GetVector());
 					if (patrolFace){
 						if (motor.movementDirection == Vector3.zero)
 							motor.facingDirection = patroller.GetStartDir();
@@ -179,7 +208,7 @@ class AICentral extends DetectionAI{
 					if (backtrackPathCompute){
 						var ve:Vector3 = navigator.nextPosition - transform.position;
 						ve.y = 0;
-						motor.movementDirection = ve.normalized;
+						motor.movementDirection = modifyMovement(ve);
 						ve = transform.position - patroller.GetNextPatrolPoint();
 						ve.y=0;
 						if (ve.sqrMagnitude < patroller.patrolPointRadius * patroller.patrolPointRadius){

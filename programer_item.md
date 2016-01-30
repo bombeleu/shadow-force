@@ -1,0 +1,11 @@
+Jay:
+- hole effect
+- burn effect
+- (examine) water effect
+- melee
+- shield drop on dead
+- explosive weapon
+- frost gun effect
+- ios network: iOS prime31
+- GUI
+- Transparent blocker

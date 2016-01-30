@@ -1,0 +1,6 @@
+Two side spawn soldiers and attack each other.
+Players join the field and support their team.
+Destroy enemy's fortress to win the match.
+
+[design](Tentative.md)
+Strategy control: player can choose what type of weapons to spawn on each spawn location --> give player decision on what weapon is needed. E.g. if his army reach a choke point, he may need more AOE.

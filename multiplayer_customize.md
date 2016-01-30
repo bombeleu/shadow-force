@@ -1,0 +1,9 @@
+Current design:
+- each player chooses 2 weapons.
+- choose 1 ability from this list:
+> - lean
+> - shield (reduce frontal damage, deflect energy gun)
+> - wall leap: landing time create vulnerable time window
+> - melee: silent instant kill, even in front (similar to shotgun except that it ignore shield)
+
+Abilities can be specific to a class (so ability selection will become class selection, if we have enough time to develop art asset)
